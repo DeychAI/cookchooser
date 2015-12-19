@@ -39,13 +39,13 @@ public class LoginPresenter extends Presenter<LoginView> {
 
         Subscription subscription = mServiceFactory.createService(TokenService.class, aUsername, aPassword)
                 .login()
+                .doOnNext(response -> mPreferences.saveUserData(response.getUser().getId(), response.getToken()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     if (view() != null) {
                         view().loginSuccessful();
                     }
-                    mPreferences.saveUserData(response.getUser().getId(), response.getToken());
                 }, t -> {
                     if (view() != null) {
                         view().showError();

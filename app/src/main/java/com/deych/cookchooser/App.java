@@ -11,10 +11,7 @@ import com.deych.cookchooser.api.NetModule;
  */
 public class App extends Application {
 
-
-//    private NetComponent mNetComponent;
     private AppComponent mAppComponent;
-
 
     public static App get(@NonNull Context aContext) {
         return (App) aContext.getApplicationContext();
@@ -25,17 +22,11 @@ public class App extends Application {
         super.onCreate();
         mAppComponent = DaggerAppComponent
                 .builder()
-                .appModule(new AppModule())
+                .appModule(new AppModule(this))
                 .netModule(new NetModule("http://deych.myihor.ru/cookchooser/api/v1/"))
 //                .netModule(new NetModule("http://deych.myihor.ru:5000/cookchooser/api/v1/"))
                 .build();
-
-//        mAppComponent = DaggerAppComponent.create();
     }
-
-//    public NetComponent getNetComponent() {
-//        return mNetComponent;
-//    }
 
     public AppComponent getAppComponent() {
         return mAppComponent;

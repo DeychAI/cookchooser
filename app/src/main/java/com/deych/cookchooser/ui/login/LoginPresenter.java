@@ -3,6 +3,7 @@ package com.deych.cookchooser.ui.login;
 import com.deych.cookchooser.api.ServiceFactory;
 import com.deych.cookchooser.api.response.TokenResponse;
 import com.deych.cookchooser.api.service.TokenService;
+import com.deych.cookchooser.shared_pref.Preferences;
 import com.deych.cookchooser.ui.base.Presenter;
 import com.deych.cookchooser.ui.login.LoginView;
 
@@ -23,10 +24,12 @@ public class LoginPresenter extends Presenter<LoginView> {
 
 
     private ServiceFactory mServiceFactory;
+    private Preferences mPreferences;
 
     @Inject
-    public LoginPresenter(ServiceFactory aServiceFactory) {
+    public LoginPresenter(ServiceFactory aServiceFactory, Preferences aPreferences) {
         mServiceFactory = aServiceFactory;
+        mPreferences = aPreferences;
     }
 
     public void doLogin(String aUsername, String aPassword) {
@@ -38,10 +41,11 @@ public class LoginPresenter extends Presenter<LoginView> {
                 .login()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(t -> {
+                .subscribe(response -> {
                     if (view() != null) {
                         view().loginSuccessful();
                     }
+                    mPreferences.saveUserData(response.getUser().getId(), response.getToken());
                 }, t -> {
                     if (view() != null) {
                         view().showError();

@@ -23,13 +23,11 @@ import rx.schedulers.Schedulers;
  * Created by deigo on 19.12.2015.
  */
 public class RegisterPresenter extends Presenter<RegisterView> {
-    private Retrofit mRetrofit;
     private ServiceFactory mServiceFactory;
 
 
     @Inject
-    public RegisterPresenter(Retrofit aRetrofit, ServiceFactory aServiceFactory) {
-        mRetrofit = aRetrofit;
+    public RegisterPresenter(ServiceFactory aServiceFactory) {
         mServiceFactory = aServiceFactory;
     }
 

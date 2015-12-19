@@ -184,8 +184,8 @@ public class RegisterFragment extends BaseViewStateFragment implements RegisterV
 
         @Provides
         @UIScope
-        public RegisterPresenter providePresenter(Retrofit aRetrofit, ServiceFactory aServiceFactory) {
-            return new RegisterPresenter(aRetrofit, aServiceFactory);
+        public RegisterPresenter providePresenter(ServiceFactory aServiceFactory) {
+            return new RegisterPresenter(aServiceFactory);
         }
 
         @Provides

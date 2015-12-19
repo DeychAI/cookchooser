@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
 import com.deych.cookchooser.api.ServiceFactory;
+import com.deych.cookchooser.shared_pref.Preferences;
 import com.deych.cookchooser.ui.MainActivity;
 import com.deych.cookchooser.ui.base.BaseViewStateFragment;
 import com.deych.cookchooser.ui.UIScope;
@@ -161,8 +162,8 @@ public class LoginFragment extends BaseViewStateFragment implements LoginView {
 
         @Provides
         @UIScope
-        public LoginPresenter provideLoginPresenter(ServiceFactory aServiceFactory) {
-            return new LoginPresenter(aServiceFactory);
+        public LoginPresenter provideLoginPresenter(ServiceFactory aServiceFactory, Preferences aPreferences) {
+            return new LoginPresenter(aServiceFactory, aPreferences);
         }
 
         @Provides

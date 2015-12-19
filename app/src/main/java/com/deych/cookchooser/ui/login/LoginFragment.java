@@ -31,10 +31,8 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import dagger.Module;
 import dagger.Provides;
 import dagger.Subcomponent;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by deigo on 16.12.2015.
@@ -78,7 +76,7 @@ public class LoginFragment extends BaseViewStateFragment implements LoginView {
 
     @Override
     protected void setUpComponents() {
-        App.get(getContext()).getAppComponent().plus(new LoginFragmentModule()).inject(this);
+        App.get(getContext()).getAppComponent().plus(new Module()).inject(this);
     }
 
     @Override
@@ -152,13 +150,13 @@ public class LoginFragment extends BaseViewStateFragment implements LoginView {
     }
 
     @UIScope
-    @Subcomponent(modules = LoginFragmentModule.class)
-    public interface LoginFragmentComponent {
+    @Subcomponent(modules = Module.class)
+    public interface Component {
         void inject(@NonNull LoginFragment aLoginFragment);
     }
 
-    @Module
-    public static class LoginFragmentModule {
+    @dagger.Module
+    public static class Module {
 
         @Provides
         @UIScope

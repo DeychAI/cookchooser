@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,10 +27,8 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import dagger.Module;
 import dagger.Provides;
 import dagger.Subcomponent;
-import retrofit.Retrofit;
 
 /**
  * Created by deigo on 16.12.2015.
@@ -102,7 +98,7 @@ public class RegisterFragment extends BaseViewStateFragment implements RegisterV
 
     @Override
     protected void setUpComponents() {
-        App.get(getContext()).getAppComponent().plus(new FragmentModule()).inject(this);
+        App.get(getContext()).getAppComponent().plus(new Module()).inject(this);
     }
 
     @Override
@@ -174,13 +170,13 @@ public class RegisterFragment extends BaseViewStateFragment implements RegisterV
     }
 
     @UIScope
-    @Subcomponent(modules = FragmentModule.class)
-    public interface FragmentComponent {
+    @Subcomponent(modules = Module.class)
+    public interface Component {
         void inject(@NonNull RegisterFragment aFragment);
     }
 
-    @Module
-    public static class FragmentModule {
+    @dagger.Module
+    public static class Module {
 
         @Provides
         @UIScope

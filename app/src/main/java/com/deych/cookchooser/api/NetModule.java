@@ -31,7 +31,7 @@ public class NetModule {
 
     @Provides
     @Singleton
-    Gson provideGson() {
+    public Gson provideGson() {
         return new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
                 .setFieldNamingStrategy(new FieldNamingStrategy() {
@@ -46,7 +46,7 @@ public class NetModule {
 
     @Provides
     @Singleton
-    OkHttpClient provideOkHttpClient() {
+    public OkHttpClient provideOkHttpClient() {
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(15, TimeUnit.SECONDS);
         client.setWriteTimeout(60, TimeUnit.SECONDS);
@@ -56,7 +56,7 @@ public class NetModule {
 
     @Provides
     @Singleton
-    Retrofit provideRetrofit(Gson gson, OkHttpClient okHttpClient) {
+    public Retrofit provideRetrofit(Gson gson, OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())

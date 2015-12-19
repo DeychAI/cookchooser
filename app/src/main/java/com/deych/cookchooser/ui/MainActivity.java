@@ -3,6 +3,7 @@ package com.deych.cookchooser.ui;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,16 +14,28 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
-import com.deych.cookchooser.api.ServiceFactory;
+import com.deych.cookchooser.db.tables.UserTable;
+import com.deych.cookchooser.db.entities.User;
+import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.queries.Query;
+
+import java.util.Random;
 
 import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-//    @Inject
-//    ServiceFactory mServiceFactory;
+    @Inject
+    StorIOSQLite mStorIOSQLite;
+
+    private Subscription mSubscription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,19 +62,29 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-//        App.get(this).getNetComponent().inject(this);
-//        TokenService service = mServiceFactory.createService(TokenService.class, "", "");
-//        service.login().enqueue(new Callback<TokenResponse>() {
-//            @Override
-//            public void onResponse(Response<TokenResponse> response, Retrofit retrofit) {
-//                Log.v("TAG", response.body().getToken());
-//            }
-//
-//            @Override
-//            public void onFailure(Throwable t) {
-//
-//            }
-//        });
+        App.get(this).getAppComponent().inject(this);
+
+        mSubscription = mStorIOSQLite
+                .get()
+                .listOfObjects(User.class)
+                .withQuery(Query.builder().table(UserTable.TABLE).build())
+                .prepare()
+                .createObservable()
+                .take(1)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(list -> {
+                    for (User u : list) {
+                        Timber.v("User: " + u.getUsername());
+                    }
+                });
+
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mSubscription.unsubscribe();
     }
 
     @Override

@@ -25,6 +25,7 @@ import com.deych.cookchooser.ui.base.Presenter;
 import com.deych.cookchooser.ui.base.ViewState;
 import com.deych.cookchooser.ui.base.ViewStateDelegate;
 import com.jakewharton.rxbinding.widget.RxTextView;
+import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
 import javax.inject.Inject;
 
@@ -76,7 +77,7 @@ public class LoginFragment extends BaseViewStateFragment implements LoginView {
 
     @Override
     protected void setUpComponents() {
-        App.get(getContext()).getAppComponent().plus(new Module()).inject(this);
+        App.get(getContext()).getAppComponent().plus(new LoginFragmentModule()).inject(this);
     }
 
     @Override
@@ -150,18 +151,19 @@ public class LoginFragment extends BaseViewStateFragment implements LoginView {
     }
 
     @UIScope
-    @Subcomponent(modules = Module.class)
-    public interface Component {
+    @Subcomponent(modules = LoginFragmentModule.class)
+    public interface LoginFragmentComponent {
         void inject(@NonNull LoginFragment aLoginFragment);
     }
 
     @dagger.Module
-    public static class Module {
+    public static class LoginFragmentModule {
 
         @Provides
         @UIScope
-        public LoginPresenter provideLoginPresenter(ServiceFactory aServiceFactory, Preferences aPreferences) {
-            return new LoginPresenter(aServiceFactory, aPreferences);
+        public LoginPresenter provideLoginPresenter(ServiceFactory aServiceFactory, Preferences aPreferences,
+                                                    StorIOSQLite aStorIOSQLite) {
+            return new LoginPresenter(aServiceFactory, aPreferences, aStorIOSQLite);
         }
 
         @Provides

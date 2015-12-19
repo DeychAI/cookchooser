@@ -98,7 +98,7 @@ public class RegisterFragment extends BaseViewStateFragment implements RegisterV
 
     @Override
     protected void setUpComponents() {
-        App.get(getContext()).getAppComponent().plus(new Module()).inject(this);
+        App.get(getContext()).getAppComponent().plus(new RegisterFragmentModule()).inject(this);
     }
 
     @Override
@@ -170,13 +170,13 @@ public class RegisterFragment extends BaseViewStateFragment implements RegisterV
     }
 
     @UIScope
-    @Subcomponent(modules = Module.class)
-    public interface Component {
+    @Subcomponent(modules = RegisterFragmentModule.class)
+    public interface RegisterFragmentComponent {
         void inject(@NonNull RegisterFragment aFragment);
     }
 
     @dagger.Module
-    public static class Module {
+    public static class RegisterFragmentModule {
 
         @Provides
         @UIScope

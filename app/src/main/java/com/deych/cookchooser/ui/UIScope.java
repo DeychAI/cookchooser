@@ -1,4 +1,4 @@
-package com.deych.cookchooser.ui.base;
+package com.deych.cookchooser.ui;
 
 import javax.inject.Scope;
 
@@ -6,5 +6,5 @@ import javax.inject.Scope;
  * Created by deigo on 17.12.2015.
  */
 @Scope
-public @interface FragmentScope {
+public @interface UIScope {
 }

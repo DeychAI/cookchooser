@@ -31,7 +31,6 @@ public class ViewStateDelegate {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         if (shouldApplyViewState) {
             mCallback.applyViewState(mViewState);
-//            mViewState.apply(this);
         }
     }
 

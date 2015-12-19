@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -33,7 +34,7 @@ public class LoginPresenter extends Presenter<LoginView> {
             view().showLoading();
         }
 
-        mServiceFactory.createService(TokenService.class, aUsername, aPassword)
+        Subscription subscription = mServiceFactory.createService(TokenService.class, aUsername, aPassword)
                 .login()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -46,5 +47,6 @@ public class LoginPresenter extends Presenter<LoginView> {
                         view().showError();
                     }
                 });
+        addToSubscription(subscription);
     }
 }

@@ -42,6 +42,7 @@ public class PresenterCacheDelegate {
     public void onDestroy(boolean aDestroyedBySystem) {
         if (!aDestroyedBySystem) {
             mCache.put(mPresenterId, null);
+            mDelegateCallback.onCacheCleared();
         }
     }
 

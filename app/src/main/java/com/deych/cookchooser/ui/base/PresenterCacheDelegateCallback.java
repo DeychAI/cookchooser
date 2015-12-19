@@ -6,4 +6,5 @@ package com.deych.cookchooser.ui.base;
 public interface PresenterCacheDelegateCallback {
     Presenter onEmptyCache();
     void restoredFromCache(Presenter aPresenter);
+    void onCacheCleared();
 }

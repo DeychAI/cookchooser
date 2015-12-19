@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,17 +12,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
 import com.deych.cookchooser.api.ServiceFactory;
 import com.deych.cookchooser.ui.MainActivity;
 import com.deych.cookchooser.ui.base.BaseViewStateFragment;
-import com.deych.cookchooser.ui.base.FragmentScope;
+import com.deych.cookchooser.ui.UIScope;
+import com.deych.cookchooser.ui.base.LfViewState;
 import com.deych.cookchooser.ui.base.Presenter;
 import com.deych.cookchooser.ui.base.ViewState;
 import com.deych.cookchooser.ui.base.ViewStateDelegate;
+import com.jakewharton.rxbinding.widget.RxTextView;
 
 import javax.inject.Inject;
 
@@ -31,11 +33,12 @@ import butterknife.OnClick;
 import dagger.Module;
 import dagger.Provides;
 import dagger.Subcomponent;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by deigo on 16.12.2015.
  */
-public class LoginFragment extends BaseViewStateFragment implements LoginView{
+public class LoginFragment extends BaseViewStateFragment implements LoginView {
 
     @Bind(R.id.progressBar)
     ProgressBar mProgressBar;
@@ -59,23 +62,32 @@ public class LoginFragment extends BaseViewStateFragment implements LoginView{
 
     @OnClick(R.id.link_signup)
     void signUpClick() {
-//        getFragmentManager().beginTransaction()
-//                .add(R.id.content, new RegisterFragment())
-//                .addToBackStack(null)
-//                .commit();
-
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content, new RegisterFragment())
+                .addToBackStack(null)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .commit();
     }
 
     @Inject
     LoginPresenter mPresenter;
 
     @Inject
-    LoginViewState mViewState;
-
+    LfViewState<LoginView> mViewState;
 
     @Override
     protected void setUpComponents() {
         App.get(getContext()).getAppComponent().plus(new LoginFragmentModule()).inject(this);
+    }
+
+    @Override
+    protected Presenter getPresenter() {
+        return mPresenter;
+    }
+
+    @Override
+    protected void setPresenter(Presenter aPresenter) {
+        mPresenter = (LoginPresenter) aPresenter;
     }
 
     @Nullable
@@ -90,6 +102,7 @@ public class LoginFragment extends BaseViewStateFragment implements LoginView{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mPresenter.bindView(this);
+        getUiSubscription().add(RxTextView.editorActionEvents(mEtPassword).subscribe(a -> loginClick()));
     }
 
     @Override
@@ -107,22 +120,21 @@ public class LoginFragment extends BaseViewStateFragment implements LoginView{
     }
 
     @Override
-    public void showLoginForm() {
-        mViewState.setShowLoginForm();
+    public void showForm() {
+        mViewState.setShowForm();
         mProgressBar.setVisibility(View.GONE);
         setFormEnabled(true);
     }
 
     public void showLoading() {
         mViewState.setShowLoading();
+        mEtUsername.setError(null);
         mProgressBar.setVisibility(View.VISIBLE);
         setFormEnabled(false);
     }
 
     public void showError() {
-        mViewState.setShowLoginForm();
-        mProgressBar.setVisibility(View.GONE);
-        setFormEnabled(true);
+        showForm();
         mEtUsername.setError(getString(R.string.error_login));
     }
 
@@ -133,22 +145,12 @@ public class LoginFragment extends BaseViewStateFragment implements LoginView{
     }
 
     @Override
-    public Presenter onEmptyCache() {
-        return mPresenter;
-    }
-
-    @Override
-    public void restoredFromCache(Presenter aPresenter) {
-        mPresenter = (LoginPresenter) aPresenter;
-    }
-
-    @Override
     public void applyViewState(ViewState aViewState) {
-        mViewState = (LoginViewState) aViewState;
+        mViewState = (LfViewState<LoginView>) aViewState;
         mViewState.apply(this);
     }
 
-    @FragmentScope
+    @UIScope
     @Subcomponent(modules = LoginFragmentModule.class)
     public interface LoginFragmentComponent {
         void inject(@NonNull LoginFragment aLoginFragment);
@@ -158,20 +160,20 @@ public class LoginFragment extends BaseViewStateFragment implements LoginView{
     public static class LoginFragmentModule {
 
         @Provides
-        @FragmentScope
+        @UIScope
         public LoginPresenter provideLoginPresenter(ServiceFactory aServiceFactory) {
             return new LoginPresenter(aServiceFactory);
         }
 
         @Provides
-        @FragmentScope
-        public LoginViewState provideLoginViewState() {
-            return new LoginViewState();
+        @UIScope
+        public LfViewState<LoginView> provideLoginViewState() {
+            return new LfViewState<>();
         }
 
         @Provides
-        @FragmentScope
-        public ViewStateDelegate provideViewStateDelegate(LoginViewState aViewState) {
+        @UIScope
+        public ViewStateDelegate provideViewStateDelegate(LfViewState<LoginView> aViewState) {
             return new ViewStateDelegate(aViewState);
         }
     }

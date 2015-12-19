@@ -1,4 +1,4 @@
-package com.deych.cookchooser.di.modules;
+package com.deych.cookchooser.api;
 
 import com.deych.cookchooser.api.ServiceFactory;
 import com.google.gson.FieldNamingPolicy;

@@ -1,7 +1,8 @@
 package com.deych.cookchooser;
 
-import com.deych.cookchooser.di.modules.NetModule;
+import com.deych.cookchooser.api.NetModule;
 import com.deych.cookchooser.ui.login.LoginFragment;
+import com.deych.cookchooser.ui.login.RegisterFragment;
 
 import javax.inject.Singleton;
 
@@ -13,5 +14,6 @@ import dagger.Component;
 @Singleton
 @Component(modules = { AppModule.class, NetModule.class})
 public interface AppComponent {
-    LoginFragment.LoginFragmentComponent plus(LoginFragment.LoginFragmentModule aLoginFragmentModule);
+    LoginFragment.LoginFragmentComponent plus(LoginFragment.LoginFragmentModule aFragmentModule);
+    RegisterFragment.FragmentComponent plus(RegisterFragment.FragmentModule aFragmentModule);
 }

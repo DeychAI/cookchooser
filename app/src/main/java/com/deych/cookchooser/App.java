@@ -4,8 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.deych.cookchooser.di.components.NetComponent;
-import com.deych.cookchooser.di.modules.NetModule;
+import com.deych.cookchooser.api.NetModule;
 
 /**
  * Created by deigo on 13.12.2015.
@@ -28,6 +27,7 @@ public class App extends Application {
                 .builder()
                 .appModule(new AppModule())
                 .netModule(new NetModule("http://deych.myihor.ru/cookchooser/api/v1/"))
+//                .netModule(new NetModule("http://deych.myihor.ru:5000/cookchooser/api/v1/"))
                 .build();
 
 //        mAppComponent = DaggerAppComponent.create();

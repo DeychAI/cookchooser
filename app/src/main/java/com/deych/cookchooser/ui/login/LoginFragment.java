@@ -15,23 +15,21 @@ import android.widget.TextView;
 
 import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
-import com.deych.cookchooser.api.ServiceFactory;
-import com.deych.cookchooser.shared_pref.Preferences;
+import com.deych.cookchooser.db.entities.User;
 import com.deych.cookchooser.ui.MainActivity;
 import com.deych.cookchooser.ui.base.BaseViewStateFragment;
 import com.deych.cookchooser.ui.UIScope;
-import com.deych.cookchooser.ui.base.LfViewState;
 import com.deych.cookchooser.ui.base.Presenter;
 import com.deych.cookchooser.ui.base.ViewState;
 import com.deych.cookchooser.ui.base.ViewStateDelegate;
 import com.jakewharton.rxbinding.widget.RxTextView;
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.Module;
 import dagger.Provides;
 import dagger.Subcomponent;
 
@@ -73,7 +71,7 @@ public class LoginFragment extends BaseViewStateFragment implements LoginView {
     LoginPresenter mPresenter;
 
     @Inject
-    LfViewState<LoginView> mViewState;
+    LoginViewState mViewState;
 
     @Override
     protected void setUpComponents() {
@@ -139,14 +137,15 @@ public class LoginFragment extends BaseViewStateFragment implements LoginView {
     }
 
     @Override
-    public void loginSuccessful() {
+    public void loginSuccessful(User user) {
+        App.get(getContext()).createUserComponent(user);
         startActivity(new Intent(getContext(), MainActivity.class));
         getActivity().finish();
     }
 
     @Override
     public void applyViewState(ViewState aViewState) {
-        mViewState = (LfViewState<LoginView>) aViewState;
+        mViewState = (LoginViewState) aViewState;
         mViewState.apply(this);
     }
 
@@ -156,25 +155,11 @@ public class LoginFragment extends BaseViewStateFragment implements LoginView {
         void inject(@NonNull LoginFragment aLoginFragment);
     }
 
-    @dagger.Module
+    @Module
     public static class LoginFragmentModule {
-
         @Provides
         @UIScope
-        public LoginPresenter provideLoginPresenter(ServiceFactory aServiceFactory, Preferences aPreferences,
-                                                    StorIOSQLite aStorIOSQLite) {
-            return new LoginPresenter(aServiceFactory, aPreferences, aStorIOSQLite);
-        }
-
-        @Provides
-        @UIScope
-        public LfViewState<LoginView> provideLoginViewState() {
-            return new LfViewState<>();
-        }
-
-        @Provides
-        @UIScope
-        public ViewStateDelegate provideViewStateDelegate(LfViewState<LoginView> aViewState) {
+        public ViewStateDelegate provideViewStateDelegate(LoginViewState aViewState) {
             return new ViewStateDelegate(aViewState);
         }
     }

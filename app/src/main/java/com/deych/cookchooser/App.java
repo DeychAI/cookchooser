@@ -4,8 +4,12 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.deych.cookchooser.api.ApiModule;
 import com.deych.cookchooser.api.NetModule;
 import com.deych.cookchooser.db.DbModule;
+import com.deych.cookchooser.db.entities.User;
+import com.deych.cookchooser.models.UserComponent;
+import com.deych.cookchooser.models.UserModule;
 
 import timber.log.Timber;
 
@@ -15,6 +19,7 @@ import timber.log.Timber;
 public class App extends Application {
 
     private AppComponent mAppComponent;
+    private UserComponent mUserComponent;
 
     public static App get(@NonNull Context aContext) {
         return (App) aContext.getApplicationContext();
@@ -28,6 +33,7 @@ public class App extends Application {
                 .appModule(new AppModule(this))
                 .netModule(new NetModule("http://deych.myihor.ru/cookchooser/api/v1/"))
                 .dbModule(new DbModule())
+                .apiModule(new ApiModule())
 //                .netModule(new NetModule("http://deych.myihor.ru:5000/cookchooser/api/v1/"))
                 .build();
 
@@ -39,5 +45,18 @@ public class App extends Application {
 
     public AppComponent getAppComponent() {
         return mAppComponent;
+    }
+
+    public UserComponent createUserComponent(User user) {
+        mUserComponent = mAppComponent.plus(new UserModule(user));
+        return mUserComponent;
+    }
+
+    public UserComponent getUserComponent() {
+        return mUserComponent;
+    }
+
+    public void releaseUserComponent() {
+        mUserComponent = null;
     }
 }

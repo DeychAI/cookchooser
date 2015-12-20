@@ -2,6 +2,7 @@ package com.deych.cookchooser.db.entities;
 
 import android.provider.BaseColumns;
 
+import com.deych.cookchooser.api.entities.UserVo;
 import com.deych.cookchooser.db.tables.UserTable;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
@@ -35,6 +36,10 @@ public class User {
         user.name = name;
         user.group = group;
         return user;
+    }
+
+    public static User newUser(UserVo userVo) {
+        return newUser(userVo.getId(), userVo.getUsername(), userVo.getName(), userVo.getGroup());
     }
 
     public long getUserId() {

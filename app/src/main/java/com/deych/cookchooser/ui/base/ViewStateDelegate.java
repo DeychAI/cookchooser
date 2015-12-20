@@ -3,6 +3,8 @@ package com.deych.cookchooser.ui.base;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import javax.inject.Inject;
+
 /**
  * Created by deigo on 17.12.2015.
  */
@@ -12,6 +14,7 @@ public class ViewStateDelegate {
     private ViewState mViewState;
     private ViewStateDelegateCallback mCallback;
 
+    @Inject
     public ViewStateDelegate(ViewState aViewState) {
         mViewState = aViewState;
     }

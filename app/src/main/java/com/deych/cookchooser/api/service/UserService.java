@@ -1,7 +1,10 @@
 package com.deych.cookchooser.api.service;
 
-import com.deych.cookchooser.api.entities.User;
+import com.deych.cookchooser.api.entities.UserVo;
+import com.deych.cookchooser.api.response.TokenResponse;
 
+import retrofit.http.GET;
+import retrofit.http.Header;
 import retrofit.http.POST;
 import retrofit.http.Query;
 import rx.Observable;
@@ -11,8 +14,11 @@ import rx.Observable;
  */
 public interface UserService {
 
+    @GET("token")
+    Observable<TokenResponse> login(@Header("Authorization") String authorization);
+
     @POST("users")
-    Observable<User> register(@Query("username") String aUsername,
+    Observable<UserVo> register(@Query("username") String aUsername,
                               @Query("password") String aPassword,
                               @Query("name") String aName);
 }

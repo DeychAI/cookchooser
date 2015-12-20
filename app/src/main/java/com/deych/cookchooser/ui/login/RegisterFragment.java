@@ -13,10 +13,8 @@ import android.widget.ProgressBar;
 
 import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
-import com.deych.cookchooser.api.ServiceFactory;
 import com.deych.cookchooser.ui.UIScope;
 import com.deych.cookchooser.ui.base.BaseViewStateFragment;
-import com.deych.cookchooser.ui.base.LfViewState;
 import com.deych.cookchooser.ui.base.Presenter;
 import com.deych.cookchooser.ui.base.ViewState;
 import com.deych.cookchooser.ui.base.ViewStateDelegate;
@@ -64,7 +62,7 @@ public class RegisterFragment extends BaseViewStateFragment implements RegisterV
     RegisterPresenter mPresenter;
 
     @Inject
-    LfViewState<RegisterView> mViewState;
+    RegisterViewState mViewState;
 
     @Nullable
     @Override
@@ -165,7 +163,7 @@ public class RegisterFragment extends BaseViewStateFragment implements RegisterV
 
     @Override
     public void applyViewState(ViewState aViewState) {
-        mViewState = (LfViewState<RegisterView>) aViewState;
+        mViewState = (RegisterViewState) aViewState;
         mViewState.apply(this);
     }
 
@@ -177,22 +175,9 @@ public class RegisterFragment extends BaseViewStateFragment implements RegisterV
 
     @dagger.Module
     public static class RegisterFragmentModule {
-
         @Provides
         @UIScope
-        public RegisterPresenter providePresenter(ServiceFactory aServiceFactory) {
-            return new RegisterPresenter(aServiceFactory);
-        }
-
-        @Provides
-        @UIScope
-        public LfViewState<RegisterView> provideViewState() {
-            return new LfViewState<>();
-        }
-
-        @Provides
-        @UIScope
-        public ViewStateDelegate provideViewStateDelegate(LfViewState<RegisterView> aViewState) {
+        public ViewStateDelegate provideViewStateDelegate(RegisterViewState aViewState) {
             return new ViewStateDelegate(aViewState);
         }
     }

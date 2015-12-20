@@ -1,13 +1,12 @@
 package com.deych.cookchooser.api;
 
-import com.deych.cookchooser.api.ServiceFactory;
+import com.deych.cookchooser.BuildConfig;
 import com.google.gson.FieldNamingPolicy;
-import com.google.gson.FieldNamingStrategy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.logging.HttpLoggingInterceptor;
 
-import java.lang.reflect.Field;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
@@ -17,6 +16,10 @@ import dagger.Provides;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
+import timber.log.Timber;
+
+import static com.squareup.okhttp.logging.HttpLoggingInterceptor.Level.BODY;
+import static com.squareup.okhttp.logging.HttpLoggingInterceptor.Level.NONE;
 
 /**
  * Created by deigo on 13.12.2015.
@@ -34,23 +37,29 @@ public class NetModule {
     public Gson provideGson() {
         return new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
-                .setFieldNamingStrategy(new FieldNamingStrategy() {
-                    @Override
-                    public String translateName(Field f) {
-                        String name = FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES.translateName(f);
-                        name = name.substring(2, name.length()).toLowerCase();
-                        return name;
-                    }
+                .setFieldNamingStrategy(f -> {
+                    String name = FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES.translateName(f);
+                    name = name.substring(2, name.length()).toLowerCase();
+                    return name;
                 }).create();
     }
 
     @Provides
     @Singleton
-    public OkHttpClient provideOkHttpClient() {
+    public HttpLoggingInterceptor provideHttpLoggingInterceptor() {
+        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor(message -> Timber.d(message));
+        httpLoggingInterceptor.setLevel(BuildConfig.DEBUG ? BODY : NONE);
+        return httpLoggingInterceptor;
+    }
+
+    @Provides
+    @Singleton
+    public OkHttpClient provideOkHttpClient(HttpLoggingInterceptor httpLoggingInterceptor) {
         OkHttpClient client = new OkHttpClient();
         client.setConnectTimeout(15, TimeUnit.SECONDS);
         client.setWriteTimeout(60, TimeUnit.SECONDS);
         client.setReadTimeout(60, TimeUnit.SECONDS);
+        client.interceptors().add(httpLoggingInterceptor);
         return client;
     }
 

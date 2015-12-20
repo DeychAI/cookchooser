@@ -1,5 +1,6 @@
 package com.deych.cookchooser.ui.login;
 
+import com.deych.cookchooser.db.entities.User;
 import com.deych.cookchooser.ui.base.LfView;
 
 /**
@@ -7,5 +8,5 @@ import com.deych.cookchooser.ui.base.LfView;
  */
 public interface LoginView extends LfView{
     void showError();
-    void loginSuccessful();
+    void loginSuccessful(User user);
 }

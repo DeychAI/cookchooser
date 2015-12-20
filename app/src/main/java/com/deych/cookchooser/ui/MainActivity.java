@@ -16,10 +16,13 @@ import android.view.MenuItem;
 
 import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
+import com.deych.cookchooser.api.entities.MealVo;
 import com.deych.cookchooser.db.tables.UserTable;
 import com.deych.cookchooser.db.entities.User;
+import com.deych.cookchooser.models.MealsModel;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
+import com.squareup.okhttp.OkHttpClient;
 
 import java.util.Random;
 
@@ -27,13 +30,14 @@ import javax.inject.Inject;
 
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Inject
-    StorIOSQLite mStorIOSQLite;
+    MealsModel mMealsModel;
 
     private Subscription mSubscription;
 
@@ -62,23 +66,17 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        App.get(this).getAppComponent().inject(this);
+        App.get(this).getUserComponent().inject(this);
 
-        mSubscription = mStorIOSQLite
-                .get()
-                .listOfObjects(User.class)
-                .withQuery(Query.builder().table(UserTable.TABLE).build())
-                .prepare()
-                .createObservable()
-                .take(1)
+        mSubscription = mMealsModel
+                .list(1)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(list -> {
-                    for (User u : list) {
-                        Timber.v("User: " + u.getUsername());
+                    for (MealVo vo : list) {
+                        Timber.v(vo.getName());
                     }
                 });
-
-
     }
 
     @Override

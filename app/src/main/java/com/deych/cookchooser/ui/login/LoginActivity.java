@@ -3,14 +3,17 @@ package com.deych.cookchooser.ui.login;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 
 import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
-import com.deych.cookchooser.shared_pref.Preferences;
+import com.deych.cookchooser.models.UserModel;
 import com.deych.cookchooser.ui.MainActivity;
 
 import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by deigo on 14.12.2015.
@@ -18,25 +21,35 @@ import javax.inject.Inject;
 public class LoginActivity extends AppCompatActivity {
 
     @Inject
-    Preferences mPreferences;
+    UserModel mUserModel;
+
+    Subscription mSubscription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.get(this).getAppComponent().inject(this);
-        
-        if (mPreferences.getUserId() != 0 && !TextUtils.isEmpty(mPreferences.getUserToken())) {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-            return;
-        }
 
-        setContentView(R.layout.layout_content);
+        mSubscription = mUserModel.login()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(user -> {
+                    App.get(this).createUserComponent(user);
+                    startActivity(new Intent(this, MainActivity.class));
+                    finish();
+                }, e -> {
+                    setContentView(R.layout.layout_content);
+                    if (savedInstanceState == null) {
+                        getSupportFragmentManager().beginTransaction()
+                                .add(R.id.content, new LoginFragment())
+                                .commit();
+                    }
+                });
+    }
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.content, new LoginFragment())
-                    .commit();
-        }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mSubscription.unsubscribe();
     }
 }

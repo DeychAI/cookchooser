@@ -2,19 +2,11 @@ package com.deych.cookchooser.ui.login;
 
 import android.text.TextUtils;
 
-import com.deych.cookchooser.api.ServiceFactory;
-import com.deych.cookchooser.api.entities.*;
-import com.deych.cookchooser.api.service.UserService;
+import com.deych.cookchooser.models.UserModel;
 import com.deych.cookchooser.ui.base.Presenter;
-
-import java.io.IOException;
 
 import javax.inject.Inject;
 
-import retrofit.Converter;
-import retrofit.GsonConverterFactory;
-import retrofit.HttpException;
-import retrofit.Retrofit;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -23,12 +15,12 @@ import rx.schedulers.Schedulers;
  * Created by deigo on 19.12.2015.
  */
 public class RegisterPresenter extends Presenter<RegisterView> {
-    private ServiceFactory mServiceFactory;
+    private UserModel mUserModel;
 
 
     @Inject
-    public RegisterPresenter(ServiceFactory aServiceFactory) {
-        mServiceFactory = aServiceFactory;
+    public RegisterPresenter(UserModel userModel) {
+        mUserModel = userModel;
     }
 
     public void doRegister(String aUsername, String aPassword, String aRepeatPassword, String aName) {
@@ -57,8 +49,7 @@ public class RegisterPresenter extends Presenter<RegisterView> {
             view().showLoading();
         }
 
-        Subscription subscription = mServiceFactory.createService(UserService.class)
-                .register(aUsername, aPassword, aName)
+        Subscription subscription = mUserModel.register(aUsername, aPassword, aName)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(u -> {
@@ -66,18 +57,10 @@ public class RegisterPresenter extends Presenter<RegisterView> {
                         view().registerSuccessful();
                     }
                 }, e -> {
-                    HttpException error = (HttpException) e;
-                    if (error.code() == 409) {
+                    if (mUserModel.handleRegisterError(e) == UserModel.ERROR_USER_EXISTS) {
                         if (view() != null) {
                             view().showUserExistsError();
                         }
-                        //TODO just a memo how to convert errors
-//                        try {
-//                            ResponseError responseError = (ResponseError) mRetrofit.responseConverter(ResponseError.class,
-//                                    ResponseError.class.getAnnotations()).convert(error.response().errorBody());
-//                        } catch (IOException e1) {
-//                            e1.printStackTrace();
-//                        }
                     } else {
                         if (view() != null) {
                             view().showError();

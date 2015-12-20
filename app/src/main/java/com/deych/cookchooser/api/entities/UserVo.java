@@ -3,7 +3,7 @@ package com.deych.cookchooser.api.entities;
 /**
  * Created by deigo on 19.12.2015.
  */
-public class User {
+public class UserVo {
     private long mId;
     private String mName;
     private String mUsername;

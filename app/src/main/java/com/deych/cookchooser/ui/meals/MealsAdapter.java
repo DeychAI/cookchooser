@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.deych.cookchooser.R;
+import com.deych.cookchooser.db.entities.Meal;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,9 +20,9 @@ import butterknife.ButterKnife;
  */
 public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder>{
 
-    private List<String> mList = Collections.emptyList();
+    private List<Meal> mList = Collections.emptyList();
 
-    public void setList(List<String> list) {
+    public void setList(List<Meal> list) {
         mList = list;
         notifyDataSetChanged();
     }
@@ -52,8 +53,8 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder>{
             ButterKnife.bind(this, itemView);
         }
 
-        public void bind(String text) {
-            tvName.setText(text);
+        public void bind(Meal meal) {
+            tvName.setText(meal.getName());
         }
     }
 }

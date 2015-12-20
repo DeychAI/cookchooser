@@ -1,15 +1,22 @@
 package com.deych.cookchooser.models;
 
-import com.deych.cookchooser.api.entities.MealVo;
-import com.deych.cookchooser.api.service.MealsService;
-import com.deych.cookchooser.db.entities.User;
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import android.content.Context;
 
+import com.deych.cookchooser.api.service.MealsService;
+import com.deych.cookchooser.db.entities.Category;
+import com.deych.cookchooser.db.entities.Meal;
+import com.deych.cookchooser.db.entities.User;
+import com.deych.cookchooser.db.tables.CategoryTable;
+import com.deych.cookchooser.db.tables.MealTable;
+import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.queries.Query;
+
+import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import retrofit.Retrofit;
 import rx.Observable;
 
 /**
@@ -20,16 +27,49 @@ public class MealsModel {
     private User mUser;
     private MealsService mMealsService;
     private StorIOSQLite mStorIOSQLite;
+    private Context mContext;
 
     @Inject
-    public MealsModel(User user, MealsService mealsService, StorIOSQLite storIOSQLite) {
+    public MealsModel(User user, MealsService mealsService, StorIOSQLite storIOSQLite, Context context) {
         mUser = user;
         mMealsService = mealsService;
         mStorIOSQLite = storIOSQLite;
+        mContext = context;
     }
 
-    public Observable<List<MealVo>> list(long category_id) {
-        return mMealsService.list(category_id);
+    public Observable<List<Meal>> getMeals(long category_id) {
+        Observable<List<Meal>> net = mMealsService.getMeals(category_id)
+                .doOnNext(list -> {
+                    mStorIOSQLite.put().objects(list).prepare().executeAsBlocking();
+                })
+                .retryWhen(new RetryWithDelayIf(1, 3, TimeUnit.SECONDS, t -> (t instanceof IOException)));
+
+        Observable<List<Meal>> db = mStorIOSQLite.get()
+                .listOfObjects(Meal.class)
+                .withQuery(Query.builder()
+                        .table(MealTable.TABLE)
+                        .where(MealTable.CATEGORY_ID + " = ?")
+                        .whereArgs(category_id).build())
+                .prepare()
+                .createObservable();
+
+        return Observable.merge(db, net);
     }
 
+    public Observable<List<Category>> getCategories() {
+        Observable<List<Category>> db = mStorIOSQLite.get()
+                .listOfObjects(Category.class)
+                .withQuery(CategoryTable.QUERY_ALL)
+                .prepare()
+                .createObservable()
+                .take(1);
+
+        Observable<List<Category>> net = mMealsService.getCategories()
+                .doOnNext(list -> {
+                    mStorIOSQLite.put().objects(list).prepare().executeAsBlocking();
+                })
+                .retryWhen(new RetryWithDelayIf(1, 3, TimeUnit.SECONDS, t -> (t instanceof IOException)));
+
+        return Observable.concat(db, net);
+    }
 }

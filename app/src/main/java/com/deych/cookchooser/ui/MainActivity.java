@@ -5,7 +5,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,20 +14,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
-import com.deych.cookchooser.api.entities.MealVo;
-import com.deych.cookchooser.db.tables.UserTable;
-import com.deych.cookchooser.db.entities.User;
+import com.deych.cookchooser.db.entities.Category;
+import com.deych.cookchooser.db.entities.Meal;
 import com.deych.cookchooser.models.MealsModel;
 import com.deych.cookchooser.ui.meals.MealsListFragment;
 import com.deych.cookchooser.ui.meals.MealsPagesAdapter;
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.queries.Query;
-import com.squareup.okhttp.OkHttpClient;
-
-import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -61,17 +55,31 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        App.get(this).getUserComponent().inject(this);
 
         setSupportActionBar(toolbar);
         MealsPagesAdapter adapter = new MealsPagesAdapter(getSupportFragmentManager());
-        adapter.addFragment(new MealsListFragment(), "Суп");
-        adapter.addFragment(new MealsListFragment(), "Салат");
-        adapter.addFragment(new MealsListFragment(), "Горячее");
-        adapter.addFragment(new MealsListFragment(), "Гарнир");
-        viewPager.setAdapter(adapter);
-        tabs.setupWithViewPager(viewPager);
 
-
+        mSubscription = mMealsModel
+                .getCategories()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(list -> {
+                    if (adapter.getCount() > 0) {
+                        return;
+                    }
+                    for (Category category : list) {
+                        Timber.v("cat list size: " + list.size());
+                        adapter.addFragment(MealsListFragment.newInstance(category.getId()), category.getName());
+                        viewPager.setAdapter(adapter);
+                        tabs.setupWithViewPager(viewPager);
+                    }
+                }, e -> {
+                    if (adapter.getCount() > 0) {
+                        return;
+                    }
+                    Toast.makeText(MainActivity.this, "Error!", Toast.LENGTH_SHORT).show();
+                });
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,23 +98,15 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        App.get(this).getUserComponent().inject(this);
 
-        mSubscription = mMealsModel
-                .list(1)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(list -> {
-                    for (MealVo vo : list) {
-                        Timber.v(vo.getName());
-                    }
-                });
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        mSubscription.unsubscribe();
+        if (mSubscription != null) {
+            mSubscription.unsubscribe();
+        }
     }
 
     @Override

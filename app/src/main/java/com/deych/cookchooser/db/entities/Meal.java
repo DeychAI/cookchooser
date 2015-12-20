@@ -2,31 +2,30 @@ package com.deych.cookchooser.db.entities;
 
 import android.provider.BaseColumns;
 
-import com.deych.cookchooser.db.tables.UserTable;
+import com.deych.cookchooser.db.tables.MealTable;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
 /**
- * Created by deigo on 19.12.2015.
+ * Created by deigo on 20.12.2015.
  */
-@StorIOSQLiteType(table = UserTable.TABLE)
-public class User {
+@StorIOSQLiteType(table = MealTable.TABLE)
+public class Meal {
+
     @StorIOSQLiteColumn(name = BaseColumns._ID, key = true)
     long mId;
 
-    @StorIOSQLiteColumn(name = UserTable.NAME)
+    @StorIOSQLiteColumn(name = MealTable.NAME)
     String mName;
 
-    @StorIOSQLiteColumn(name = UserTable.LOGIN)
-    String mUsername;
+    @StorIOSQLiteColumn(name = MealTable.CATEGORY_ID)
+    long mCategoryId;
 
-    @StorIOSQLiteColumn(name = UserTable.GROUP_ID)
+    @StorIOSQLiteColumn(name = MealTable.GROUP_ID)
     String mGroup;
 
-    String mToken;
-
-    public User() {
-    }
+    @StorIOSQLiteColumn(name = MealTable.CLIENT_ID)
+    String mClientId;
 
     public long getId() {
         return mId;
@@ -44,12 +43,12 @@ public class User {
         mName = name;
     }
 
-    public String getUsername() {
-        return mUsername;
+    public long getCategoryId() {
+        return mCategoryId;
     }
 
-    public void setUsername(String username) {
-        mUsername = username;
+    public void setCategoryId(long categoryId) {
+        mCategoryId = categoryId;
     }
 
     public String getGroup() {
@@ -60,11 +59,11 @@ public class User {
         mGroup = group;
     }
 
-    public String getToken() {
-        return mToken;
+    public String getClientId() {
+        return mClientId;
     }
 
-    public void setToken(String token) {
-        mToken = token;
+    public void setClientId(String clientId) {
+        mClientId = clientId;
     }
 }

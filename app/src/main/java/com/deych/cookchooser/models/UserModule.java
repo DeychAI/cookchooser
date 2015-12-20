@@ -1,5 +1,6 @@
 package com.deych.cookchooser.models;
 
+import android.content.Context;
 import android.util.Base64;
 
 import com.deych.cookchooser.api.service.MealsService;
@@ -40,7 +41,8 @@ public class UserModule {
     public MealsModel provideMealsModel(User user, OkHttpClient okHttpClient,
                                         HttpLoggingInterceptor loggingInterceptor,
                                         MealsService mealsService,
-                                        StorIOSQLite storIOSQLite) {
+                                        StorIOSQLite storIOSQLite,
+                                        Context context) {
 
         Interceptor interceptor = new Interceptor() {
             @Override
@@ -62,6 +64,6 @@ public class UserModule {
         okHttpClient.interceptors().add(loggingInterceptor);
         okHttpClient.interceptors().add(interceptor);
 
-        return new MealsModel(user, mealsService, storIOSQLite);
+        return new MealsModel(user, mealsService, storIOSQLite, context);
     }
 }

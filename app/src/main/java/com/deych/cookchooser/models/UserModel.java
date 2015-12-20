@@ -1,9 +1,9 @@
 package com.deych.cookchooser.models;
 
+import android.provider.BaseColumns;
 import android.text.TextUtils;
 import android.util.Base64;
 
-import com.deych.cookchooser.api.entities.UserVo;
 import com.deych.cookchooser.api.service.UserService;
 import com.deych.cookchooser.db.entities.User;
 import com.deych.cookchooser.db.tables.UserTable;
@@ -15,7 +15,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import retrofit.HttpException;
-import retrofit.Retrofit;
 import rx.Observable;
 
 /**
@@ -38,7 +37,7 @@ public class UserModel {
         mStorIOSQLite = storIOSQLite;
     }
 
-    public Observable<UserVo> register(String username, String password, String name) {
+    public Observable<User> register(String username, String password, String name) {
         return mUserService.register(username, password, name);
     }
 
@@ -66,8 +65,7 @@ public class UserModel {
                 "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
         return mUserService.login(basic)
                 .map(response -> {
-                    UserVo responseUser = response.getUser();
-                    User user = User.newUser(responseUser);
+                    User user = response.getUser();
                     user.setToken(response.getToken());
                     mStorIOSQLite
                             .put()
@@ -76,7 +74,7 @@ public class UserModel {
                             .executeAsBlocking();
                     return user;
                 })
-                .doOnNext(u -> mPreferences.saveUserData(u.getUserId(), u.getToken()));
+                .doOnNext(u -> mPreferences.saveUserData(u.getId(), u.getToken()));
     }
 
     public Observable<User> login() {
@@ -84,18 +82,14 @@ public class UserModel {
             return mStorIOSQLite
                     .get()
                     .listOfObjects(User.class)
-                    .withQuery(Query.builder()
-                            .table(UserTable.TABLE)
-                            .where("user_id = ?")
-                            .whereArgs(mPreferences.getUserId())
-                            .build())
+                    .withQuery(UserTable.get(mPreferences.getUserId()))
                     .prepare()
                     .createObservable()
                     .take(1)
                     .map(list -> {
                         if (list.isEmpty()) {
                             mPreferences.clearUserData();
-                            throw new RuntimeException("UserVo not found");
+                            throw new RuntimeException("User not found");
                         } else {
                             User user = list.get(0);
                             user.setToken(mPreferences.getUserToken());
@@ -103,7 +97,7 @@ public class UserModel {
                         }
                     });
         } else {
-            return Observable.error(new RuntimeException("UserVo not found"));
+            return Observable.error(new RuntimeException("User not found"));
         }
     }
 

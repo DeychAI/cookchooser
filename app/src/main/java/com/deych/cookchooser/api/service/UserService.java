@@ -1,7 +1,7 @@
 package com.deych.cookchooser.api.service;
 
-import com.deych.cookchooser.api.entities.UserVo;
 import com.deych.cookchooser.api.response.TokenResponse;
+import com.deych.cookchooser.db.entities.User;
 
 import retrofit.http.GET;
 import retrofit.http.Header;
@@ -18,7 +18,7 @@ public interface UserService {
     Observable<TokenResponse> login(@Header("Authorization") String authorization);
 
     @POST("users")
-    Observable<UserVo> register(@Query("username") String aUsername,
+    Observable<User> register(@Query("username") String aUsername,
                               @Query("password") String aPassword,
                               @Query("name") String aName);
 }

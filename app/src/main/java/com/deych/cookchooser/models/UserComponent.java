@@ -1,6 +1,6 @@
 package com.deych.cookchooser.models;
 
-import com.deych.cookchooser.ui.MainActivity;
+import com.deych.cookchooser.ui.meals.MealsActivity;
 import com.deych.cookchooser.ui.meals.MealsListFragment;
 
 import dagger.Subcomponent;
@@ -11,6 +11,6 @@ import dagger.Subcomponent;
 @UserScope
 @Subcomponent(modules = UserModule.class)
 public interface UserComponent {
-    void inject(MainActivity mainActivity);
+    void inject(MealsActivity mealsActivity);
     void inject(MealsListFragment fragment);
 }

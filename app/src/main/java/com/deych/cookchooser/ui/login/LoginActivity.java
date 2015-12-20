@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
 import com.deych.cookchooser.models.UserModel;
-import com.deych.cookchooser.ui.MainActivity;
+import com.deych.cookchooser.ui.meals.MealsActivity;
 
 import javax.inject.Inject;
 
@@ -37,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(user -> {
                     App.get(this).createUserComponent(user);
-                    startActivity(new Intent(this, MainActivity.class));
+                    startActivity(new Intent(this, MealsActivity.class));
                     finish();
                 }, e -> {
                     if (savedInstanceState == null) {

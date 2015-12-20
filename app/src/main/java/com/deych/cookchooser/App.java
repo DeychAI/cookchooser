@@ -10,6 +10,8 @@ import com.deych.cookchooser.db.DbModule;
 import com.deych.cookchooser.db.entities.User;
 import com.deych.cookchooser.models.UserComponent;
 import com.deych.cookchooser.models.UserModule;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 import timber.log.Timber;
 
@@ -25,9 +27,18 @@ public class App extends Application {
         return (App) aContext.getApplicationContext();
     }
 
+    public RefWatcher getRefWatcher() {
+        return refWatcher;
+    }
+
+    private RefWatcher refWatcher;
+
     @Override
     public void onCreate() {
         super.onCreate();
+
+        refWatcher = LeakCanary.install(this);
+
         mAppComponent = DaggerAppComponent
                 .builder()
                 .appModule(new AppModule(this))

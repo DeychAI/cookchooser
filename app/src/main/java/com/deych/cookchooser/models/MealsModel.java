@@ -38,11 +38,7 @@ public class MealsModel {
     }
 
     public Observable<List<Meal>> getMeals(long category_id) {
-        Observable<List<Meal>> net = mMealsService.getMeals(category_id)
-                .doOnNext(list -> {
-                    mStorIOSQLite.put().objects(list).prepare().executeAsBlocking();
-                })
-                .retryWhen(new RetryWithDelayIf(1, 3, TimeUnit.SECONDS, t -> (t instanceof IOException)));
+        Observable<List<Meal>> net = getMealsFromNet(category_id);
 
         Observable<List<Meal>> db = mStorIOSQLite.get()
                 .listOfObjects(Meal.class)
@@ -54,6 +50,14 @@ public class MealsModel {
                 .createObservable();
 
         return Observable.merge(db, net);
+    }
+
+    public Observable<List<Meal>> getMealsFromNet(long category_id) {
+        return mMealsService.getMeals(category_id)
+                .doOnNext(list -> {
+                    mStorIOSQLite.put().objects(list).prepare().executeAsBlocking();
+                })
+                .retryWhen(new RetryWithDelayIf(1, 3, TimeUnit.SECONDS, t -> (t instanceof IOException)));
     }
 
     public Observable<List<Category>> getCategories() {

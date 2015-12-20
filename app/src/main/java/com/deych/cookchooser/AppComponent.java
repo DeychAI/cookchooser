@@ -5,7 +5,6 @@ import com.deych.cookchooser.api.NetModule;
 import com.deych.cookchooser.db.DbModule;
 import com.deych.cookchooser.models.UserComponent;
 import com.deych.cookchooser.models.UserModule;
-import com.deych.cookchooser.ui.MainActivity;
 import com.deych.cookchooser.ui.login.LoginActivity;
 import com.deych.cookchooser.ui.login.LoginFragment;
 import com.deych.cookchooser.ui.login.RegisterFragment;

@@ -15,4 +15,9 @@
     <string name="error_login">Неверное имя пользователя или пароль</string>
     <string name="user_name">Имя</string>
     <string name="btn_register">Регистрация</string>
+    <string name="nav_list">Список блюд</string>
+    <string name="nav_group">Группа</string>
+    <string name="nav_invites">Приглашения</string>
+    <string name="nav_settings">Настройки</string>
+    <string name="nav_logout">Выйти</string>
 </resources>

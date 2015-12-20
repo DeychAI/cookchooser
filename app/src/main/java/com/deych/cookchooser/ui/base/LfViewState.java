@@ -46,4 +46,12 @@ public class LfViewState<V extends LfView> implements ViewState<V> {
         }
         return null;
     }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
 }

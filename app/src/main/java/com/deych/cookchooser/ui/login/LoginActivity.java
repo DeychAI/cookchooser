@@ -28,6 +28,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.layout_content);
+
         App.get(this).getAppComponent().inject(this);
 
         mSubscription = mUserModel.login()
@@ -38,7 +40,6 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(new Intent(this, MainActivity.class));
                     finish();
                 }, e -> {
-                    setContentView(R.layout.layout_content);
                     if (savedInstanceState == null) {
                         getSupportFragmentManager().beginTransaction()
                                 .add(R.id.content, new LoginFragment())

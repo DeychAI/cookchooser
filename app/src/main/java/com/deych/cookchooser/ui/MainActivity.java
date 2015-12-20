@@ -3,6 +3,8 @@ package com.deych.cookchooser.ui;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -20,6 +22,8 @@ import com.deych.cookchooser.api.entities.MealVo;
 import com.deych.cookchooser.db.tables.UserTable;
 import com.deych.cookchooser.db.entities.User;
 import com.deych.cookchooser.models.MealsModel;
+import com.deych.cookchooser.ui.meals.MealsListFragment;
+import com.deych.cookchooser.ui.meals.MealsPagesAdapter;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 import com.squareup.okhttp.OkHttpClient;
@@ -28,6 +32,8 @@ import java.util.Random;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -39,14 +45,32 @@ public class MainActivity extends AppCompatActivity
     @Inject
     MealsModel mMealsModel;
 
+    @Bind(R.id.tabs)
+    TabLayout tabs;
+
+    @Bind(R.id.viewPager)
+    ViewPager viewPager;
+
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+
     private Subscription mSubscription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
+
         setSupportActionBar(toolbar);
+        MealsPagesAdapter adapter = new MealsPagesAdapter(getSupportFragmentManager());
+        adapter.addFragment(new MealsListFragment(), "Суп");
+        adapter.addFragment(new MealsListFragment(), "Салат");
+        adapter.addFragment(new MealsListFragment(), "Горячее");
+        adapter.addFragment(new MealsListFragment(), "Гарнир");
+        viewPager.setAdapter(adapter);
+        tabs.setupWithViewPager(viewPager);
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

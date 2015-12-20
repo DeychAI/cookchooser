@@ -9,4 +9,6 @@ public interface ViewState<V> {
     void apply(V view);
     void saveInstanceState(Bundle out);
     ViewState<V> restoreInstanceState(Bundle in);
+    void setState(int state);
+    int getState();
 }

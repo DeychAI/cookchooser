@@ -133,7 +133,7 @@ public class LoginFragment extends BaseViewStateFragment implements LoginView {
 
     public void showError() {
         showForm();
-        mEtUsername.setError(getString(R.string.error_login));
+        mEtPassword.setError(getString(R.string.error_login));
     }
 
     @Override
@@ -145,7 +145,7 @@ public class LoginFragment extends BaseViewStateFragment implements LoginView {
 
     @Override
     public void applyViewState(ViewState aViewState) {
-        mViewState = (LoginViewState) aViewState;
+        mViewState.setState(aViewState.getState());
         mViewState.apply(this);
     }
 

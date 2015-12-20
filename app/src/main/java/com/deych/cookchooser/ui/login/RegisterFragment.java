@@ -163,7 +163,7 @@ public class RegisterFragment extends BaseViewStateFragment implements RegisterV
 
     @Override
     public void applyViewState(ViewState aViewState) {
-        mViewState = (RegisterViewState) aViewState;
+        mViewState.setState(aViewState.getState());
         mViewState.apply(this);
     }
 

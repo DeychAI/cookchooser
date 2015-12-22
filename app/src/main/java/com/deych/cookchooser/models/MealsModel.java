@@ -2,6 +2,7 @@ package com.deych.cookchooser.models;
 
 import android.content.Context;
 
+import android.support.annotation.NonNull;
 import com.deych.cookchooser.api.service.MealsService;
 import com.deych.cookchooser.db.entities.Category;
 import com.deych.cookchooser.db.entities.Meal;
@@ -40,16 +41,21 @@ public class MealsModel {
     public Observable<List<Meal>> getMeals(long category_id) {
         Observable<List<Meal>> net = getMealsFromNet(category_id);
 
-        Observable<List<Meal>> db = mStorIOSQLite.get()
-                .listOfObjects(Meal.class)
-                .withQuery(Query.builder()
-                        .table(MealTable.TABLE)
-                        .where(MealTable.CATEGORY_ID + " = ?")
-                        .whereArgs(category_id).build())
-                .prepare()
-                .createObservable();
+        Observable<List<Meal>> db = getMealsFromDb(category_id);
 
         return Observable.merge(db, net);
+    }
+
+    @NonNull
+    public Observable<List<Meal>> getMealsFromDb(final long category_id) {
+        return mStorIOSQLite.get()
+                    .listOfObjects(Meal.class)
+                    .withQuery(Query.builder()
+                            .table(MealTable.TABLE)
+                            .where(MealTable.CATEGORY_ID + " = ?")
+                            .whereArgs(category_id).build())
+                    .prepare()
+                    .createObservable();
     }
 
     public Observable<List<Meal>> getMealsFromNet(long category_id) {

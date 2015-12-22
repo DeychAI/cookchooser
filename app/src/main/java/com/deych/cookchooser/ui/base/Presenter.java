@@ -12,6 +12,7 @@ public abstract class Presenter<V> {
     private volatile V mView;
 
     private final CompositeSubscription mCompositeSubscription = new CompositeSubscription();
+    private final CompositeSubscription mUnbindSubscription = new CompositeSubscription();
 
     public void bindView(V aView) {
         if (mView != null) {
@@ -25,6 +26,7 @@ public abstract class Presenter<V> {
             throw new IllegalStateException("Bounded some other view!");
         }
         mView = null;
+        mUnbindSubscription.clear();
     }
 
     protected V view() {
@@ -36,6 +38,14 @@ public abstract class Presenter<V> {
 
         for (Subscription s : subscriptions) {
             mCompositeSubscription.add(s);
+        }
+    }
+
+    protected final void addToUnbindSubscription(@NonNull Subscription subscription, @NonNull Subscription... subscriptions) {
+        mUnbindSubscription.add(subscription);
+
+        for (Subscription s : subscriptions) {
+            mUnbindSubscription.add(s);
         }
     }
 

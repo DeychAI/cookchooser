@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
@@ -30,30 +31,33 @@ public class MealsListPresenter extends Presenter<MealsListView> {
     }
 
     public void refreshMeals(long category_id) {
-        mMealsModel.getMealsFromNet(category_id)
+        Subscription subscription = mMealsModel.getMealsFromNet(category_id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(list -> {
-                    if (view() != null) {
-                        view().showMeals(list);
+                    if(view() != null){
+                        view().hideRefresh();
+//                        view().showMeals(list);
                     }
                 }, e -> {
-                    if (view() != null) {
+                    if(view() != null){
                         view().hideRefresh();
                     }
                 });
+        addToSubscription(subscription);
     }
 
     public void loadMeals(long category_id) {
-        mMealsModel.getMeals(category_id)
+        Subscription subscription = mMealsModel.getMealsFromDb(category_id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(l -> {
-                    if (view() != null) {
+                    if(view() != null){
                         view().showMeals(l);
                     }
                 }, e -> {
                     Timber.v("Error " + e);
                 });
+        addToUnbindSubscription(subscription);
     }
 }

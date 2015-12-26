@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import retrofit.HttpException;
+import retrofit.Retrofit;
 import rx.Observable;
 
 /**
@@ -27,14 +28,16 @@ public class UserModel {
 
     private Preferences mPreferences;
     private StorIOSQLite mStorIOSQLite;
+    private Retrofit mRetrofit;
     private UserService mUserService;
 
 
     @Inject
-    public UserModel(UserService userService, Preferences preferences, StorIOSQLite storIOSQLite) {
+    public UserModel(UserService userService, Preferences preferences, StorIOSQLite storIOSQLite, Retrofit retrofit) {
         mUserService = userService;
         mPreferences = preferences;
         mStorIOSQLite = storIOSQLite;
+        mRetrofit = retrofit;
     }
 
     public Observable<User> register(String username, String password, String name) {
@@ -103,5 +106,8 @@ public class UserModel {
 
     public void logout() {
         mPreferences.clearUserData();
+        if (mRetrofit.client().interceptors().size() > 1) {
+            mRetrofit.client().interceptors().remove(1);
+        }
     }
 }

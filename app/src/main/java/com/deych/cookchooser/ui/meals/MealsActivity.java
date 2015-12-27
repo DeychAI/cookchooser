@@ -74,8 +74,7 @@ public class MealsActivity extends BaseActivity
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void bindViews() {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
@@ -97,7 +96,9 @@ public class MealsActivity extends BaseActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mPresenter.unbindView(this);
+        if (mPresenter != null) {
+            mPresenter.unbindView(this);
+        }
     }
 
     @Override

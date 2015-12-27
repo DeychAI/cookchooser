@@ -4,7 +4,11 @@ import com.deych.cookchooser.api.ApiModule;
 import com.deych.cookchooser.api.NetModule;
 import com.deych.cookchooser.db.DbModule;
 import com.deych.cookchooser.models.UserComponent;
+import com.deych.cookchooser.models.UserModel;
 import com.deych.cookchooser.models.UserModule;
+import com.deych.cookchooser.ui.base.BaseActivity;
+import com.deych.cookchooser.ui.base.PresenterCache;
+import com.deych.cookchooser.ui.base.PresenterCacheDelegate;
 import com.deych.cookchooser.ui.login.LoginActivity;
 import com.deych.cookchooser.ui.login.LoginFragment;
 import com.deych.cookchooser.ui.login.RegisterFragment;
@@ -28,5 +32,8 @@ public interface AppComponent {
     LoginFragment.LoginFragmentComponent plus(LoginFragment.LoginFragmentModule aModule);
     RegisterFragment.RegisterFragmentComponent plus(RegisterFragment.RegisterFragmentModule aModule);
 
-    void inject(LoginActivity aActivity);
+    UserModel userModel();
+    PresenterCache presenterCache();
+
+    void inject(LoginActivity activity);
 }

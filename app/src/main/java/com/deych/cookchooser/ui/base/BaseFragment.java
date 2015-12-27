@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
+import com.deych.cookchooser.App;
+
 import javax.inject.Inject;
 
 import rx.subscriptions.CompositeSubscription;
@@ -47,16 +49,20 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setUpComponents();
-        mCacheDelegate.setDelegateCallback(mDelegateCallback);
-        mCacheDelegate.onCreate(savedInstanceState);
+        if (App.get(getContext()).getUserComponent() != null) {
+            setUpComponents();
+            mCacheDelegate.setDelegateCallback(mDelegateCallback);
+            mCacheDelegate.onCreate(savedInstanceState);
+        }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mDestroyedBySystem = true;
-        mCacheDelegate.onSaveInstanceState(outState);
+        if (mCacheDelegate != null) {
+            mCacheDelegate.onSaveInstanceState(outState);
+        }
     }
 
     @Override
@@ -74,7 +80,9 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mCacheDelegate.onDestroy(mDestroyedBySystem);
+        if (mCacheDelegate != null) {
+            mCacheDelegate.onDestroy(mDestroyedBySystem);
+        }
         mDelegateCallback = null;
     }
 }

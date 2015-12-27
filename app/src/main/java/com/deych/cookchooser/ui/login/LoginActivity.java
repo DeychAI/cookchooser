@@ -37,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(user -> {
                     App.get(this).createUserComponent(user);
-                    startActivity(new Intent(this, MealsActivity.class));
+                    startActivity(new Intent(this, MealsActivity.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                     finish();
                 }, e -> {
                     if (savedInstanceState == null) {

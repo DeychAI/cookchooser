@@ -76,9 +76,11 @@ public class MealsListFragment extends BaseFragment implements MealsListView{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mPresenter.bindView(this);
-        mPresenter.loadMeals(id);
-        refreshLayout.setOnRefreshListener(() -> mPresenter.refreshMeals(id));
+        if (mPresenter != null) {
+            mPresenter.bindView(this);
+            mPresenter.loadMeals(id);
+            refreshLayout.setOnRefreshListener(() -> mPresenter.refreshMeals(id));
+        }
     }
 
     @Override
@@ -106,7 +108,9 @@ public class MealsListFragment extends BaseFragment implements MealsListView{
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-        mPresenter.unbindView(this);
+        if (mPresenter != null) {
+            mPresenter.unbindView(this);
+        }
         Timber.d("onDestroyView");
     }
 

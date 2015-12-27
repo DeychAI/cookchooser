@@ -1,6 +1,5 @@
 package com.deych.cookchooser.api.service;
 
-import com.deych.cookchooser.api.entities.MealVo;
 import com.deych.cookchooser.db.entities.Category;
 import com.deych.cookchooser.db.entities.Meal;
 
@@ -16,10 +15,10 @@ import rx.Observable;
 public interface MealsService {
 
     @GET("meals")
-    Observable<List<Meal>> getMeals(@Query("cat") long category_id);
+    Observable<List<Meal>> getMealsForCat(@Query("cat") long category_id);
 
     @GET("meals")
-    Observable<List<MealVo>> getMealsVo(@Query("cat") long category_id);
+    Observable<List<Meal>> getAllMeals();
 
     @GET("categories")
     Observable<List<Category>> getCategories();

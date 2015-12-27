@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 /**
  * Created by deigo on 17.12.2015.
  */
@@ -24,10 +26,14 @@ public class PresenterCacheDelegate {
         if (aSavedInstanceState == null) {
             mPresenterId = mCache.generateId();
         } else {
-            mPresenterId = aSavedInstanceState.getLong(PRESENTER_INDEX_KEY);
+            mPresenterId = aSavedInstanceState.getLong(PRESENTER_INDEX_KEY, -1);
         }
         Presenter presenter = mCache.get(mPresenterId);
         if(presenter == null) {
+            if (aSavedInstanceState != null) {
+                //It seems that our app was destroyed by Android without onDestroy() calls. We need to shift ID
+                mPresenterId = mCache.generateId();
+            }
             mCache.put(mPresenterId, mDelegateCallback.onEmptyCache());
         } else {
             mDelegateCallback.restoredFromCache(presenter);
@@ -35,6 +41,7 @@ public class PresenterCacheDelegate {
     }
 
     public void onSaveInstanceState(Bundle outState) {
+        Timber.d("onSaveInstanceState");
         outState.putLong(PRESENTER_INDEX_KEY, mPresenterId);
     }
 

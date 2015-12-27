@@ -38,12 +38,12 @@ public class MealsModel {
         mContext = context;
     }
 
-    public Observable<List<Meal>> getMeals(long category_id) {
-        Observable<List<Meal>> net = getMealsFromNet(category_id);
-
-        Observable<List<Meal>> db = getMealsFromDb(category_id);
-
-        return Observable.merge(db, net);
+    public Observable<List<Meal>> getAllMealsFromNet() {
+        return mMealsService.getAllMeals()
+                .doOnNext(list -> {
+                    mStorIOSQLite.put().objects(list).prepare().executeAsBlocking();
+                })
+                .retryWhen(new RetryWithDelayIf(1, 3, TimeUnit.SECONDS, t -> (t instanceof IOException)));
     }
 
     @NonNull
@@ -59,7 +59,7 @@ public class MealsModel {
     }
 
     public Observable<List<Meal>> getMealsFromNet(long category_id) {
-        return mMealsService.getMeals(category_id)
+        return mMealsService.getMealsForCat(category_id)
                 .doOnNext(list -> {
                     mStorIOSQLite.put().objects(list).prepare().executeAsBlocking();
                 })

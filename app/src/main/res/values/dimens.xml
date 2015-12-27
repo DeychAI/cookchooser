@@ -12,4 +12,5 @@
 
     <!--Text size -->
     <dimen name="font_medium">16sp</dimen>
+    <dimen name="font_sub_medium">14sp</dimen>
 </resources>

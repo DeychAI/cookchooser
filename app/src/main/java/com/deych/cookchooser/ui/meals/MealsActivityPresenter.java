@@ -27,6 +27,7 @@ public class MealsActivityPresenter extends Presenter<MealsView> {
     private MealsModel mMealsModel;
     private UserModel mUserModel;
     private List<Category> mCategories = Collections.emptyList();
+    private boolean mealsLoaded = false;
 
     @Inject
     public MealsActivityPresenter(User user, MealsModel mealsModel, UserModel userModel) {
@@ -35,7 +36,22 @@ public class MealsActivityPresenter extends Presenter<MealsView> {
         mUserModel = userModel;
     }
 
-    public void loadCategories() {
+    public void loadData() {
+
+        if (view() != null) {
+            view().bindUserData(mUser.getUsername(), mUser.getName());
+        }
+
+        if (!mealsLoaded) {
+            mealsLoaded = true;
+            Subscription mealsSubscription = mMealsModel
+                    .getAllMealsFromNet()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(list -> {}, e -> {});
+            addToSubscription(mealsSubscription);
+        }
+
         if (!mCategories.isEmpty() && view() != null) {
             view().showCategories(mCategories);
             return;

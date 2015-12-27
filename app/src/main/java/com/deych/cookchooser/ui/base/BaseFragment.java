@@ -39,7 +39,9 @@ public abstract class BaseFragment extends Fragment {
     };
 
     protected abstract void setUpComponents();
+
     protected abstract Presenter getPresenter();
+
     protected abstract void setPresenter(Presenter aPresenter);
 
     public CompositeSubscription getUiSubscription() {
@@ -49,8 +51,8 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (App.get(getContext()).getUserComponent() != null) {
-            setUpComponents();
+        setUpComponents();
+        if (mCacheDelegate != null) {
             mCacheDelegate.setDelegateCallback(mDelegateCallback);
             mCacheDelegate.onCreate(savedInstanceState);
         }

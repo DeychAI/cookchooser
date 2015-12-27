@@ -11,4 +11,5 @@ public interface MealsView {
     void showCategories(List<Category> categories);
     void finishIfNotAuthorized();
     void showLoginScreen();
+    void bindUserData(String username, String name);
 }

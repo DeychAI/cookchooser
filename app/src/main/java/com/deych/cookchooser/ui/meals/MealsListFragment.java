@@ -91,7 +91,9 @@ public class MealsListFragment extends BaseFragment implements MealsListView{
 
     @Override
     protected void setUpComponents() {
-        App.get(getContext()).getUserComponent().inject(this);
+        if (App.get(getContext()).getUserComponent() != null) {
+            App.get(getContext()).getUserComponent().inject(this);
+        }
     }
 
     @Override

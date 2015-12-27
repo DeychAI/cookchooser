@@ -1,7 +1,6 @@
 package com.deych.cookchooser.ui.meals;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -13,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
@@ -46,6 +46,10 @@ public class MealsActivity extends BaseActivity
 
     @Bind(R.id.drawer_layout)
     DrawerLayout drawer;
+
+    TextView tvUsername;
+
+    TextView tvName;
 
     private MealsPagerAdapter mMealsAdapter;
 
@@ -88,9 +92,11 @@ public class MealsActivity extends BaseActivity
 
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_list);
+        tvUsername = ButterKnife.findById(navigationView.getHeaderView(0), R.id.tvUsername);
+        tvName = ButterKnife.findById(navigationView.getHeaderView(0), R.id.tvName);
 
         mPresenter.bindView(this);
-        mPresenter.loadCategories();
+        mPresenter.loadData();
     }
 
     @Override
@@ -159,5 +165,11 @@ public class MealsActivity extends BaseActivity
         Intent intent = new Intent(this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+    }
+
+    @Override
+    public void bindUserData(String username, String name) {
+        tvName.setText(name);
+        tvUsername.setText(username);
     }
 }

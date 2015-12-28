@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 /**
  * Created by deigo on 17.12.2015.
  */

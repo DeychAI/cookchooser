@@ -48,6 +48,11 @@ public class App extends Application {
 //                .netModule(new NetModule("http://deych.myihor.ru:5000/cookchooser/api/v1/"))
                 .build();
 
+        User user = mAppComponent.userModel().loginAsBlocking();
+        if (user != null) {
+            createUserComponent(user);
+        }
+
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }

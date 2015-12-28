@@ -27,12 +27,15 @@ public class PresenterCacheDelegate {
             mPresenterId = mCache.generateId();
         } else {
             mPresenterId = aSavedInstanceState.getLong(PRESENTER_INDEX_KEY, -1);
+            if (mPresenterId < 0) {
+                mPresenterId = mCache.generateId();
+            }
         }
         Presenter presenter = mCache.get(mPresenterId);
         if(presenter == null) {
             if (aSavedInstanceState != null) {
                 //It seems that our app was destroyed by Android without onDestroy() calls. We need to shift ID
-                mPresenterId = mCache.generateId();
+//                mPresenterId = mCache.generateId();
             }
             mCache.put(mPresenterId, mDelegateCallback.onEmptyCache());
         } else {

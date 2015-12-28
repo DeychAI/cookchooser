@@ -102,9 +102,7 @@ public class MealsActivity extends BaseActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mPresenter != null) {
-            mPresenter.unbindView(this);
-        }
+        mPresenter.unbindView(this);
     }
 
     @Override
@@ -144,15 +142,13 @@ public class MealsActivity extends BaseActivity
 
     @Override
     public void showCategories(List<Category> categories) {
-        if(mMealsAdapter.getCount() > 0) {
+        if (mMealsAdapter.getCount() > 0) {
             return;
         }
-        for (Category category : categories) {
-            mMealsAdapter.addFragment(MealsListFragment.newInstance(category.getId()), category.getName());
-            viewPager.setAdapter(mMealsAdapter);
-            tabs.setupWithViewPager(viewPager);
-        }
-        mMealsAdapter.notifyDataSetChanged();
+        mMealsAdapter.setCategories(categories);
+        viewPager.setOffscreenPageLimit(3);
+        viewPager.setAdapter(mMealsAdapter);
+        tabs.setupWithViewPager(viewPager);
     }
 
     @Override
@@ -162,9 +158,11 @@ public class MealsActivity extends BaseActivity
 
     @Override
     public void showLoginScreen() {
+        App.get(this).releaseUserComponent();
         Intent intent = new Intent(this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+        finish();
     }
 
     @Override

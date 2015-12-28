@@ -47,8 +47,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     };
 
     protected abstract void setUpComponents();
+
     protected abstract Presenter getPresenter();
+
     protected abstract void setPresenter(Presenter aPresenter);
+
     protected abstract void bindViews();
 
     public CompositeSubscription getUiSubscription() {
@@ -58,25 +61,17 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (App.get(this).getUserComponent() != null) {
-            setUpComponents();
-            mCacheDelegate.setDelegateCallback(mDelegateCallback);
-            mCacheDelegate.onCreate(savedInstanceState);
-            bindViews();
-        } else {
-            Intent intent = new Intent(this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            startActivity(intent);
-        }
+        setUpComponents();
+        mCacheDelegate.setDelegateCallback(mDelegateCallback);
+        mCacheDelegate.onCreate(savedInstanceState);
+        bindViews();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mDestroyedBySystem = true;
-        if (mCacheDelegate != null) {
-            mCacheDelegate.onSaveInstanceState(outState);
-        }
+        mCacheDelegate.onSaveInstanceState(outState);
     }
 
     @Override
@@ -89,9 +84,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         mUiSubscription.clear();
-        if (mCacheDelegate != null) {
-            mCacheDelegate.onDestroy(mDestroyedBySystem);
-        }
+        mCacheDelegate.onDestroy(mDestroyedBySystem);
         mDelegateCallback = null;
     }
 }

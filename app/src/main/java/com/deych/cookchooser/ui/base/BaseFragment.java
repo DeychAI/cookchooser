@@ -52,19 +52,15 @@ public abstract class BaseFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setUpComponents();
-        if (mCacheDelegate != null) {
-            mCacheDelegate.setDelegateCallback(mDelegateCallback);
-            mCacheDelegate.onCreate(savedInstanceState);
-        }
+        mCacheDelegate.setDelegateCallback(mDelegateCallback);
+        mCacheDelegate.onCreate(savedInstanceState);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mDestroyedBySystem = true;
-        if (mCacheDelegate != null) {
-            mCacheDelegate.onSaveInstanceState(outState);
-        }
+        mCacheDelegate.onSaveInstanceState(outState);
     }
 
     @Override
@@ -82,9 +78,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mCacheDelegate != null) {
-            mCacheDelegate.onDestroy(mDestroyedBySystem);
-        }
+        mCacheDelegate.onDestroy(mDestroyedBySystem);
         mDelegateCallback = null;
     }
 }

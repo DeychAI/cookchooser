@@ -14,7 +14,7 @@ import timber.log.Timber;
 @Singleton
 public class PresenterCache {
 
-    private final AtomicLong nextId = new AtomicLong();
+    private final AtomicLong nextId = new AtomicLong(100);
 
     private Map<Long, Object> presentersCache = new HashMap<>();
 

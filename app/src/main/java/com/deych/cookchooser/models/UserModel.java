@@ -11,6 +11,8 @@ import com.deych.cookchooser.shared_pref.Preferences;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -102,6 +104,27 @@ public class UserModel {
         } else {
             return Observable.error(new RuntimeException("User not found"));
         }
+    }
+
+    public User loginAsBlocking() {
+        if (mPreferences.getUserId() != 0 && !TextUtils.isEmpty(mPreferences.getUserToken())) {
+            List<User> list = mStorIOSQLite
+                    .get()
+                    .listOfObjects(User.class)
+                    .withQuery(UserTable.get(mPreferences.getUserId()))
+                    .prepare()
+                    .executeAsBlocking();
+            if (list.isEmpty()) {
+                mPreferences.clearUserData();
+                return null;
+            } else {
+                User user = list.get(0);
+                user.setToken(mPreferences.getUserToken());
+                return user;
+            }
+
+        }
+        return null;
     }
 
     public void logout() {

@@ -10,6 +10,8 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.deych.cookchooser.db.entities.Category;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,29 +22,29 @@ import timber.log.Timber;
  */
 public class MealsPagerAdapter extends FragmentPagerAdapter {
 
-    private List<Fragment> mList = new ArrayList<>();
-    private List<String> mTitles = new ArrayList<>();
+    private List<Category> mCategories;
 
     public MealsPagerAdapter(FragmentManager fm) {
         super(fm);
+        mCategories = new ArrayList<>();
     }
 
     public Fragment getItem(int position) {
-        return mList.get(position);
+        return MealsListFragment.newInstance(mCategories.get(position).getId());
     }
 
     @Override
     public int getCount() {
-        return mList.size();
+        return mCategories.size();
     }
 
-    public void addFragment(Fragment fragment, String title) {
-        mList.add(fragment);
-        mTitles.add(title);
+    public void setCategories(List<Category> categories) {
+        mCategories = categories;
+        notifyDataSetChanged();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return mTitles.get(position);
+        return mCategories.get(position).getName();
     }
 }

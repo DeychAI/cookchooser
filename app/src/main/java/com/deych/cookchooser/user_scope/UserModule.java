@@ -68,34 +68,4 @@ public class UserModule {
                 .client(okHttpClient)
                 .build();
     }
-
-//    @Provides
-//    @UserScope
-//    public MealsModel provideMealsModel(User user,
-//                                        MealsService mealsService,
-//                                        StorIOSQLite storIOSQLite,
-//                                        Context context) {
-//
-////        Interceptor interceptor = new Interceptor() {
-////            @Override
-////            public Response intercept(Chain chain) throws IOException {
-////                Request original = chain.request();
-////                String credentials = user.getToken() + ":";
-////
-////                Request.Builder requestBuilder = original.newBuilder()
-////                        .header("Authorization", "Basic "
-////                                + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP))
-////                        .method(original.method(), original.body());
-////
-////                Request request = requestBuilder.build();
-////                return chain.proceed(request);
-////            }
-////        };
-////
-////        okHttpClient.interceptors().clear();
-////        okHttpClient.interceptors().add(loggingInterceptor);
-////        okHttpClient.interceptors().add(interceptor);
-//
-//        return new MealsModel(user, mealsService, storIOSQLite, context);
-//    }
 }

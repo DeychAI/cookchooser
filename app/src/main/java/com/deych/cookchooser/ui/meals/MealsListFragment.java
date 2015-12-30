@@ -35,7 +35,9 @@ import timber.log.Timber;
 /**
  * Created by deigo on 20.12.2015.
  */
-public class MealsListFragment extends BaseFragment implements MealsListView{
+public class MealsListFragment extends BaseFragment implements MealsListView {
+
+    private static final String EXTRA_ID = "id";
 
     @Bind(R.id.list)
     RecyclerView list;
@@ -50,21 +52,18 @@ public class MealsListFragment extends BaseFragment implements MealsListView{
 
     public static MealsListFragment newInstance(long category_id) {
         Bundle args = new Bundle();
-        args.putLong("id", category_id);
+        args.putLong(EXTRA_ID, category_id);
         MealsListFragment fragment = new MealsListFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
-    private long id;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_list, container, false);
-        ButterKnife.bind(this, v);
 
-        id = getArguments().getLong("id");
+        ButterKnife.bind(this, v);
 
         list.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new MealsAdapter();
@@ -76,11 +75,11 @@ public class MealsListFragment extends BaseFragment implements MealsListView{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (mPresenter != null) {
-            mPresenter.bindView(this);
-            mPresenter.loadMeals(id);
-            refreshLayout.setOnRefreshListener(() -> mPresenter.refreshMeals(id));
-        }
+
+        mPresenter.bindView(this);
+        mPresenter.setCategoryId(getArguments().getLong(EXTRA_ID));
+        mPresenter.loadMeals();
+        refreshLayout.setOnRefreshListener(mPresenter::refreshMeals);
     }
 
     @Override
@@ -91,9 +90,7 @@ public class MealsListFragment extends BaseFragment implements MealsListView{
 
     @Override
     protected void setUpComponents() {
-        if (App.get(getContext()).getUserComponent() != null) {
-            App.get(getContext()).getUserComponent().inject(this);
-        }
+        App.get(getContext()).getUserComponent().inject(this);
     }
 
     @Override
@@ -110,9 +107,7 @@ public class MealsListFragment extends BaseFragment implements MealsListView{
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-        if (mPresenter != null) {
-            mPresenter.unbindView(this);
-        }
+        mPresenter.unbindView(this);
         Timber.d("onDestroyView");
     }
 

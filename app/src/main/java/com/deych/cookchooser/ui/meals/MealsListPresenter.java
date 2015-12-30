@@ -23,6 +23,7 @@ public class MealsListPresenter extends Presenter<MealsListView> {
     private MealsModel mMealsModel;
     private User mUser;
     private List<Meal> mMeals = Collections.emptyList();
+    private long mId;
 
     @Inject
     public MealsListPresenter(MealsModel mealsModel, User user) {
@@ -30,8 +31,8 @@ public class MealsListPresenter extends Presenter<MealsListView> {
         mUser = user;
     }
 
-    public void refreshMeals(long category_id) {
-        Subscription subscription = mMealsModel.getMealsFromNet(category_id)
+    public void refreshMeals() {
+        Subscription subscription = mMealsModel.getMealsFromNet(mId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(list -> {
@@ -47,8 +48,8 @@ public class MealsListPresenter extends Presenter<MealsListView> {
         addToSubscription(subscription);
     }
 
-    public void loadMeals(long category_id) {
-        Subscription subscription = mMealsModel.getMealsFromDb(category_id)
+    public void loadMeals() {
+        Subscription subscription = mMealsModel.getMealsFromDb(mId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(l -> {
@@ -59,5 +60,9 @@ public class MealsListPresenter extends Presenter<MealsListView> {
                     Timber.v("Error " + e);
                 });
         addToUnbindSubscription(subscription);
+    }
+
+    public void setCategoryId(long id) {
+        mId = id;
     }
 }

@@ -1,5 +1,6 @@
 package com.deych.cookchooser.ui.meals;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,6 +55,11 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder>{
         }
 
         public void bind(Meal meal) {
+            if (meal.getId() < 0) {
+                tvName.setTextColor(Color.LTGRAY);
+            } else {
+                tvName.setTextColor(Color.DKGRAY);
+            }
             tvName.setText(meal.getName());
         }
     }

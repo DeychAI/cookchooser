@@ -66,4 +66,41 @@ public class Meal {
     public void setClientId(String clientId) {
         mClientId = clientId;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Meal meal = (Meal) o;
+
+        if (mId != meal.mId) {
+            return false;
+        }
+        if (mCategoryId != meal.mCategoryId) {
+            return false;
+        }
+        if (mName != null ? !mName.equals(meal.mName) : meal.mName != null) {
+            return false;
+        }
+        if (mGroup != null ? !mGroup.equals(meal.mGroup) : meal.mGroup != null) {
+            return false;
+        }
+        return !(mClientId != null ? !mClientId.equals(meal.mClientId) : meal.mClientId != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (mId ^ (mId >>> 32));
+        result = 31 * result + (mName != null ? mName.hashCode() : 0);
+        result = 31 * result + (int) (mCategoryId ^ (mCategoryId >>> 32));
+        result = 31 * result + (mGroup != null ? mGroup.hashCode() : 0);
+        result = 31 * result + (mClientId != null ? mClientId.hashCode() : 0);
+        return result;
+    }
 }

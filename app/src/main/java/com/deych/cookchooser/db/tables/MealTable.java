@@ -2,6 +2,8 @@ package com.deych.cookchooser.db.tables;
 
 import android.provider.BaseColumns;
 
+import com.pushtorefresh.storio.sqlite.queries.Query;
+
 /**
  * Created by deigo on 20.12.2015.
  */
@@ -21,6 +23,8 @@ public class MealTable {
                 + GROUP_ID + " text, "
                 + CLIENT_ID + " text)";
     }
+
+    public static final Query QUERY_ALL = Query.builder().table(TABLE).build();
 
     private MealTable() {
     }

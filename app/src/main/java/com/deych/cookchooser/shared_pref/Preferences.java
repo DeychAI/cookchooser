@@ -13,6 +13,7 @@ public class Preferences {
     private static final String USER_ID = "user.id";
     private static final String USER_TOKEN = "user.token";
     private static final String PRESENTER_CACHE_ID = "presenter.cache.id";
+    private static final String NEW_DB_ID = "new.db.id";
 
     private final SharedPreferences mPreferences;
 
@@ -41,8 +42,16 @@ public class Preferences {
     }
 
     public long getPresenterCacheIdAndIncrement() {
-        long result = mPreferences.getLong(PRESENTER_CACHE_ID, 0);
-        mPreferences.edit().putLong(PRESENTER_CACHE_ID, result + 1).apply();
+        return getLongAndIncrement(PRESENTER_CACHE_ID, 0);
+    }
+
+    public long getNewDbIdAndIncrement() {
+        return getLongAndIncrement(NEW_DB_ID, Long.MIN_VALUE);
+    }
+
+    private long getLongAndIncrement(String key, long defaultValue) {
+        long result = mPreferences.getLong(key, defaultValue);
+        mPreferences.edit().putLong(key, result + 1).apply();
         return result;
     }
 }

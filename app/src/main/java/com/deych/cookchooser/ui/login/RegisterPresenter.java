@@ -2,11 +2,13 @@ package com.deych.cookchooser.ui.login;
 
 import android.text.TextUtils;
 
+import com.deych.cookchooser.db.entities.User;
 import com.deych.cookchooser.models.UserModel;
 import com.deych.cookchooser.ui.base.Presenter;
 
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -16,6 +18,7 @@ import rx.schedulers.Schedulers;
  */
 public class RegisterPresenter extends Presenter<RegisterView> {
     private UserModel mUserModel;
+    private Observable<User> mUserObservable;
 
 
     @Inject
@@ -49,9 +52,11 @@ public class RegisterPresenter extends Presenter<RegisterView> {
             view().showLoading();
         }
 
-        Subscription subscription = mUserModel.register(aUsername, aPassword, aName)
+        mUserObservable = mUserModel.register(aUsername, aPassword, aName)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        Subscription subscription = mUserObservable
                 .subscribe(u -> {
                     if (view() != null) {
                         view().registerSuccessful();
@@ -81,5 +86,11 @@ public class RegisterPresenter extends Presenter<RegisterView> {
 
     private boolean validatePasswordMatch(String aPassword, String aRepeatPassword) {
         return aPassword.equals(aRepeatPassword);
+    }
+
+    public void checkStateAfterRestore() {
+        if (mUserObservable == null && view() != null) {
+            view().showForm();
+        }
     }
 }

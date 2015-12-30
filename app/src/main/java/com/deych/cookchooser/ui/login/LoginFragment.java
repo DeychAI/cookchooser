@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
 import com.deych.cookchooser.db.entities.User;
+import com.deych.cookchooser.ui.base.LfViewState;
 import com.deych.cookchooser.ui.meals.MealsActivity;
 import com.deych.cookchooser.ui.base.BaseViewStateFragment;
 import com.deych.cookchooser.ui.UIScope;
@@ -147,6 +148,9 @@ public class LoginFragment extends BaseViewStateFragment implements LoginView {
     public void applyViewState(ViewState aViewState) {
         mViewState.setState(aViewState.getState());
         mViewState.apply(this);
+        if (mViewState.getState() == LfViewState.STATE_SHOW_LOADING) {
+            mPresenter.checkStateAfterRestore();
+        }
     }
 
     @UIScope

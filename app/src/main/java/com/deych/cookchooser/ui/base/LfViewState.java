@@ -6,8 +6,8 @@ import android.os.Bundle;
  * Created by deigo on 19.12.2015.
  */
 public class LfViewState<V extends LfView> implements ViewState<V> {
-    protected static final int STATE_SHOW_FORM = 0;
-    protected static final int STATE_SHOW_LOADING = 1;
+    public static final int STATE_SHOW_FORM = 0;
+    public static final int STATE_SHOW_LOADING = 1;
     protected final String STATE_EXTRA = "bundle.state";
 
     protected int state = STATE_SHOW_FORM;

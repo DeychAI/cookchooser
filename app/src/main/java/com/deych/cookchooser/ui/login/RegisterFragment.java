@@ -15,6 +15,7 @@ import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
 import com.deych.cookchooser.ui.UIScope;
 import com.deych.cookchooser.ui.base.BaseViewStateFragment;
+import com.deych.cookchooser.ui.base.LfViewState;
 import com.deych.cookchooser.ui.base.Presenter;
 import com.deych.cookchooser.ui.base.ViewState;
 import com.deych.cookchooser.ui.base.ViewStateDelegate;
@@ -25,6 +26,7 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.Module;
 import dagger.Provides;
 import dagger.Subcomponent;
 
@@ -165,6 +167,9 @@ public class RegisterFragment extends BaseViewStateFragment implements RegisterV
     public void applyViewState(ViewState aViewState) {
         mViewState.setState(aViewState.getState());
         mViewState.apply(this);
+        if (mViewState.getState() == LfViewState.STATE_SHOW_LOADING) {
+            mPresenter.checkStateAfterRestore();
+        }
     }
 
     @UIScope
@@ -173,7 +178,7 @@ public class RegisterFragment extends BaseViewStateFragment implements RegisterV
         void inject(@NonNull RegisterFragment aFragment);
     }
 
-    @dagger.Module
+    @Module
     public static class RegisterFragmentModule {
         @Provides
         @UIScope

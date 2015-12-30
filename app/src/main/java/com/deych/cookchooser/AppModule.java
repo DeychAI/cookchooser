@@ -36,8 +36,8 @@ public class AppModule {
 
     @Singleton
     @Provides
-    public PresenterCache providePresenterCache() {
-        return new PresenterCache();
+    public PresenterCache providePresenterCache(Preferences preferences) {
+        return new PresenterCache(preferences);
     }
 
     @Singleton

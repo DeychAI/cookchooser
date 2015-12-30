@@ -1,9 +1,12 @@
 package com.deych.cookchooser.ui.base;
 
+import com.deych.cookchooser.shared_pref.Preferences;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import timber.log.Timber;
@@ -14,13 +17,21 @@ import timber.log.Timber;
 @Singleton
 public class PresenterCache {
 
-    private final AtomicLong nextId = new AtomicLong(100);
-
     private Map<Long, Object> presentersCache = new HashMap<>();
 
+    private Preferences mPreferences;
+
+    @Inject
+    public PresenterCache(Preferences preferences) {
+        mPreferences = preferences;
+    }
+
+    //    private final AtomicLong nextId = new AtomicLong(100);
+
     public long generateId() {
+        long nextId = mPreferences.getPresenterCacheIdAndIncrement();
         Timber.d("called nextId = " + nextId);
-        return nextId.getAndIncrement();
+        return nextId;
     }
 
     @SuppressWarnings("unchecked")

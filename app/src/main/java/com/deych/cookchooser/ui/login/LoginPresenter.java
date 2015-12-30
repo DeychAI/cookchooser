@@ -34,7 +34,6 @@ public class LoginPresenter extends Presenter<LoginView> {
         }
 
         mUserObservable = mUserModel.login(username, password)
-                .delaySubscription(7, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 

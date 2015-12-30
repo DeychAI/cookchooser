@@ -12,6 +12,7 @@ public class Preferences {
 
     private static final String USER_ID = "user.id";
     private static final String USER_TOKEN = "user.token";
+    private static final String PRESENTER_CACHE_ID = "presenter.cache.id";
 
     private final SharedPreferences mPreferences;
 
@@ -37,5 +38,11 @@ public class Preferences {
 
     public long getUserId() {
         return mPreferences.getLong(USER_ID, 0);
+    }
+
+    public long getPresenterCacheIdAndIncrement() {
+        long result = mPreferences.getLong(PRESENTER_CACHE_ID, 0);
+        mPreferences.edit().putLong(PRESENTER_CACHE_ID, result + 1).apply();
+        return result;
     }
 }

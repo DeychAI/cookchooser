@@ -1,21 +1,10 @@
 package com.deych.cookchooser.ui.base;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.deych.cookchooser.App;
-import com.deych.cookchooser.R;
-import com.deych.cookchooser.models.UserModel;
-import com.deych.cookchooser.ui.login.LoginActivity;
-import com.deych.cookchooser.ui.login.LoginFragment;
-import com.deych.cookchooser.ui.meals.MealsActivity;
-
 import javax.inject.Inject;
 
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 /**

@@ -16,8 +16,8 @@ import android.widget.TextView;
 import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
 import com.deych.cookchooser.db.entities.User;
+import com.deych.cookchooser.ui.MainActivity;
 import com.deych.cookchooser.ui.base.LfViewState;
-import com.deych.cookchooser.ui.meals.MealsActivity;
 import com.deych.cookchooser.ui.base.BaseViewStateFragment;
 import com.deych.cookchooser.ui.base.Presenter;
 import com.deych.cookchooser.ui.base.ViewState;
@@ -139,7 +139,7 @@ public class LoginFragment extends BaseViewStateFragment implements LoginView {
     @Override
     public void loginSuccessful(User user) {
         App.get(getContext()).createUserComponent(user);
-        startActivity(new Intent(getContext(), MealsActivity.class));
+        startActivity(new Intent(getContext(), MainActivity.class));
         getActivity().finish();
     }
 

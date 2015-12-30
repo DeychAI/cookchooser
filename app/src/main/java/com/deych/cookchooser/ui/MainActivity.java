@@ -1,42 +1,34 @@
-package com.deych.cookchooser.ui.meals;
+package com.deych.cookchooser.ui;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
 import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
-import com.deych.cookchooser.db.entities.Category;
-import com.deych.cookchooser.ui.base.BaseActivity;
-import com.deych.cookchooser.ui.base.Presenter;
+import com.deych.cookchooser.ui.group.GroupFragment;
 import com.deych.cookchooser.ui.login.LoginActivity;
-
-import java.util.List;
+import com.deych.cookchooser.ui.meals.MealsHostFragment;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
-public class MealsActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, MealsView {
+public class MainActivity extends AppCompatActivity
+        implements MainActivityView, NavigationView.OnNavigationItemSelectedListener {
 
     @Bind(R.id.tabs)
     TabLayout tabs;
-
-    @Bind(R.id.viewPager)
-    ViewPager viewPager;
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -51,39 +43,30 @@ public class MealsActivity extends BaseActivity
 
     TextView tvName;
 
-    private MealsPagerAdapter mMealsAdapter;
+    @Bind(R.id.fab)
+    FloatingActionButton fab;
+
+    public FloatingActionButton getFab() {
+        return fab;
+    }
+
+    public TabLayout getTabs() {
+        return tabs;
+    }
 
     @Inject
-    MealsActivityPresenter mPresenter;
-
-    @OnClick(R.id.fab)
-    void fabClick(View view) {
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-    }
+    MainActivityPresenter mPresenter;
 
     @Override
-    protected void setUpComponents() {
-        App.get(this).getUserComponent().inject(this);
-    }
-
-    @Override
-    protected Presenter getPresenter() {
-        return mPresenter;
-    }
-
-    @Override
-    protected void setPresenter(Presenter aPresenter) {
-        mPresenter = (MealsActivityPresenter) aPresenter;
-    }
-
-    @Override
-    protected void bindViews() {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        App.get(this).getUserComponent().inject(this);
+
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
-        mMealsAdapter = new MealsPagerAdapter(getSupportFragmentManager());
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -94,9 +77,11 @@ public class MealsActivity extends BaseActivity
         navigationView.setCheckedItem(R.id.nav_list);
         tvUsername = ButterKnife.findById(navigationView.getHeaderView(0), R.id.tvUsername);
         tvName = ButterKnife.findById(navigationView.getHeaderView(0), R.id.tvName);
-
         mPresenter.bindView(this);
-        mPresenter.loadData();
+
+        if (savedInstanceState == null) {
+            showMealsHostFragment();
+        }
     }
 
     @Override
@@ -114,25 +99,30 @@ public class MealsActivity extends BaseActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.main, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_logout:
                 mPresenter.logout();
+                break;
+            case R.id.nav_list:
+                showMealsHostFragment();
+                break;
+            case R.id.nav_group:
+                showGroupFragment();
                 break;
         }
 
@@ -140,20 +130,16 @@ public class MealsActivity extends BaseActivity
         return true;
     }
 
-    @Override
-    public void showCategories(List<Category> categories) {
-        if (mMealsAdapter.getCount() > 0) {
-            return;
-        }
-        mMealsAdapter.setCategories(categories);
-        viewPager.setOffscreenPageLimit(3);
-        viewPager.setAdapter(mMealsAdapter);
-        tabs.setupWithViewPager(viewPager);
+    private void showGroupFragment() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content, new GroupFragment())
+                .commit();
     }
 
-    @Override
-    public void finishIfNotAuthorized() {
-
+    private void showMealsHostFragment() {
+        getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content, new MealsHostFragment())
+                    .commit();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.deych.cookchooser.ui;
+package com.deych.cookchooser.ui.login;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -10,5 +10,5 @@ import javax.inject.Scope;
  */
 @Scope
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UIScope {
+public @interface LoginScope {
 }

@@ -2,10 +2,7 @@ package com.deych.cookchooser.ui.login;
 
 import com.deych.cookchooser.db.entities.User;
 import com.deych.cookchooser.models.UserModel;
-import com.deych.cookchooser.ui.UIScope;
 import com.deych.cookchooser.ui.base.Presenter;
-
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -17,7 +14,6 @@ import rx.schedulers.Schedulers;
 /**
  * Created by deigo on 16.12.2015.
  */
-@UIScope
 public class LoginPresenter extends Presenter<LoginView> {
 
     private UserModel mUserModel;

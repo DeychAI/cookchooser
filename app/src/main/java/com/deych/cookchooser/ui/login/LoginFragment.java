@@ -19,7 +19,6 @@ import com.deych.cookchooser.db.entities.User;
 import com.deych.cookchooser.ui.base.LfViewState;
 import com.deych.cookchooser.ui.meals.MealsActivity;
 import com.deych.cookchooser.ui.base.BaseViewStateFragment;
-import com.deych.cookchooser.ui.UIScope;
 import com.deych.cookchooser.ui.base.Presenter;
 import com.deych.cookchooser.ui.base.ViewState;
 import com.deych.cookchooser.ui.base.ViewStateDelegate;
@@ -153,7 +152,7 @@ public class LoginFragment extends BaseViewStateFragment implements LoginView {
         }
     }
 
-    @UIScope
+    @LoginScope
     @Subcomponent(modules = LoginFragmentModule.class)
     public interface LoginFragmentComponent {
         void inject(@NonNull LoginFragment aLoginFragment);
@@ -162,7 +161,7 @@ public class LoginFragment extends BaseViewStateFragment implements LoginView {
     @Module
     public static class LoginFragmentModule {
         @Provides
-        @UIScope
+        @LoginScope
         public ViewStateDelegate provideViewStateDelegate(LoginViewState aViewState) {
             return new ViewStateDelegate(aViewState);
         }

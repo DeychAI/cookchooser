@@ -13,7 +13,6 @@ import android.widget.ProgressBar;
 
 import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
-import com.deych.cookchooser.ui.UIScope;
 import com.deych.cookchooser.ui.base.BaseViewStateFragment;
 import com.deych.cookchooser.ui.base.LfViewState;
 import com.deych.cookchooser.ui.base.Presenter;
@@ -172,7 +171,7 @@ public class RegisterFragment extends BaseViewStateFragment implements RegisterV
         }
     }
 
-    @UIScope
+    @LoginScope
     @Subcomponent(modules = RegisterFragmentModule.class)
     public interface RegisterFragmentComponent {
         void inject(@NonNull RegisterFragment aFragment);
@@ -181,7 +180,7 @@ public class RegisterFragment extends BaseViewStateFragment implements RegisterV
     @Module
     public static class RegisterFragmentModule {
         @Provides
-        @UIScope
+        @LoginScope
         public ViewStateDelegate provideViewStateDelegate(RegisterViewState aViewState) {
             return new ViewStateDelegate(aViewState);
         }

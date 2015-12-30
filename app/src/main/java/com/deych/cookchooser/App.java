@@ -8,8 +8,8 @@ import com.deych.cookchooser.api.ApiModule;
 import com.deych.cookchooser.api.NetModule;
 import com.deych.cookchooser.db.DbModule;
 import com.deych.cookchooser.db.entities.User;
-import com.deych.cookchooser.models.UserComponent;
-import com.deych.cookchooser.models.UserModule;
+import com.deych.cookchooser.user_scope.UserComponent;
+import com.deych.cookchooser.user_scope.UserModule;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 

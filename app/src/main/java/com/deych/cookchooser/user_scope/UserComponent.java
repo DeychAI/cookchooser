@@ -1,4 +1,4 @@
-package com.deych.cookchooser.models;
+package com.deych.cookchooser.user_scope;
 
 import com.deych.cookchooser.ui.MainActivity;
 import com.deych.cookchooser.ui.meals.MealsHostFragment;
@@ -10,7 +10,7 @@ import dagger.Subcomponent;
  * Created by deigo on 20.12.2015.
  */
 @UserScope
-@Subcomponent(modules = UserModule.class)
+@Subcomponent(modules = {UserModule.class, UserScopeApiModule.class})
 public interface UserComponent {
     void inject(MealsHostFragment mealsHostFragment);
     void inject(MealsListFragment fragment);

@@ -1,4 +1,4 @@
-package com.deych.cookchooser.models;
+package com.deych.cookchooser.user_scope;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

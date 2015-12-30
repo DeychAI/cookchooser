@@ -129,8 +129,5 @@ public class UserModel {
 
     public void logout() {
         mPreferences.clearUserData();
-        if (mRetrofit.client().interceptors().size() > 1) {
-            mRetrofit.client().interceptors().remove(1);
-        }
     }
 }

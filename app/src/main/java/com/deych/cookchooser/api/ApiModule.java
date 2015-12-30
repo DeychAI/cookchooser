@@ -20,10 +20,4 @@ public class ApiModule {
     UserService provideUserService(Retrofit retrofit) {
         return retrofit.create(UserService.class);
     }
-
-    @Singleton
-    @Provides
-    MealsService provideMealsService(Retrofit retrofit) {
-        return retrofit.create(MealsService.class);
-    }
 }

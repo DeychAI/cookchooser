@@ -9,6 +9,7 @@ import com.deych.cookchooser.db.entities.Meal;
 import com.deych.cookchooser.db.entities.User;
 import com.deych.cookchooser.db.tables.CategoryTable;
 import com.deych.cookchooser.db.tables.MealTable;
+import com.deych.cookchooser.user_scope.UserScope;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
@@ -23,6 +24,7 @@ import rx.Observable;
 /**
  * Created by deigo on 20.12.2015.
  */
+@UserScope
 public class MealsModel {
 
     private User mUser;

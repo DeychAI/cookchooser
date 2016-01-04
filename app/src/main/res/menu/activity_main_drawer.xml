@@ -1,39 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <group
-        android:id="@+id/nav_group1"
+        android:id="@+id/drawer_group1"
         android:checkableBehavior="single"
         >
         <item
             android:id="@+id/nav_list"
-            android:title="@string/nav_list"
             android:icon="@drawable/ic_list"
+            android:title="@string/nav_list"
+            />
+
+        <item
+            android:id="@+id/nav_list_red"
+            android:title="Красный"
+            />
+
+        <item
+            android:id="@+id/nav_list_green"
+            android:title="Зеленый"
+            />
+
+        <item
+            android:id="@+id/nav_list_blue"
+            android:title="Синий"
+            />
+
+        <item
+            android:id="@+id/nav_list_orange"
+            android:title="Оранжевый"
             />
 
         <item
             android:id="@+id/nav_group"
-            android:title="@string/nav_group"
             android:icon="@drawable/ic_group"
+            android:title="@string/nav_group"
             />
         <item
             android:id="@+id/nav_invites"
-            android:title="@string/nav_invites"
             android:icon="@drawable/ic_invites"
+            android:title="@string/nav_invites"
             />
         <item
             android:id="@+id/nav_settings"
-            android:title="@string/nav_settings"
             android:icon="@drawable/ic_settings"
+            android:title="@string/nav_settings"
             />
 
     </group>
     <group
-        android:id="@+id/nav_group2"
+        android:id="@+id/drawer_group2"
         >
-        <item android:id="@+id/nav_logout"
-              android:title="@string/nav_logout"
-              android:icon="@drawable/ic_logout"
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_logout"
+            android:title="@string/nav_logout"
             />
     </group>
 </menu>

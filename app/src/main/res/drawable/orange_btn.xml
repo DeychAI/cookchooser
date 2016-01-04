@@ -5,10 +5,10 @@
             android:shape="oval">
             <solid android:color="@color/colorOrange"/>
             <size
-                android:width="50dp"
-                android:height="50dp"/>
+                android:width="@dimen/color_btn_normal_size"
+                android:height="@dimen/color_btn_normal_size"/>
             <stroke
-                android:width="2dp"
+                android:width="@dimen/color_btn_stroke"
                 android:color="@android:color/black"/>
         </shape>
     </item>
@@ -17,8 +17,8 @@
             android:shape="oval">
             <solid android:color="@color/colorOrange"/>
             <size
-                android:width="50dp"
-                android:height="50dp"/>
+                android:width="@dimen/color_btn_normal_size"
+                android:height="@dimen/color_btn_normal_size"/>
         </shape>
     </item>
 </selector>

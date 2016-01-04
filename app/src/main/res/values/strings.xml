@@ -24,4 +24,5 @@
     <string name="title_list">Список блюд</string>
     <string name="title_group">Группа</string>
     <string name="title_add_meal">Новое блюдо</string>
+    <string name="menu_add_meal">Добавить блюдо</string>
 </resources>

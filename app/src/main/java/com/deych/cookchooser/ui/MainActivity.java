@@ -6,11 +6,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.deych.cookchooser.App;
@@ -45,11 +48,6 @@ public class MainActivity extends AppCompatActivity
 
     @Bind(R.id.fab)
     FloatingActionButton fab;
-    private ActionBarDrawerToggle actionBarDrawerToggle;
-
-    public ActionBarDrawerToggle getActionBarDrawerToggle() {
-        return actionBarDrawerToggle;
-    }
 
     public FloatingActionButton getFab() {
         return fab;
@@ -78,13 +76,45 @@ public class MainActivity extends AppCompatActivity
         toolbar.setTitle(R.string.title_list);
         setSupportActionBar(toolbar);
 
-        actionBarDrawerToggle = new ActionBarDrawerToggle(
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_list);
+
+        MenuItem item = navigationView.getMenu().findItem(R.id.nav_list);
+        View view = View.inflate(this, R.layout.drawer_action_layout, null);
+        ImageView imageView = (ImageView) view.findViewById(R.id.colorSelector);
+        imageView.setImageResource(R.drawable.none_btn);
+        MenuItemCompat.setActionView(item, view);
+
+        item = navigationView.getMenu().findItem(R.id.nav_list_red);
+        view = View.inflate(this, R.layout.drawer_action_layout, null);
+        imageView = (ImageView) view.findViewById(R.id.colorSelector);
+        imageView.setImageResource(R.drawable.red_btn);
+        MenuItemCompat.setActionView(item, view);
+
+
+        item = navigationView.getMenu().findItem(R.id.nav_list_green);
+        view = View.inflate(this, R.layout.drawer_action_layout, null);
+        imageView = (ImageView) view.findViewById(R.id.colorSelector);
+        imageView.setImageResource(R.drawable.green_btn);
+        MenuItemCompat.setActionView(item, view);
+
+        item = navigationView.getMenu().findItem(R.id.nav_list_blue);
+        view = View.inflate(this, R.layout.drawer_action_layout, null);
+        imageView = (ImageView) view.findViewById(R.id.colorSelector);
+        imageView.setImageResource(R.drawable.blue_btn);
+        MenuItemCompat.setActionView(item, view);
+
+        item = navigationView.getMenu().findItem(R.id.nav_list_orange);
+        view = View.inflate(this, R.layout.drawer_action_layout, null);
+        imageView = (ImageView) view.findViewById(R.id.colorSelector);
+        imageView.setImageResource(R.drawable.orange_btn);
+        MenuItemCompat.setActionView(item, view);
+
         tvUsername = ButterKnife.findById(navigationView.getHeaderView(0), R.id.tvUsername);
         tvName = ButterKnife.findById(navigationView.getHeaderView(0), R.id.tvName);
         presenter.bindView(this);
@@ -108,19 +138,6 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.main, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {

@@ -1,75 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:ls="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
               android:padding="@dimen/dimen_1x"
     >
 
-    <EditText
-        android:id="@+id/etName"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Название"
         android:layout_marginBottom="@dimen/dimen_1x"
-        />
+        >
 
-    <Spinner
+        <EditText
+            android:id="@+id/etName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Название"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+    <com.farbod.labelledspinner.LabelledSpinner
         android:id="@+id/spCategory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        ls:labelText="Категория"
+        ls:widgetColor="@color/colorAccent"
         android:layout_marginBottom="@dimen/dimen_1x"
         />
 
     <RadioGroup
         android:id="@+id/colorGroup"
-        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:orientation="horizontal"
         >
 
         <RadioButton
             android:id="@+id/btnNone"
             android:layout_width="wrap_content"
-            android:button="@drawable/none_btn"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/color_btn_margin"
+            android:button="@drawable/none_btn"
             />
 
         <RadioButton
             android:id="@+id/btnRed"
             android:layout_width="wrap_content"
-            android:button="@drawable/red_btn"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/color_btn_margin"
             android:layout_marginRight="@dimen/color_btn_margin"
+            android:button="@drawable/red_btn"
             />
 
         <RadioButton
             android:id="@+id/btnGreen"
             android:layout_width="wrap_content"
-            android:button="@drawable/green_btn"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/color_btn_margin"
             android:layout_marginRight="@dimen/color_btn_margin"
+            android:button="@drawable/green_btn"
             />
 
         <RadioButton
             android:id="@+id/btnBlue"
             android:layout_width="wrap_content"
-            android:button="@drawable/blue_btn"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/color_btn_margin"
             android:layout_marginRight="@dimen/color_btn_margin"
+            android:button="@drawable/blue_btn"
             />
 
         <RadioButton
             android:id="@+id/btnOrange"
             android:layout_width="wrap_content"
-            android:button="@drawable/orange_btn"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/color_btn_margin"
+            android:button="@drawable/orange_btn"
             />
 
 

@@ -5,11 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
@@ -17,6 +13,7 @@ import com.deych.cookchooser.db.entities.Category;
 import com.deych.cookchooser.ui.base.BaseFragment;
 import com.deych.cookchooser.ui.base.Presenter;
 import com.deych.cookchooser.util.Extras;
+import com.farbod.labelledspinner.LabelledSpinner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,11 +68,11 @@ public class MealsDetailFragment extends BaseFragment implements MealsDetailView
     @Inject
     MealsDetailPresenter presenter;
 
-    @Bind(R.id.spCategory)
-    Spinner spCategory;
-
     @Bind(R.id.colorGroup)
     RadioGroup colorGroup;
+
+    @Bind(R.id.spCategory)
+    LabelledSpinner spCategory;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -119,11 +116,6 @@ public class MealsDetailFragment extends BaseFragment implements MealsDetailView
 
     @Override
     public void setCategories(List<Category> categories) {
-        ArrayAdapter<Category> adapter =
-                new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, categories);
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spCategory.setAdapter(adapter);
+        spCategory.setItemsArray(new ArrayList<>(categories));
     }
 }

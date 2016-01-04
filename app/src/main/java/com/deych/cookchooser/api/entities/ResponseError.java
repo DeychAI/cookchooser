@@ -4,13 +4,13 @@ package com.deych.cookchooser.api.entities;
  * Created by deigo on 19.12.2015.
  */
 public class ResponseError {
-    private String mMessage;
+    private String message;
 
     public String getMessage() {
-        return mMessage;
+        return message;
     }
 
-    public void setMessage(String aMessage) {
-        mMessage = aMessage;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

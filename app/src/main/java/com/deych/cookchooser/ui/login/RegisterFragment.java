@@ -53,17 +53,17 @@ public class RegisterFragment extends BaseViewStateFragment implements RegisterV
 
     @OnClick(R.id.btnRegister)
     void registerClick() {
-        mPresenter.doRegister(etUsername.getText().toString(),
+        presenter.doRegister(etUsername.getText().toString(),
                 etPassword.getText().toString(),
                 etRepeatPassword.getText().toString(),
                 etName.getText().toString());
     }
 
     @Inject
-    RegisterPresenter mPresenter;
+    RegisterPresenter presenter;
 
     @Inject
-    RegisterViewState mViewState;
+    RegisterViewState viewState;
 
     @Nullable
     @Override
@@ -76,7 +76,7 @@ public class RegisterFragment extends BaseViewStateFragment implements RegisterV
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mPresenter.bindView(this);
+        presenter.bindView(this);
         getUiSubscription().add(RxTextView.editorActionEvents(etName).subscribe(a -> registerClick()));
     }
 
@@ -84,15 +84,15 @@ public class RegisterFragment extends BaseViewStateFragment implements RegisterV
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-        mPresenter.unbindView(this);
+        presenter.unbindView(this);
     }
 
-    private void setFormEnabled(boolean aEnabled) {
-        etUsername.setEnabled(aEnabled);
-        etPassword.setEnabled(aEnabled);
-        etRepeatPassword.setEnabled(aEnabled);
-        etName.setEnabled(aEnabled);
-        btnRegister.setEnabled(aEnabled);
+    private void setFormEnabled(boolean enabled) {
+        etUsername.setEnabled(enabled);
+        etPassword.setEnabled(enabled);
+        etRepeatPassword.setEnabled(enabled);
+        etName.setEnabled(enabled);
+        btnRegister.setEnabled(enabled);
     }
 
     @Override
@@ -102,24 +102,24 @@ public class RegisterFragment extends BaseViewStateFragment implements RegisterV
 
     @Override
     protected Presenter getPresenter() {
-        return mPresenter;
+        return presenter;
     }
 
     @Override
-    protected void setPresenter(Presenter aPresenter) {
-        mPresenter = (RegisterPresenter) aPresenter;
+    protected void setPresenter(Presenter presenter) {
+        this.presenter = (RegisterPresenter) presenter;
     }
 
     @Override
     public void showForm() {
-        mViewState.setShowForm();
+        viewState.setShowForm();
         setFormEnabled(true);
         progressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void showLoading() {
-        mViewState.setShowLoading();
+        viewState.setShowLoading();
         etUsername.setError(null);
         etPassword.setError(null);
         etRepeatPassword.setError(null);
@@ -163,11 +163,11 @@ public class RegisterFragment extends BaseViewStateFragment implements RegisterV
     }
 
     @Override
-    public void applyViewState(ViewState aViewState) {
-        mViewState.setState(aViewState.getState());
-        mViewState.apply(this);
-        if (mViewState.getState() == LfViewState.STATE_SHOW_LOADING) {
-            mPresenter.checkStateAfterRestore();
+    public void applyViewState(ViewState viewState) {
+        this.viewState.setState(viewState.getState());
+        this.viewState.apply(this);
+        if (this.viewState.getState() == LfViewState.STATE_SHOW_LOADING) {
+            presenter.checkStateAfterRestore();
         }
     }
 

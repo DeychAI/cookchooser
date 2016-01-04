@@ -12,59 +12,59 @@ import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 @StorIOSQLiteType(table = UserTable.TABLE)
 public class User {
     @StorIOSQLiteColumn(name = BaseColumns._ID, key = true)
-    long mId;
+    long id;
 
     @StorIOSQLiteColumn(name = UserTable.NAME)
-    String mName;
+    String name;
 
     @StorIOSQLiteColumn(name = UserTable.LOGIN)
-    String mUsername;
+    String username;
 
     @StorIOSQLiteColumn(name = UserTable.GROUP_ID)
-    String mGroup;
+    String group;
 
-    String mToken;
+    String token;
 
     public User() {
     }
 
     public long getId() {
-        return mId;
+        return id;
     }
 
     public void setId(long id) {
-        mId = id;
+        this.id = id;
     }
 
     public String getName() {
-        return mName;
+        return name;
     }
 
     public void setName(String name) {
-        mName = name;
+        this.name = name;
     }
 
     public String getUsername() {
-        return mUsername;
+        return username;
     }
 
     public void setUsername(String username) {
-        mUsername = username;
+        this.username = username;
     }
 
     public String getGroup() {
-        return mGroup;
+        return group;
     }
 
     public void setGroup(String group) {
-        mGroup = group;
+        this.group = group;
     }
 
     public String getToken() {
-        return mToken;
+        return token;
     }
 
     public void setToken(String token) {
-        mToken = token;
+        this.token = token;
     }
 }

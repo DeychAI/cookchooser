@@ -20,11 +20,11 @@ import timber.log.Timber;
  */
 public class App extends Application {
 
-    private AppComponent mAppComponent;
-    private UserComponent mUserComponent;
+    private AppComponent appComponent;
+    private UserComponent userComponent;
 
-    public static App get(@NonNull Context aContext) {
-        return (App) aContext.getApplicationContext();
+    public static App get(@NonNull Context context) {
+        return (App) context.getApplicationContext();
     }
 
     public RefWatcher getRefWatcher() {
@@ -39,7 +39,7 @@ public class App extends Application {
 
         refWatcher = LeakCanary.install(this);
 
-        mAppComponent = DaggerAppComponent
+        appComponent = DaggerAppComponent
                 .builder()
                 .appModule(new AppModule(this))
                 .netModule(new NetModule("http://deych.myihor.ru/cookchooser/api/v1/"))
@@ -48,7 +48,7 @@ public class App extends Application {
 //                .netModule(new NetModule("http://deych.myihor.ru:5000/cookchooser/api/v1/"))
                 .build();
 
-        User user = mAppComponent.userModel().loginAsBlocking();
+        User user = appComponent.userModel().loginAsBlocking();
         if (user != null) {
             createUserComponent(user);
         }
@@ -60,19 +60,19 @@ public class App extends Application {
     }
 
     public AppComponent getAppComponent() {
-        return mAppComponent;
+        return appComponent;
     }
 
     public UserComponent createUserComponent(User user) {
-        mUserComponent = mAppComponent.plus(new UserModule(user));
-        return mUserComponent;
+        userComponent = appComponent.plus(new UserModule(user));
+        return userComponent;
     }
 
     public UserComponent getUserComponent() {
-        return mUserComponent;
+        return userComponent;
     }
 
     public void releaseUserComponent() {
-        mUserComponent = null;
+        userComponent = null;
     }
 }

@@ -6,22 +6,22 @@ import com.deych.cookchooser.db.entities.User;
  * Created by deigo on 13.12.2015.
  */
 public class TokenResponse {
-    private String mToken;
-    private User mUser;
+    private String token;
+    private User user;
 
     public String getToken() {
-        return mToken;
+        return token;
     }
 
-    public void setToken(String aToken) {
-        mToken = aToken;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public User getUser() {
-        return mUser;
+        return user;
     }
 
-    public void setUser(User aUser) {
-        mUser = aUser;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

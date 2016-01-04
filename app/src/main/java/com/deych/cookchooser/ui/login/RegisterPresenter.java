@@ -17,31 +17,31 @@ import rx.schedulers.Schedulers;
  * Created by deigo on 19.12.2015.
  */
 public class RegisterPresenter extends Presenter<RegisterView> {
-    private UserModel mUserModel;
-    private Observable<User> mUserObservable;
+    private UserModel userModel;
+    private Observable<User> userObservable;
 
 
     @Inject
     public RegisterPresenter(UserModel userModel) {
-        mUserModel = userModel;
+        this.userModel = userModel;
     }
 
-    public void doRegister(String aUsername, String aPassword, String aRepeatPassword, String aName) {
-        if (!validateUsername(aUsername)) {
+    public void doRegister(String username, String password, String repeatPassword, String name) {
+        if (!validateUsername(username)) {
             if (view() != null) {
                 view().showEmailNotValidError();
             }
             return;
         }
 
-        if (!validatePasswordBlank(aPassword)) {
+        if (!validatePasswordBlank(password)) {
             if (view() != null) {
                 view().showPasswordBlankError();
             }
             return;
         }
 
-        if (!validatePasswordMatch(aPassword, aRepeatPassword)) {
+        if (!validatePasswordMatch(password, repeatPassword)) {
             if (view() != null) {
                 view().showPasswordMustMatchError();
             }
@@ -52,17 +52,17 @@ public class RegisterPresenter extends Presenter<RegisterView> {
             view().showLoading();
         }
 
-        mUserObservable = mUserModel.register(aUsername, aPassword, aName)
+        userObservable = userModel.register(username, password, name)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        Subscription subscription = mUserObservable
+        Subscription subscription = userObservable
                 .subscribe(u -> {
                     if (view() != null) {
                         view().registerSuccessful();
                     }
                 }, e -> {
-                    if (mUserModel.handleRegisterError(e) == UserModel.ERROR_USER_EXISTS) {
+                    if (userModel.handleRegisterError(e) == UserModel.ERROR_USER_EXISTS) {
                         if (view() != null) {
                             view().showUserExistsError();
                         }
@@ -76,20 +76,20 @@ public class RegisterPresenter extends Presenter<RegisterView> {
     }
 
 
-    private boolean validateUsername(String aUsername) {
-        return !(TextUtils.isEmpty(aUsername) || !android.util.Patterns.EMAIL_ADDRESS.matcher(aUsername).matches());
+    private boolean validateUsername(String username) {
+        return !(TextUtils.isEmpty(username) || !android.util.Patterns.EMAIL_ADDRESS.matcher(username).matches());
     }
 
-    private boolean validatePasswordBlank(String aPassword) {
-        return !(TextUtils.isEmpty(aPassword));
+    private boolean validatePasswordBlank(String password) {
+        return !(TextUtils.isEmpty(password));
     }
 
-    private boolean validatePasswordMatch(String aPassword, String aRepeatPassword) {
-        return aPassword.equals(aRepeatPassword);
+    private boolean validatePasswordMatch(String password, String repeatPassword) {
+        return password.equals(repeatPassword);
     }
 
     public void checkStateAfterRestore() {
-        if (mUserObservable == null && view() != null) {
+        if (userObservable == null && view() != null) {
             view().showForm();
         }
     }

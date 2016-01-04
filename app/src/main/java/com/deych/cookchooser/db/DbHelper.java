@@ -15,8 +15,8 @@ public class DbHelper extends SQLiteOpenHelper {
 
     private static final int DB_VERSION = 4;
 
-    public DbHelper(Context aContext) {
-        super(aContext, "cookchooser_db", null, DB_VERSION);
+    public DbHelper(Context context) {
+        super(context, "cookchooser_db", null, DB_VERSION);
     }
 
     @Override

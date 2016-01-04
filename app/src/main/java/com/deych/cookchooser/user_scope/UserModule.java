@@ -7,6 +7,9 @@ import com.google.gson.Gson;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+import java.io.IOException;
 
 import javax.inject.Named;
 
@@ -22,25 +25,22 @@ import retrofit.RxJavaCallAdapterFactory;
 @Module
 public class UserModule {
 
-    private User mUser;
+    private User user;
 
     public UserModule(User user) {
-        mUser = user;
+        this.user = user;
     }
 
     @UserScope
     @Provides
     public User provideUser() {
-        return mUser;
+        return user;
     }
 
     @Provides
     @UserScope
-    @Named("OkHttpWithAuth")
-    public OkHttpClient provideOkHttpClient(OkHttpClient noAuthClient, User user) {
-        OkHttpClient client = noAuthClient.clone();
-
-        Interceptor interceptor = chain -> {
+    public Interceptor provideAuthInterceptor(User user) {
+        return chain -> {
             Request original = chain.request();
             String credentials = user.getToken() + ":";
 
@@ -52,8 +52,14 @@ public class UserModule {
             Request request = requestBuilder.build();
             return chain.proceed(request);
         };
+    }
 
-        client.interceptors().add(interceptor);
+    @Provides
+    @UserScope
+    @Named("OkHttpWithAuth")
+    public OkHttpClient provideOkHttpClient(OkHttpClient noAuthClient, Interceptor authInterceptor) {
+        OkHttpClient client = noAuthClient.clone();
+        client.interceptors().add(authInterceptor);
         return client;
     }
 

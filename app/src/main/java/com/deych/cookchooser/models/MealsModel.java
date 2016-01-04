@@ -110,7 +110,7 @@ public class MealsModel {
     }
 
     @NonNull
-    public Observable<List<Meal>> getMealsFromDb(final long category_id) {
+    public Observable<List<Meal>> getMealsFromDb(long category_id) {
         return storIOSQLite.get()
                 .listOfObjects(Meal.class)
                 .withQuery(Query.builder()

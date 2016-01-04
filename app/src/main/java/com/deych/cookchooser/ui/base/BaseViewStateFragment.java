@@ -5,32 +5,30 @@ import android.support.annotation.Nullable;
 
 import javax.inject.Inject;
 
-import timber.log.Timber;
-
 /**
  * Created by deigo on 17.12.2015.
  */
 public abstract class BaseViewStateFragment extends BaseFragment implements ViewStateDelegateCallback {
 
     @Inject
-    ViewStateDelegate mViewStateDelegate;
+    ViewStateDelegate viewStateDelegate;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewStateDelegate.setDelegateCallback(this);
-        mViewStateDelegate.onCreate(savedInstanceState);
+        viewStateDelegate.setDelegateCallback(this);
+        viewStateDelegate.onCreate(savedInstanceState);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewStateDelegate.onActivityCreated(savedInstanceState);
+        viewStateDelegate.onActivityCreated(savedInstanceState);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mViewStateDelegate.onSaveInstanceState(outState);
+        viewStateDelegate.onSaveInstanceState(outState);
     }
 }

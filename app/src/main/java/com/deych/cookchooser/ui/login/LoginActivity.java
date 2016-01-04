@@ -20,37 +20,20 @@ import rx.schedulers.Schedulers;
  */
 public class LoginActivity extends AppCompatActivity {
 
-    @Inject
-    UserModel mUserModel;
-
-    Subscription mSubscription;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_content);
 
-        App.get(this).getAppComponent().inject(this);
-
-        mSubscription = mUserModel.login()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(user -> {
-                    App.get(this).createUserComponent(user);
-                    startActivity(new Intent(this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
-                    finish();
-                }, e -> {
-                    if (savedInstanceState == null) {
-                        getSupportFragmentManager().beginTransaction()
-                                .add(R.id.content, new LoginFragment())
-                                .commit();
-                    }
-                });
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mSubscription.unsubscribe();
+        if (App.get(this).getUserComponent() != null) {
+            startActivity(new Intent(this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+            finish();
+        } else {
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.content, new LoginFragment())
+                        .commit();
+            }
+        }
     }
 }

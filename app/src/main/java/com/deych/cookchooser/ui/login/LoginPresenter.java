@@ -16,12 +16,12 @@ import rx.schedulers.Schedulers;
  */
 public class LoginPresenter extends Presenter<LoginView> {
 
-    private UserModel mUserModel;
-    private Observable<User> mUserObservable;
+    private UserModel userModel;
+    private Observable<User> userObservable;
 
     @Inject
     public LoginPresenter(UserModel userModel) {
-        mUserModel = userModel;
+        this.userModel = userModel;
     }
 
     public void doLogin(String username, String password) {
@@ -29,11 +29,11 @@ public class LoginPresenter extends Presenter<LoginView> {
             view().showLoading();
         }
 
-        mUserObservable = mUserModel.login(username, password)
+        userObservable = userModel.login(username, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
 
-        Subscription subscription = mUserObservable
+        Subscription subscription = userObservable
                 .subscribe(user -> {
                     if (view() != null) {
                         view().loginSuccessful(user);
@@ -47,7 +47,7 @@ public class LoginPresenter extends Presenter<LoginView> {
     }
 
     public void checkStateAfterRestore() {
-        if (mUserObservable == null && view() != null) {
+        if (userObservable == null && view() != null) {
             view().showForm();
         }
     }

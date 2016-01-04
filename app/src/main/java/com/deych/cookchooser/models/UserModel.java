@@ -1,6 +1,5 @@
 package com.deych.cookchooser.models;
 
-import android.provider.BaseColumns;
 import android.text.TextUtils;
 import android.util.Base64;
 
@@ -9,7 +8,6 @@ import com.deych.cookchooser.db.entities.User;
 import com.deych.cookchooser.db.tables.UserTable;
 import com.deych.cookchooser.shared_pref.Preferences;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import java.util.List;
 
@@ -28,22 +26,22 @@ public class UserModel {
     public static final int ERROR_USER_EXISTS = 1;
     public static final int ERROR_OTHER = 2;
 
-    private Preferences mPreferences;
-    private StorIOSQLite mStorIOSQLite;
-    private Retrofit mRetrofit;
-    private UserService mUserService;
+    private Preferences preferences;
+    private StorIOSQLite storIOSQLite;
+    private Retrofit retrofit;
+    private UserService userService;
 
 
     @Inject
     public UserModel(UserService userService, Preferences preferences, StorIOSQLite storIOSQLite, Retrofit retrofit) {
-        mUserService = userService;
-        mPreferences = preferences;
-        mStorIOSQLite = storIOSQLite;
-        mRetrofit = retrofit;
+        this.userService = userService;
+        this.preferences = preferences;
+        this.storIOSQLite = storIOSQLite;
+        this.retrofit = retrofit;
     }
 
     public Observable<User> register(String username, String password, String name) {
-        return mUserService.register(username, password, name);
+        return userService.register(username, password, name);
     }
 
     public int handleRegisterError(Throwable e) {
@@ -55,7 +53,7 @@ public class UserModel {
             return ERROR_USER_EXISTS;
             //TODO just a memo how to convert errors
 //                        try {
-//                            ResponseError responseError = (ResponseError) mRetrofit.responseConverter(ResponseError.class,
+//                            ResponseError responseError = (ResponseError) retrofit.responseConverter(ResponseError.class,
 //                                    ResponseError.class.getAnnotations()).convert(error.response().errorBody());
 //                        } catch (IOException e1) {
 //                            e1.printStackTrace();
@@ -68,36 +66,36 @@ public class UserModel {
         final String credentials = username + ":" + password;
         final String basic =
                 "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
-        return mUserService.login(basic)
+        return userService.login(basic)
                 .map(response -> {
                     User user = response.getUser();
                     user.setToken(response.getToken());
-                    mStorIOSQLite
+                    storIOSQLite
                             .put()
                             .object(user)
                             .prepare()
                             .executeAsBlocking();
                     return user;
                 })
-                .doOnNext(u -> mPreferences.saveUserData(u.getId(), u.getToken()));
+                .doOnNext(u -> preferences.saveUserData(u.getId(), u.getToken()));
     }
 
     public Observable<User> login() {
-        if (mPreferences.getUserId() != 0 && !TextUtils.isEmpty(mPreferences.getUserToken())) {
-            return mStorIOSQLite
+        if (preferences.getUserId() != 0 && !TextUtils.isEmpty(preferences.getUserToken())) {
+            return storIOSQLite
                     .get()
                     .listOfObjects(User.class)
-                    .withQuery(UserTable.get(mPreferences.getUserId()))
+                    .withQuery(UserTable.get(preferences.getUserId()))
                     .prepare()
                     .createObservable()
                     .take(1)
                     .map(list -> {
                         if (list.isEmpty()) {
-                            mPreferences.clearUserData();
+                            preferences.clearUserData();
                             throw new RuntimeException("User not found");
                         } else {
                             User user = list.get(0);
-                            user.setToken(mPreferences.getUserToken());
+                            user.setToken(preferences.getUserToken());
                             return user;
                         }
                     });
@@ -107,19 +105,19 @@ public class UserModel {
     }
 
     public User loginAsBlocking() {
-        if (mPreferences.getUserId() != 0 && !TextUtils.isEmpty(mPreferences.getUserToken())) {
-            List<User> list = mStorIOSQLite
+        if (preferences.getUserId() != 0 && !TextUtils.isEmpty(preferences.getUserToken())) {
+            List<User> list = storIOSQLite
                     .get()
                     .listOfObjects(User.class)
-                    .withQuery(UserTable.get(mPreferences.getUserId()))
+                    .withQuery(UserTable.get(preferences.getUserId()))
                     .prepare()
                     .executeAsBlocking();
             if (list.isEmpty()) {
-                mPreferences.clearUserData();
+                preferences.clearUserData();
                 return null;
             } else {
                 User user = list.get(0);
-                user.setToken(mPreferences.getUserToken());
+                user.setToken(preferences.getUserToken());
                 return user;
             }
 
@@ -128,6 +126,6 @@ public class UserModel {
     }
 
     public void logout() {
-        mPreferences.clearUserData();
+        preferences.clearUserData();
     }
 }

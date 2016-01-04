@@ -11,20 +11,20 @@ import javax.inject.Inject;
 public class ViewStateDelegate {
 
     private boolean shouldApplyViewState;
-    private ViewState mViewState;
-    private ViewStateDelegateCallback mCallback;
+    private ViewState viewState;
+    private ViewStateDelegateCallback callback;
 
     @Inject
-    public ViewStateDelegate(ViewState aViewState) {
-        mViewState = aViewState;
+    public ViewStateDelegate(ViewState viewState) {
+        this.viewState = viewState;
     }
 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         shouldApplyViewState = false;
         if (savedInstanceState != null) {
-            ViewState restoredState = mViewState.restoreInstanceState(savedInstanceState);
+            ViewState restoredState = viewState.restoreInstanceState(savedInstanceState);
             if (restoredState != null) {
-                mViewState = restoredState;
+                viewState = restoredState;
                 shouldApplyViewState = true;
             }
         }
@@ -33,15 +33,15 @@ public class ViewStateDelegate {
 
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         if (shouldApplyViewState) {
-            mCallback.applyViewState(mViewState);
+            callback.applyViewState(viewState);
         }
     }
 
     public void onSaveInstanceState(Bundle outState) {
-        mViewState.saveInstanceState(outState);
+        viewState.saveInstanceState(outState);
     }
 
-    public void setDelegateCallback(ViewStateDelegateCallback aCallback) {
-        mCallback = aCallback;
+    public void setDelegateCallback(ViewStateDelegateCallback callback) {
+        this.callback = callback;
     }
 }

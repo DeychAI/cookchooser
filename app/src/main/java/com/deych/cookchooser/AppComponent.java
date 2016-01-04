@@ -31,6 +31,4 @@ public interface AppComponent {
     RegisterFragment.RegisterFragmentComponent plus(RegisterFragment.RegisterFragmentModule aModule);
 
     UserModel userModel();
-
-    void inject(LoginActivity activity);
 }

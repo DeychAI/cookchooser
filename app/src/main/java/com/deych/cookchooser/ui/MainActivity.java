@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Inject
-    MainActivityPresenter mPresenter;
+    MainActivityPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setCheckedItem(R.id.nav_list);
         tvUsername = ButterKnife.findById(navigationView.getHeaderView(0), R.id.tvUsername);
         tvName = ButterKnife.findById(navigationView.getHeaderView(0), R.id.tvName);
-        mPresenter.bindView(this);
+        presenter.bindView(this);
 
         if (savedInstanceState == null) {
             showMealsHostFragment();
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mPresenter.unbindView(this);
+        presenter.unbindView(this);
     }
 
     @Override
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_logout:
-                mPresenter.logout();
+                presenter.logout();
                 break;
             case R.id.nav_list:
                 showMealsHostFragment();

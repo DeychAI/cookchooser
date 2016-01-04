@@ -21,22 +21,22 @@ import timber.log.Timber;
  */
 public class MealsHostPresenter extends Presenter<MealsHostView> {
 
-    private User mUser;
-    private MealsModel mMealsModel;
-    private List<Category> mCategories = Collections.emptyList();
+    private User user;
+    private MealsModel mealsModel;
+    private List<Category> categories = Collections.emptyList();
     private boolean mealsLoaded = false;
 
     @Inject
     public MealsHostPresenter(User user, MealsModel mealsModel) {
-        mUser = user;
-        mMealsModel = mealsModel;
+        this.user = user;
+        this.mealsModel = mealsModel;
     }
 
     public void loadData() {
 
         if (!mealsLoaded) {
             mealsLoaded = true;
-            Subscription mealsSubscription = mMealsModel
+            Subscription mealsSubscription = mealsModel
                     .loadAllMeals()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -44,22 +44,22 @@ public class MealsHostPresenter extends Presenter<MealsHostView> {
             addToSubscription(mealsSubscription);
         }
 
-        if (!mCategories.isEmpty() && view() != null) {
-            view().showCategories(mCategories);
+        if (!categories.isEmpty() && view() != null) {
+            view().showCategories(categories);
             return;
         }
 
-        Subscription subscription = mMealsModel
+        Subscription subscription = mealsModel
                 .getCategories()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(list -> {
-                    if (mCategories.size() > 0) {
+                    if (categories.size() > 0) {
                         return;
                     }
-                    mCategories = Collections.unmodifiableList(list);
+                    categories = Collections.unmodifiableList(list);
                     if (view() != null) {
-                        view().showCategories(mCategories);
+                        view().showCategories(categories);
                     }
                 }, e -> {
 //                    if (adapter.getCount() > 0) {
@@ -71,7 +71,7 @@ public class MealsHostPresenter extends Presenter<MealsHostView> {
     }
 
     public void addRandomMeal() {
-        mMealsModel
+        mealsModel
                 .addMeal(1, "Суп " + new Random().nextInt(100))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

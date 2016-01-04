@@ -21,10 +21,10 @@ import butterknife.ButterKnife;
  */
 public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder>{
 
-    private List<Meal> mList = Collections.emptyList();
+    private List<Meal> list = Collections.emptyList();
 
     public void setList(List<Meal> list) {
-        mList = list;
+        this.list = list;
         notifyDataSetChanged();
     }
 
@@ -36,12 +36,12 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(mList.get(position));
+        holder.bind(list.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mList.size();
+        return list.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

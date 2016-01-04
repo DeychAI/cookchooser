@@ -18,7 +18,7 @@ public interface UserService {
     Observable<TokenResponse> login(@Header("Authorization") String authorization);
 
     @POST("users")
-    Observable<User> register(@Query("username") String aUsername,
-                              @Query("password") String aPassword,
-                              @Query("name") String aName);
+    Observable<User> register(@Query("username") String username,
+                              @Query("password") String password,
+                              @Query("name") String name);
 }

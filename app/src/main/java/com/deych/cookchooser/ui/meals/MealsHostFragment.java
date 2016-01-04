@@ -16,7 +16,6 @@ import android.widget.Toast;
 import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
 import com.deych.cookchooser.db.entities.Category;
-import com.deych.cookchooser.ui.MainActivity;
 import com.deych.cookchooser.ui.base.BaseFragment;
 import com.deych.cookchooser.ui.base.MainActivityUiDelegate;
 import com.deych.cookchooser.ui.base.Presenter;
@@ -27,7 +26,6 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by deigo on 30.12.2015.
@@ -37,10 +35,10 @@ public class MealsHostFragment extends BaseFragment implements MealsHostView {
     @Bind(R.id.viewPager)
     ViewPager viewPager;
 
-    private MealsPagerAdapter mMealsAdapter;
+    private MealsPagerAdapter mealsPagerAdapter;
 
     @Inject
-    MealsHostPresenter mPresenter;
+    MealsHostPresenter presenter;
 
     private MainActivityUiDelegate mainActivityUiDelegate;
 
@@ -51,12 +49,12 @@ public class MealsHostFragment extends BaseFragment implements MealsHostView {
 
     @Override
     protected Presenter getPresenter() {
-        return mPresenter;
+        return presenter;
     }
 
     @Override
-    protected void setPresenter(Presenter aPresenter) {
-        mPresenter = (MealsHostPresenter) aPresenter;
+    protected void setPresenter(Presenter presenter) {
+        this.presenter = (MealsHostPresenter) presenter;
     }
 
     @Override
@@ -89,9 +87,9 @@ public class MealsHostFragment extends BaseFragment implements MealsHostView {
         super.onViewCreated(view, savedInstanceState);
         mainActivityUiDelegate.onViewCreated();
 
-        mMealsAdapter = new MealsPagerAdapter(getChildFragmentManager());
-        mPresenter.bindView(this);
-        mPresenter.loadData();
+        mealsPagerAdapter = new MealsPagerAdapter(getChildFragmentManager());
+        presenter.bindView(this);
+        presenter.loadData();
 
     }
 
@@ -104,7 +102,7 @@ public class MealsHostFragment extends BaseFragment implements MealsHostView {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                mPresenter.addRandomMeal();
+                presenter.addRandomMeal();
                 Toast.makeText(getActivity(), "Add!", Toast.LENGTH_SHORT).show();
                 return true;
         }
@@ -114,19 +112,19 @@ public class MealsHostFragment extends BaseFragment implements MealsHostView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mPresenter.unbindView(this);
+        presenter.unbindView(this);
         mainActivityUiDelegate.onDestroyView();
 
     }
 
     @Override
     public void showCategories(List<Category> categories) {
-        if (mMealsAdapter.getCount() > 0) {
+        if (mealsPagerAdapter.getCount() > 0) {
             return;
         }
-        mMealsAdapter.setCategories(categories);
+        mealsPagerAdapter.setCategories(categories);
         viewPager.setOffscreenPageLimit(3);
-        viewPager.setAdapter(mMealsAdapter);
+        viewPager.setAdapter(mealsPagerAdapter);
         mainActivityUiDelegate.getTabs().setupWithViewPager(viewPager);
     }
 }

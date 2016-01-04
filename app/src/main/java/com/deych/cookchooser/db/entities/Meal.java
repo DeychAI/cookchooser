@@ -13,59 +13,68 @@ import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 public class Meal {
 
     @StorIOSQLiteColumn(name = BaseColumns._ID, key = true)
-    long mId;
+    long id;
 
     @StorIOSQLiteColumn(name = MealTable.NAME)
-    String mName;
+    String name;
 
     @StorIOSQLiteColumn(name = MealTable.CATEGORY_ID)
-    long mCategoryId;
+    long categoryId;
 
     @StorIOSQLiteColumn(name = MealTable.GROUP_ID)
-    String mGroup;
+    String group;
 
     @StorIOSQLiteColumn(name = MealTable.CLIENT_ID)
-    String mClientId;
+    String clientId;
+
+    String color;
+
+    long revision;
+
+    boolean changed;
+
+    boolean deleted;
 
     public long getId() {
-        return mId;
+        return id;
     }
 
     public void setId(long id) {
-        mId = id;
+        this.id = id;
     }
 
     public String getName() {
-        return mName;
+        return name;
     }
 
     public void setName(String name) {
-        mName = name;
+        this.name = name;
     }
 
     public long getCategoryId() {
-        return mCategoryId;
+        return categoryId;
     }
 
     public void setCategoryId(long categoryId) {
-        mCategoryId = categoryId;
+        this.categoryId = categoryId;
     }
 
     public String getGroup() {
-        return mGroup;
+        return group;
     }
 
     public void setGroup(String group) {
-        mGroup = group;
+        this.group = group;
     }
 
     public String getClientId() {
-        return mClientId;
+        return clientId;
     }
 
     public void setClientId(String clientId) {
-        mClientId = clientId;
+        this.clientId = clientId;
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -78,29 +87,29 @@ public class Meal {
 
         Meal meal = (Meal) o;
 
-        if (mId != meal.mId) {
+        if (id != meal.id) {
             return false;
         }
-        if (mCategoryId != meal.mCategoryId) {
+        if (categoryId != meal.categoryId) {
             return false;
         }
-        if (mName != null ? !mName.equals(meal.mName) : meal.mName != null) {
+        if (name != null ? !name.equals(meal.name) : meal.name != null) {
             return false;
         }
-        if (mGroup != null ? !mGroup.equals(meal.mGroup) : meal.mGroup != null) {
+        if (group != null ? !group.equals(meal.group) : meal.group != null) {
             return false;
         }
-        return !(mClientId != null ? !mClientId.equals(meal.mClientId) : meal.mClientId != null);
+        return !(clientId != null ? !clientId.equals(meal.clientId) : meal.clientId != null);
 
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (mId ^ (mId >>> 32));
-        result = 31 * result + (mName != null ? mName.hashCode() : 0);
-        result = 31 * result + (int) (mCategoryId ^ (mCategoryId >>> 32));
-        result = 31 * result + (mGroup != null ? mGroup.hashCode() : 0);
-        result = 31 * result + (mClientId != null ? mClientId.hashCode() : 0);
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (int) (categoryId ^ (categoryId >>> 32));
+        result = 31 * result + (group != null ? group.hashCode() : 0);
+        result = 31 * result + (clientId != null ? clientId.hashCode() : 0);
         return result;
     }
 }

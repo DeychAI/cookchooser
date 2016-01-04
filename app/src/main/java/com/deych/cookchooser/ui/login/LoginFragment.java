@@ -39,24 +39,24 @@ import dagger.Subcomponent;
 public class LoginFragment extends BaseViewStateFragment implements LoginView {
 
     @Bind(R.id.progressBar)
-    ProgressBar mProgressBar;
+    ProgressBar progressBar;
 
     @Bind(R.id.etUsername)
-    EditText mEtUsername;
+    EditText etUsername;
 
     @Bind(R.id.etPassword)
-    EditText mEtPassword;
+    EditText etPassword;
 
     @Bind(R.id.btnLogin)
-    Button mBtnLogin;
+    Button btnLogin;
 
     @OnClick(R.id.btnLogin)
     void loginClick() {
-        mPresenter.doLogin(mEtUsername.getText().toString(), mEtPassword.getText().toString());
+        presenter.doLogin(etUsername.getText().toString(), etPassword.getText().toString());
     }
 
     @Bind(R.id.link_signup)
-    TextView mTvSignUp;
+    TextView tvSignUp;
 
     @OnClick(R.id.link_signup)
     void signUpClick() {
@@ -68,10 +68,10 @@ public class LoginFragment extends BaseViewStateFragment implements LoginView {
     }
 
     @Inject
-    LoginPresenter mPresenter;
+    LoginPresenter presenter;
 
     @Inject
-    LoginViewState mViewState;
+    LoginViewState viewState;
 
     @Override
     protected void setUpComponents() {
@@ -80,12 +80,12 @@ public class LoginFragment extends BaseViewStateFragment implements LoginView {
 
     @Override
     protected Presenter getPresenter() {
-        return mPresenter;
+        return presenter;
     }
 
     @Override
-    protected void setPresenter(Presenter aPresenter) {
-        mPresenter = (LoginPresenter) aPresenter;
+    protected void setPresenter(Presenter presenter) {
+        this.presenter = (LoginPresenter) presenter;
     }
 
     @Nullable
@@ -99,41 +99,41 @@ public class LoginFragment extends BaseViewStateFragment implements LoginView {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mPresenter.bindView(this);
-        getUiSubscription().add(RxTextView.editorActionEvents(mEtPassword).subscribe(a -> loginClick()));
+        presenter.bindView(this);
+        getUiSubscription().add(RxTextView.editorActionEvents(etPassword).subscribe(a -> loginClick()));
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-        mPresenter.unbindView(this);
+        presenter.unbindView(this);
     }
 
-    private void setFormEnabled(boolean aEnabled) {
-        mEtUsername.setEnabled(aEnabled);
-        mEtPassword.setEnabled(aEnabled);
-        mBtnLogin.setEnabled(aEnabled);
-        mTvSignUp.setEnabled(aEnabled);
+    private void setFormEnabled(boolean enabled) {
+        etUsername.setEnabled(enabled);
+        etPassword.setEnabled(enabled);
+        btnLogin.setEnabled(enabled);
+        tvSignUp.setEnabled(enabled);
     }
 
     @Override
     public void showForm() {
-        mViewState.setShowForm();
-        mProgressBar.setVisibility(View.GONE);
+        viewState.setShowForm();
+        progressBar.setVisibility(View.GONE);
         setFormEnabled(true);
     }
 
     public void showLoading() {
-        mViewState.setShowLoading();
-        mEtUsername.setError(null);
-        mProgressBar.setVisibility(View.VISIBLE);
+        viewState.setShowLoading();
+        etUsername.setError(null);
+        progressBar.setVisibility(View.VISIBLE);
         setFormEnabled(false);
     }
 
     public void showError() {
         showForm();
-        mEtPassword.setError(getString(R.string.error_login));
+        etPassword.setError(getString(R.string.error_login));
     }
 
     @Override
@@ -144,11 +144,11 @@ public class LoginFragment extends BaseViewStateFragment implements LoginView {
     }
 
     @Override
-    public void applyViewState(ViewState aViewState) {
-        mViewState.setState(aViewState.getState());
-        mViewState.apply(this);
-        if (mViewState.getState() == LfViewState.STATE_SHOW_LOADING) {
-            mPresenter.checkStateAfterRestore();
+    public void applyViewState(ViewState viewState) {
+        this.viewState.setState(viewState.getState());
+        this.viewState.apply(this);
+        if (this.viewState.getState() == LfViewState.STATE_SHOW_LOADING) {
+            presenter.checkStateAfterRestore();
         }
     }
 

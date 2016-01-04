@@ -12,21 +12,21 @@ import rx.subscriptions.CompositeSubscription;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
-    private CompositeSubscription mUiSubscription = new CompositeSubscription();
-    private boolean mDestroyedBySystem;
+    private CompositeSubscription uiSubscription = new CompositeSubscription();
+    private boolean destroyedBySystem;
 
     @Inject
-    PresenterCacheDelegate mCacheDelegate;
+    PresenterCacheDelegate cacheDelegate;
 
-    PresenterCacheDelegateCallback mDelegateCallback = new PresenterCacheDelegateCallback() {
+    PresenterCacheDelegateCallback delegateCallback = new PresenterCacheDelegateCallback() {
         @Override
         public Presenter onEmptyCache() {
             return getPresenter();
         }
 
         @Override
-        public void restoredFromCache(Presenter aPresenter) {
-            setPresenter(aPresenter);
+        public void restoredFromCache(Presenter presenter) {
+            setPresenter(presenter);
         }
 
         @Override
@@ -44,36 +44,36 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected abstract void bindViews();
 
     public CompositeSubscription getUiSubscription() {
-        return mUiSubscription;
+        return uiSubscription;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setUpComponents();
-        mCacheDelegate.setDelegateCallback(mDelegateCallback);
-        mCacheDelegate.onCreate(savedInstanceState);
+        cacheDelegate.setDelegateCallback(delegateCallback);
+        cacheDelegate.onCreate(savedInstanceState);
         bindViews();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mDestroyedBySystem = true;
-        mCacheDelegate.onSaveInstanceState(outState);
+        destroyedBySystem = true;
+        cacheDelegate.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mDestroyedBySystem = false;
+        destroyedBySystem = false;
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mUiSubscription.clear();
-        mCacheDelegate.onDestroy(mDestroyedBySystem);
-        mDelegateCallback = null;
+        uiSubscription.clear();
+        cacheDelegate.onDestroy(destroyedBySystem);
+        delegateCallback = null;
     }
 }

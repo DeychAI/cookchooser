@@ -11,26 +11,26 @@ import javax.inject.Inject;
  */
 public class MainActivityPresenter extends Presenter<MainActivityView>{
 
-    private User mUser;
-    private UserModel mUserModel;
+    private User user;
+    private UserModel userModel;
 
     @Inject
     public MainActivityPresenter(User user, UserModel userModel) {
-        mUser = user;
-        mUserModel = userModel;
+        this.user = user;
+        this.userModel = userModel;
     }
 
     @Override
-    public void bindView(MainActivityView aView) {
-        super.bindView(aView);
+    public void bindView(MainActivityView view) {
+        super.bindView(view);
         if (view() != null) {
-            view().bindUserData(mUser.getUsername(), mUser.getName());
+            view().bindUserData(user.getUsername(), user.getName());
         }
     }
 
     public void logout() {
         //TODO clear all data
-        mUserModel.logout();
+        userModel.logout();
         if (view() != null) {
             view().showLoginScreen();
         }

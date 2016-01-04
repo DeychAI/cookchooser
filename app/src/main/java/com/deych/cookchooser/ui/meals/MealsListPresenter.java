@@ -20,19 +20,19 @@ import timber.log.Timber;
  */
 public class MealsListPresenter extends Presenter<MealsListView> {
 
-    private MealsModel mMealsModel;
-    private User mUser;
-    private List<Meal> mMeals = Collections.emptyList();
-    private long mId;
+    private MealsModel mealsModel;
+    private User user;
+    private List<Meal> meals = Collections.emptyList();
+    private long id;
 
     @Inject
     public MealsListPresenter(MealsModel mealsModel, User user) {
-        mMealsModel = mealsModel;
-        mUser = user;
+        this.mealsModel = mealsModel;
+        this.user = user;
     }
 
     public void refreshMeals() {
-        Subscription subscription = mMealsModel.getMealsFromNet(mId)
+        Subscription subscription = mealsModel.getMealsFromNet(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(list -> {
@@ -49,7 +49,7 @@ public class MealsListPresenter extends Presenter<MealsListView> {
     }
 
     public void loadMeals() {
-        Subscription subscription = mMealsModel.getMealsFromDb(mId)
+        Subscription subscription = mealsModel.getMealsFromDb(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(l -> {
@@ -63,6 +63,6 @@ public class MealsListPresenter extends Presenter<MealsListView> {
     }
 
     public void setCategoryId(long id) {
-        mId = id;
+        this.id = id;
     }
 }

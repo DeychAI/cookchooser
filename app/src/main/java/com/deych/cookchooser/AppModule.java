@@ -16,22 +16,22 @@ import dagger.Provides;
 @Module
 public class AppModule {
 
-    private App mApp;
+    private App app;
 
-    public AppModule(App aApp) {
-        mApp = aApp;
+    public AppModule(App app) {
+        this.app = app;
     }
 
     @Singleton
     @Provides
     public App provideApp() {
-        return mApp;
+        return app;
     }
 
     @Singleton
     @Provides
     public Context provideContext() {
-        return mApp;
+        return app;
     }
 
     @Singleton
@@ -42,7 +42,7 @@ public class AppModule {
 
     @Singleton
     @Provides
-    public Preferences providePreferences(Context aContext) {
-        return new Preferences(aContext);
+    public Preferences providePreferences(Context context) {
+        return new Preferences(context);
     }
 }

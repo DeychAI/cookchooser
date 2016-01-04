@@ -15,30 +15,30 @@ public class Preferences {
     private static final String PRESENTER_CACHE_ID = "presenter.cache.id";
     private static final String NEW_DB_ID = "new.db.id";
 
-    private final SharedPreferences mPreferences;
+    private final SharedPreferences preferences;
 
     @Inject
-    public Preferences(Context aContext) {
-        mPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(aContext);
+    public Preferences(Context context) {
+        preferences = android.preference.PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public void saveUserData(long aId, String aToken) {
-        mPreferences.edit()
-                .putString(USER_TOKEN, aToken)
-                .putLong(USER_ID, aId)
+    public void saveUserData(long id, String token) {
+        preferences.edit()
+                .putString(USER_TOKEN, token)
+                .putLong(USER_ID, id)
                 .apply();
     }
 
     public void clearUserData() {
-        mPreferences.edit().remove(USER_ID).remove(USER_TOKEN).apply();
+        preferences.edit().remove(USER_ID).remove(USER_TOKEN).apply();
     }
 
     public String getUserToken() {
-        return mPreferences.getString(USER_TOKEN, "");
+        return preferences.getString(USER_TOKEN, "");
     }
 
     public long getUserId() {
-        return mPreferences.getLong(USER_ID, 0);
+        return preferences.getLong(USER_ID, 0);
     }
 
     public long getPresenterCacheIdAndIncrement() {
@@ -50,8 +50,8 @@ public class Preferences {
     }
 
     private long getLongAndIncrement(String key, long defaultValue) {
-        long result = mPreferences.getLong(key, defaultValue);
-        mPreferences.edit().putLong(key, result + 1).apply();
+        long result = preferences.getLong(key, defaultValue);
+        preferences.edit().putLong(key, result + 1).apply();
         return result;
     }
 }

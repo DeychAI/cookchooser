@@ -4,7 +4,6 @@ import com.deych.cookchooser.shared_pref.Preferences;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -19,17 +18,17 @@ public class PresenterCache {
 
     private Map<Long, Object> presentersCache = new HashMap<>();
 
-    private Preferences mPreferences;
+    private Preferences preferences;
 
     @Inject
     public PresenterCache(Preferences preferences) {
-        mPreferences = preferences;
+        this.preferences = preferences;
     }
 
     //    private final AtomicLong nextId = new AtomicLong(100);
 
     public long generateId() {
-        long nextId = mPreferences.getPresenterCacheIdAndIncrement();
+        long nextId = preferences.getPresenterCacheIdAndIncrement();
         Timber.d("called nextId = " + nextId);
         return nextId;
     }

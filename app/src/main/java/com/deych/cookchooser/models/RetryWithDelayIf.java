@@ -13,27 +13,27 @@ import rx.functions.Func1;
 public class RetryWithDelayIf implements
         Func1<Observable<? extends Throwable>, Observable<?>> {
 
-    private final int mMaxRetries;
-    private final int mRetryDelay;
-    private TimeUnit mTimeUnit;
-    private Func1<Throwable, Boolean> mRetryIf;
+    private final int maxRetries;
+    private final int retryDelay;
+    private TimeUnit timeUnit;
+    private Func1<Throwable, Boolean> retryIf;
 
     public RetryWithDelayIf(final int maxRetries, final int retryDelay, TimeUnit timeUnit, Func1<Throwable, Boolean> retryIf) {
-        this.mMaxRetries = maxRetries;
-        this.mRetryDelay = retryDelay;
-        mTimeUnit = timeUnit;
-        this.mRetryIf = retryIf;
+        this.maxRetries = maxRetries;
+        this.retryDelay = retryDelay;
+        this.timeUnit = timeUnit;
+        this.retryIf = retryIf;
     }
 
     @Override
     public Observable<?> call(Observable<? extends Throwable> attempts) {
-        return attempts.zipWith(Observable.range(1, mMaxRetries + 1), (n, i) -> {
+        return attempts.zipWith(Observable.range(1, maxRetries + 1), (n, i) -> {
             return new Pair<>(n, i);
         })
                 .flatMap(
                         ni -> {
-                            if (mRetryIf.call(ni.first) && ni.second <= mMaxRetries) {
-                                return Observable.timer((long) ni.second * mRetryDelay, mTimeUnit);
+                            if (retryIf.call(ni.first) && ni.second <= maxRetries) {
+                                return Observable.timer((long) ni.second * retryDelay, timeUnit);
                             } else {
                                 return Observable.error(ni.first);
                             }

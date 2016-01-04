@@ -31,15 +31,15 @@ public class DbModule {
 
     @Singleton
     @Provides
-    public DbHelper provideDbHelper(Context aContext) {
-        return new DbHelper(aContext);
+    public DbHelper provideDbHelper(Context context) {
+        return new DbHelper(context);
     }
 
     @Provides
     @Singleton
-    public StorIOSQLite provideStorIOSQLite(DbHelper aDbHelper) {
+    public StorIOSQLite provideStorIOSQLite(DbHelper dbHelper) {
         return DefaultStorIOSQLite.builder()
-                .sqliteOpenHelper(aDbHelper)
+                .sqliteOpenHelper(dbHelper)
                 .addTypeMapping(User.class, SQLiteTypeMapping.<User>builder()
                         .putResolver(new UserStorIOSQLitePutResolver())
                         .getResolver(new UserStorIOSQLiteGetResolver())

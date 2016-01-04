@@ -12,25 +12,25 @@ import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 @StorIOSQLiteType(table = CategoryTable.TABLE)
 public class Category {
     @StorIOSQLiteColumn(name = BaseColumns._ID, key = true)
-    long mId;
+    long id;
 
     @StorIOSQLiteColumn(name = CategoryTable.NAME)
-    String mName;
+    String name;
 
     public long getId() {
-        return mId;
+        return id;
     }
 
     public void setId(long id) {
-        mId = id;
+        this.id = id;
     }
 
     public String getName() {
-        return mName;
+        return name;
     }
 
     public void setName(String name) {
-        mName = name;
+        this.name = name;
     }
 
 }

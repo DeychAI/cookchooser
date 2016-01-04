@@ -26,22 +26,24 @@ import static com.squareup.okhttp.logging.HttpLoggingInterceptor.Level.NONE;
  */
 @Module
 public class NetModule {
-    String mBaseUrl;
+    String baseUrl;
 
-    public NetModule(String aBaseUrl) {
-        mBaseUrl = aBaseUrl;
+    public NetModule(String baseUrl) {
+        this.baseUrl = baseUrl;
     }
 
     @Provides
     @Singleton
     public Gson provideGson() {
         return new GsonBuilder()
-                .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
-                .setFieldNamingStrategy(f -> {
-                    String name = FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES.translateName(f);
-                    name = name.substring(2, name.length()).toLowerCase();
-                    return name;
-                }).create();
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+//                .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
+//                .setFieldNamingStrategy(f -> {
+//                    String name = FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES.translateName(f);
+//                    name = name.substring(2, name.length()).toLowerCase();
+//                    return name;
+//                })
+                .create();
     }
 
     @Provides
@@ -69,7 +71,7 @@ public class NetModule {
         return new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .baseUrl(mBaseUrl)
+                .baseUrl(baseUrl)
                 .client(okHttpClient)
                 .build();
     }

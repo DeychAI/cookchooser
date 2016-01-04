@@ -13,50 +13,50 @@ public class PresenterCacheDelegate {
 
     private static final String PRESENTER_INDEX_KEY = "presenter-index";
 
-    private PresenterCacheDelegateCallback mDelegateCallback;
-    private PresenterCache mCache;
-    private long mPresenterId;
+    private PresenterCacheDelegateCallback delegateCallback;
+    private PresenterCache cache;
+    private long presenterId;
 
     @Inject
-    public PresenterCacheDelegate(PresenterCache aCache) {
-        mCache = aCache;
+    public PresenterCacheDelegate(PresenterCache cache) {
+        this.cache = cache;
     }
 
-    public void onCreate(Bundle aSavedInstanceState) {
-        if (aSavedInstanceState == null) {
-            mPresenterId = mCache.generateId();
+    public void onCreate(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            presenterId = cache.generateId();
         } else {
-            mPresenterId = aSavedInstanceState.getLong(PRESENTER_INDEX_KEY, -1);
-//            if (mPresenterId < 0) {
-//                mPresenterId = mCache.generateId();
+            presenterId = savedInstanceState.getLong(PRESENTER_INDEX_KEY, -1);
+//            if (presenterId < 0) {
+//                presenterId = cache.generateId();
 //            }
         }
-        Presenter presenter = mCache.get(mPresenterId);
+        Presenter presenter = cache.get(presenterId);
         if(presenter == null) {
-//            if (aSavedInstanceState != null) {
+//            if (savedInstanceState != null) {
                 //It seems that our app was destroyed by Android without onDestroy() calls. We need to shift ID
-//                mPresenterId = mCache.generateId();
+//                presenterId = cache.generateId();
 //            }
-            mCache.put(mPresenterId, mDelegateCallback.onEmptyCache());
+            cache.put(presenterId, delegateCallback.onEmptyCache());
         } else {
-            mDelegateCallback.restoredFromCache(presenter);
+            delegateCallback.restoredFromCache(presenter);
         }
     }
 
     public void onSaveInstanceState(Bundle outState) {
         Timber.d("onSaveInstanceState");
-        outState.putLong(PRESENTER_INDEX_KEY, mPresenterId);
+        outState.putLong(PRESENTER_INDEX_KEY, presenterId);
     }
 
 
-    public void onDestroy(boolean aDestroyedBySystem) {
-        if (!aDestroyedBySystem) {
-            mCache.put(mPresenterId, null);
-            mDelegateCallback.onCacheCleared();
+    public void onDestroy(boolean destroyedBySystem) {
+        if (!destroyedBySystem) {
+            cache.put(presenterId, null);
+            delegateCallback.onCacheCleared();
         }
     }
 
-    public void setDelegateCallback(PresenterCacheDelegateCallback aDelegateCallback) {
-        mDelegateCallback = aDelegateCallback;
+    public void setDelegateCallback(PresenterCacheDelegateCallback delegateCallback) {
+        this.delegateCallback = delegateCallback;
     }
 }

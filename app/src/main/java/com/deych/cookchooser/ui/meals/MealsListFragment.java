@@ -1,9 +1,7 @@
 package com.deych.cookchooser.ui.meals;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,23 +11,16 @@ import android.view.ViewGroup;
 
 import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
-import com.deych.cookchooser.api.service.MealsService;
 import com.deych.cookchooser.db.entities.Meal;
-import com.deych.cookchooser.models.MealsModel;
 import com.deych.cookchooser.ui.base.BaseFragment;
 import com.deych.cookchooser.ui.base.Presenter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import retrofit.Retrofit;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -45,10 +36,10 @@ public class MealsListFragment extends BaseFragment implements MealsListView {
     @Bind(R.id.refresh)
     SwipeRefreshLayout refreshLayout;
 
-    private MealsAdapter mAdapter;
+    private MealsAdapter adapter;
 
     @Inject
-    MealsListPresenter mPresenter;
+    MealsListPresenter presenter;
 
     public static MealsListFragment newInstance(long category_id) {
         Bundle args = new Bundle();
@@ -66,8 +57,8 @@ public class MealsListFragment extends BaseFragment implements MealsListView {
         ButterKnife.bind(this, v);
 
         list.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new MealsAdapter();
-        list.setAdapter(mAdapter);
+        adapter = new MealsAdapter();
+        list.setAdapter(adapter);
 
         return v;
     }
@@ -76,10 +67,10 @@ public class MealsListFragment extends BaseFragment implements MealsListView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mPresenter.bindView(this);
-        mPresenter.setCategoryId(getArguments().getLong(EXTRA_ID));
-        mPresenter.loadMeals();
-        refreshLayout.setOnRefreshListener(mPresenter::refreshMeals);
+        presenter.bindView(this);
+        presenter.setCategoryId(getArguments().getLong(EXTRA_ID));
+        presenter.loadMeals();
+        refreshLayout.setOnRefreshListener(presenter::refreshMeals);
     }
 
     @Override
@@ -95,19 +86,19 @@ public class MealsListFragment extends BaseFragment implements MealsListView {
 
     @Override
     protected Presenter getPresenter() {
-        return mPresenter;
+        return presenter;
     }
 
     @Override
-    protected void setPresenter(Presenter aPresenter) {
-        mPresenter = (MealsListPresenter) aPresenter;
+    protected void setPresenter(Presenter presenter) {
+        this.presenter = (MealsListPresenter) presenter;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-        mPresenter.unbindView(this);
+        presenter.unbindView(this);
         Timber.d("onDestroyView");
     }
 
@@ -120,7 +111,7 @@ public class MealsListFragment extends BaseFragment implements MealsListView {
     @Override
     public void showMeals(List<Meal> meals) {
         hideRefresh();
-        mAdapter.setList(meals);
+        adapter.setList(meals);
     }
 
     @Override

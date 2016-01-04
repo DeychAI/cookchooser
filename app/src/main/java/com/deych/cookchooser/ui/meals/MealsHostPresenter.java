@@ -7,14 +7,12 @@ import com.deych.cookchooser.ui.base.Presenter;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import javax.inject.Inject;
 
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import timber.log.Timber;
 
 /**
  * Created by deigo on 20.12.2015.
@@ -50,7 +48,7 @@ public class MealsHostPresenter extends Presenter<MealsHostView> {
         }
 
         Subscription subscription = mealsModel
-                .getCategories()
+                .reloadCategories()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(list -> {
@@ -68,17 +66,5 @@ public class MealsHostPresenter extends Presenter<MealsHostView> {
 //                    Toast.makeText(MealsActivity.this, "Error!", Toast.LENGTH_SHORT).show();
                 });
         addToSubscription(subscription);
-    }
-
-    public void addRandomMeal() {
-        mealsModel
-                .addMeal(1, "Суп " + new Random().nextInt(100))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(meal -> {
-                    Timber.d("New Meal Added!");
-                }, e -> {
-                    Timber.d(e.toString());
-                });
     }
 }

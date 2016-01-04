@@ -1,6 +1,8 @@
 package com.deych.cookchooser.ui.base;
 
 import android.content.Context;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.StringRes;
 import android.support.design.widget.TabLayout;
 import android.view.View;
 
@@ -16,6 +18,8 @@ public class MainActivityUiDelegate {
     private boolean showFab;
     private View.OnClickListener fabListener;
     private boolean showTabs;
+    private int fabDrawableRes;
+    private int toolbarTitleRes;
 
     public TabLayout getTabs() {
         return activity.getTabs();
@@ -25,6 +29,10 @@ public class MainActivityUiDelegate {
         activity.getFab().setVisibility(showFab ? View.VISIBLE : View.GONE);
         activity.getFab().setOnClickListener(fabListener);
         activity.getTabs().setVisibility(showTabs ? View.VISIBLE : View.GONE);
+        activity.getToolbar().setTitle(toolbarTitleRes);
+        if (showFab) {
+            activity.getFab().setImageResource(fabDrawableRes);
+        }
     }
 
     public void onDestroyView() {
@@ -38,6 +46,8 @@ public class MainActivityUiDelegate {
         this.showFab = builder.showFab;
         this.fabListener = builder.fabListener;
         this.showTabs = builder.showTabs;
+        this.fabDrawableRes = builder.fabDrawableRes;
+        this.toolbarTitleRes = builder.toolbarTitleRes;
     }
 
     public static class Builder {
@@ -47,6 +57,8 @@ public class MainActivityUiDelegate {
         private boolean showFab = false;
         private View.OnClickListener fabListener = null;
         private boolean showTabs = false;
+        private int fabDrawableRes = -1;
+        private int toolbarTitleRes = -1;
 
         public Builder(Context context) {
             try {
@@ -71,7 +83,23 @@ public class MainActivityUiDelegate {
             return this;
         }
 
+        public Builder setFabDrawable(@DrawableRes int icon) {
+            this.fabDrawableRes = icon;
+            return this;
+        }
+
+        public Builder setToolbarTitle(@StringRes int resId) {
+            this.toolbarTitleRes = resId;
+            return this;
+        }
+
         public MainActivityUiDelegate build() {
+            if (toolbarTitleRes == -1) {
+                throw new IllegalStateException("You must set title for the toolbar!");
+            }
+            if (showFab && fabDrawableRes == -1) {
+                throw new IllegalStateException("You must set drawable if you want to show FAB!");
+            }
             return new MainActivityUiDelegate(this);
         }
     }

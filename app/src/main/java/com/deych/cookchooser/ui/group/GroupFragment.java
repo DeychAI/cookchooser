@@ -22,7 +22,8 @@ public class GroupFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mainActivityUiDelegate = new MainActivityUiDelegate.Builder(context).build();
+        mainActivityUiDelegate = new MainActivityUiDelegate.Builder(context).setToolbarTitle(R.string.title_group)
+                .build();
     }
 
     @Nullable

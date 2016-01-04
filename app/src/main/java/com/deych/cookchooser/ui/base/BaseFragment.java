@@ -40,7 +40,7 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract Presenter getPresenter();
 
-    protected abstract void setPresenter(Presenter aPresenter);
+    protected abstract void setPresenter(Presenter presenter);
 
     public CompositeSubscription getUiSubscription() {
         return uiSubscription;

@@ -9,6 +9,7 @@
     <dimen name="dimen_1x">16dp</dimen>
     <dimen name="dimen_0.5x">8dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="color_btn_margin">5dp</dimen>
 
     <!--Text size -->
     <dimen name="font_medium">16sp</dimen>

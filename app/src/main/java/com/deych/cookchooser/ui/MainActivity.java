@@ -45,6 +45,11 @@ public class MainActivity extends AppCompatActivity
 
     @Bind(R.id.fab)
     FloatingActionButton fab;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+
+    public ActionBarDrawerToggle getActionBarDrawerToggle() {
+        return actionBarDrawerToggle;
+    }
 
     public FloatingActionButton getFab() {
         return fab;
@@ -52,6 +57,10 @@ public class MainActivity extends AppCompatActivity
 
     public TabLayout getTabs() {
         return tabs;
+    }
+
+    public Toolbar getToolbar() {
+        return toolbar;
     }
 
     @Inject
@@ -66,12 +75,13 @@ public class MainActivity extends AppCompatActivity
 
         ButterKnife.bind(this);
 
+        toolbar.setTitle(R.string.title_list);
         setSupportActionBar(toolbar);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        actionBarDrawerToggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        drawer.setDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_list);

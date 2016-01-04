@@ -5,4 +5,10 @@
     <color name="colorPrimaryDarker">#1A237E</color>
     <color name="colorAccent">#FFC107</color>
     <color name="iron">#CCCCCC</color>
+
+    <color name="colorNone">#e0e2de</color>
+    <color name="colorRed">#ff0000</color>
+    <color name="colorGreen">#4dc643</color>
+    <color name="colorBlue">#0000ff</color>
+    <color name="colorOrange">#f1ca3c</color>
 </resources>

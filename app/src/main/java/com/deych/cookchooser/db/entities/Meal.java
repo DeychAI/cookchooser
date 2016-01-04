@@ -27,12 +27,16 @@ public class Meal {
     @StorIOSQLiteColumn(name = MealTable.CLIENT_ID)
     String clientId;
 
+    @StorIOSQLiteColumn(name = MealTable.COLOR)
     String color;
 
+    @StorIOSQLiteColumn(name = MealTable.REVISION)
     long revision;
 
+    @StorIOSQLiteColumn(name = MealTable.CHANGED)
     boolean changed;
 
+    @StorIOSQLiteColumn(name = MealTable.DELETED)
     boolean deleted;
 
     public long getId() {
@@ -75,41 +79,40 @@ public class Meal {
         this.clientId = clientId;
     }
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        Meal meal = (Meal) o;
-
-        if (id != meal.id) {
-            return false;
-        }
-        if (categoryId != meal.categoryId) {
-            return false;
-        }
-        if (name != null ? !name.equals(meal.name) : meal.name != null) {
-            return false;
-        }
-        if (group != null ? !group.equals(meal.group) : meal.group != null) {
-            return false;
-        }
-        return !(clientId != null ? !clientId.equals(meal.clientId) : meal.clientId != null);
-
+    public String getColor() {
+        return color;
     }
 
-    @Override
-    public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (int) (categoryId ^ (categoryId >>> 32));
-        result = 31 * result + (group != null ? group.hashCode() : 0);
-        result = 31 * result + (clientId != null ? clientId.hashCode() : 0);
-        return result;
+    public Meal setColor(String color) {
+        this.color = color;
+        return this;
     }
+
+    public long getRevision() {
+        return revision;
+    }
+
+    public Meal setRevision(long revision) {
+        this.revision = revision;
+        return this;
+    }
+
+    public boolean isChanged() {
+        return changed;
+    }
+
+    public Meal setChanged(boolean changed) {
+        this.changed = changed;
+        return this;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public Meal setDeleted(boolean deleted) {
+        this.deleted = deleted;
+        return this;
+    }
+
 }

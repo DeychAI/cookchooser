@@ -4,8 +4,9 @@ import com.deych.cookchooser.BuildConfig;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.logging.HttpLoggingInterceptor;
+
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 import java.util.concurrent.TimeUnit;
 
@@ -13,13 +14,13 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import retrofit.GsonConverterFactory;
-import retrofit.Retrofit;
-import retrofit.RxJavaCallAdapterFactory;
+import retrofit2.GsonConverterFactory;
+import retrofit2.Retrofit;
+import retrofit2.RxJavaCallAdapterFactory;
 import timber.log.Timber;
 
-import static com.squareup.okhttp.logging.HttpLoggingInterceptor.Level.BODY;
-import static com.squareup.okhttp.logging.HttpLoggingInterceptor.Level.NONE;
+import static okhttp3.logging.HttpLoggingInterceptor.Level.BODY;
+import static okhttp3.logging.HttpLoggingInterceptor.Level.NONE;
 
 /**
  * Created by deigo on 13.12.2015.
@@ -37,12 +38,6 @@ public class NetModule {
     public Gson provideGson() {
         return new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-//                .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
-//                .setFieldNamingStrategy(f -> {
-//                    String name = FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES.translateName(f);
-//                    name = name.substring(2, name.length()).toLowerCase();
-//                    return name;
-//                })
                 .create();
     }
 
@@ -57,12 +52,12 @@ public class NetModule {
     @Provides
     @Singleton
     public OkHttpClient provideOkHttpClient(HttpLoggingInterceptor httpLoggingInterceptor) {
-        OkHttpClient client = new OkHttpClient();
-        client.setConnectTimeout(15, TimeUnit.SECONDS);
-        client.setWriteTimeout(60, TimeUnit.SECONDS);
-        client.setReadTimeout(60, TimeUnit.SECONDS);
-        client.interceptors().add(httpLoggingInterceptor);
-        return client;
+        return new OkHttpClient.Builder()
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .addInterceptor(httpLoggingInterceptor)
+                .build();
     }
 
     @Provides

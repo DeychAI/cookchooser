@@ -14,8 +14,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import retrofit.HttpException;
-import retrofit.Retrofit;
+import retrofit2.HttpException;
+import retrofit2.Retrofit;
 import rx.Observable;
 
 /**

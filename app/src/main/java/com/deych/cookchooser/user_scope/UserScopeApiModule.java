@@ -6,7 +6,7 @@ import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
-import retrofit.Retrofit;
+import retrofit2.Retrofit;
 
 /**
  * Created by deigo on 30.12.2015.

@@ -4,20 +4,22 @@ import android.util.Base64;
 
 import com.deych.cookchooser.db.entities.User;
 import com.google.gson.Gson;
-import com.squareup.okhttp.Interceptor;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
-import retrofit.GsonConverterFactory;
-import retrofit.Retrofit;
-import retrofit.RxJavaCallAdapterFactory;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.GsonConverterFactory;
+import retrofit2.Retrofit;
+import retrofit2.RxJavaCallAdapterFactory;
 
 /**
  * Created by deigo on 19.12.2015.
@@ -57,11 +59,22 @@ public class UserModule {
     @Provides
     @UserScope
     @Named("OkHttpWithAuth")
-    public OkHttpClient provideOkHttpClient(OkHttpClient noAuthClient, Interceptor authInterceptor) {
-        OkHttpClient client = noAuthClient.clone();
-        client.interceptors().add(authInterceptor);
-        return client;
+    public OkHttpClient provideOkHttpClient(HttpLoggingInterceptor httpLoggingInterceptor
+            , Interceptor authInterceptor) {
+        return new OkHttpClient.Builder()
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .addInterceptor(httpLoggingInterceptor)
+                .addInterceptor(authInterceptor)
+                .build();
     }
+
+//    public OkHttpClient provideOkHttpClient(OkHttpClient noAuthClient, Interceptor authInterceptor) {
+//        OkHttpClient client = new OkHttpClient.Builder(noAuthClient)
+//        client.interceptors().add(authInterceptor);
+//        return client;
+//    }
 
     @Provides
     @UserScope

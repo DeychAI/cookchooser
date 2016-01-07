@@ -7,7 +7,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import retrofit.Retrofit;
+import retrofit2.Retrofit;
 
 /**
  * Created by deigo on 20.12.2015.

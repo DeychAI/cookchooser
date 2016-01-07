@@ -59,22 +59,11 @@ public class UserModule {
     @Provides
     @UserScope
     @Named("OkHttpWithAuth")
-    public OkHttpClient provideOkHttpClient(HttpLoggingInterceptor httpLoggingInterceptor
-            , Interceptor authInterceptor) {
-        return new OkHttpClient.Builder()
-                .connectTimeout(15, TimeUnit.SECONDS)
-                .writeTimeout(60, TimeUnit.SECONDS)
-                .readTimeout(60, TimeUnit.SECONDS)
-                .addInterceptor(httpLoggingInterceptor)
+    public OkHttpClient provideOkHttpClient(OkHttpClient noAuthClient, Interceptor authInterceptor) {
+        return noAuthClient.newBuilder()
                 .addInterceptor(authInterceptor)
                 .build();
     }
-
-//    public OkHttpClient provideOkHttpClient(OkHttpClient noAuthClient, Interceptor authInterceptor) {
-//        OkHttpClient client = new OkHttpClient.Builder(noAuthClient)
-//        client.interceptors().add(authInterceptor);
-//        return client;
-//    }
 
     @Provides
     @UserScope

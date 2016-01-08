@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -48,6 +49,11 @@ public class MainActivity extends AppCompatActivity
 
     @Bind(R.id.fab)
     FloatingActionButton fab;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+
+    public ActionBarDrawerToggle getActionBarDrawerToggle() {
+        return actionBarDrawerToggle;
+    }
 
     public FloatingActionButton getFab() {
         return fab;
@@ -59,6 +65,10 @@ public class MainActivity extends AppCompatActivity
 
     public Toolbar getToolbar() {
         return toolbar;
+    }
+
+    public DrawerLayout getDrawer() {
+        return drawer;
     }
 
     @Inject
@@ -75,10 +85,14 @@ public class MainActivity extends AppCompatActivity
 
         toolbar.setTitle(R.string.title_list);
         setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
+        actionBarDrawerToggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.setToolbarNavigationClickListener(v -> onBackPressed());
         actionBarDrawerToggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
@@ -124,10 +138,23 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         presenter.unbindView(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        } else {
+            actionBarDrawerToggle.setDrawerIndicatorEnabled(false);
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        }
     }
 
     @Override
@@ -136,6 +163,8 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         }
     }
 

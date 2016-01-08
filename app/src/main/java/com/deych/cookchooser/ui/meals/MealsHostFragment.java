@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,9 +21,11 @@ import android.widget.Toast;
 import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
 import com.deych.cookchooser.db.entities.Category;
+import com.deych.cookchooser.ui.MainActivity;
 import com.deych.cookchooser.ui.base.BaseFragment;
 import com.deych.cookchooser.ui.base.MainActivityUiDelegate;
 import com.deych.cookchooser.ui.base.Presenter;
+import com.deych.cookchooser.ui.meals.add.AddMealFragment;
 import com.deych.cookchooser.ui.meals.detail.AddMealActivity;
 
 import java.util.List;
@@ -109,7 +113,15 @@ public class MealsHostFragment extends BaseFragment implements MealsHostView {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                startActivity(new Intent(getContext(), AddMealActivity.class));
+//                startActivity(new Intent(getContext(), AddMealActivity.class));
+                getFragmentManager().beginTransaction()
+                        .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                        .replace(R.id.content, new AddMealFragment())
+                        .addToBackStack(null)
+//                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+                ((MainActivity)getActivity()).getActionBarDrawerToggle().setDrawerIndicatorEnabled(false);
+                ((MainActivity)getActivity()).getDrawer().setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                 return true;
         }
         return super.onOptionsItemSelected(item);

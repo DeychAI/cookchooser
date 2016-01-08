@@ -45,7 +45,6 @@ public class App extends Application {
                 .netModule(new NetModule("http://deych.myihor.ru/cookchooser/api/v1/"))
                 .dbModule(new DbModule())
                 .apiModule(new ApiModule())
-//                .netModule(new NetModule("http://deych.myihor.ru:5000/cookchooser/api/v1/"))
                 .build();
 
         User user = appComponent.userModel().loginAsBlocking();

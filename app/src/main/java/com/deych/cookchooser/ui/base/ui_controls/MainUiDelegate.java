@@ -1,4 +1,4 @@
-package com.deych.cookchooser.ui.base;
+package com.deych.cookchooser.ui.base.ui_controls;
 
 import android.content.Context;
 import android.support.annotation.DrawableRes;
@@ -6,14 +6,12 @@ import android.support.annotation.StringRes;
 import android.support.design.widget.TabLayout;
 import android.view.View;
 
-import com.deych.cookchooser.ui.MainActivity;
-
 /**
  * Created by deigo on 30.12.2015.
  */
-public class MainActivityUiDelegate {
+public class MainUiDelegate {
 
-    private MainActivity activity;
+    private MainUi ui;
 
     private boolean showFab;
     private View.OnClickListener fabListener;
@@ -22,27 +20,27 @@ public class MainActivityUiDelegate {
     private int toolbarTitleRes;
 
     public TabLayout getTabs() {
-        return activity.getTabs();
+        return ui.tabs();
     }
 
     public void onViewCreated() {
-        activity.getFab().setVisibility(showFab ? View.VISIBLE : View.GONE);
-        activity.getFab().setOnClickListener(fabListener);
-        activity.getTabs().setVisibility(showTabs ? View.VISIBLE : View.GONE);
-        activity.getToolbar().setTitle(toolbarTitleRes);
+        ui.fab().setVisibility(showFab ? View.VISIBLE : View.GONE);
+        ui.fab().setOnClickListener(fabListener);
+        ui.tabs().setVisibility(showTabs ? View.VISIBLE : View.GONE);
+        ui.toolbar().setTitle(toolbarTitleRes);
         if (showFab) {
-            activity.getFab().setImageResource(fabDrawableRes);
+            ui.fab().setImageResource(fabDrawableRes);
         }
     }
 
     public void onDestroyView() {
-        activity.getTabs().setOnTabSelectedListener(null);
-        activity.getFab().setOnClickListener(null);
-        activity = null;
+        ui.tabs().setOnTabSelectedListener(null);
+        ui.fab().setOnClickListener(null);
+        ui = null;
     }
 
-    private MainActivityUiDelegate(Builder builder) {
-        this.activity = builder.activity;
+    private MainUiDelegate(Builder builder) {
+        this.ui = builder.ui;
         this.showFab = builder.showFab;
         this.fabListener = builder.fabListener;
         this.showTabs = builder.showTabs;
@@ -52,7 +50,7 @@ public class MainActivityUiDelegate {
 
     public static class Builder {
 
-        private MainActivity activity;
+        private MainUi ui;
 
         private boolean showFab = false;
         private View.OnClickListener fabListener = null;
@@ -62,9 +60,9 @@ public class MainActivityUiDelegate {
 
         public Builder(Context context) {
             try {
-                activity = (MainActivity) context;
+                ui = (MainUi) context;
             } catch (ClassCastException e) {
-                throw new ClassCastException(context.toString() + " must be MainActivity");
+                throw new ClassCastException(context.toString() + " must implement MainUi");
             }
         }
 
@@ -93,14 +91,14 @@ public class MainActivityUiDelegate {
             return this;
         }
 
-        public MainActivityUiDelegate build() {
+        public MainUiDelegate build() {
             if (toolbarTitleRes == -1) {
                 throw new IllegalStateException("You must set title for the toolbar!");
             }
             if (showFab && fabDrawableRes == -1) {
                 throw new IllegalStateException("You must set drawable if you want to show FAB!");
             }
-            return new MainActivityUiDelegate(this);
+            return new MainUiDelegate(this);
         }
     }
 

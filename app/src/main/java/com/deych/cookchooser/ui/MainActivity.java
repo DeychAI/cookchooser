@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
+import com.deych.cookchooser.ui.base.ui_controls.MainUi;
 import com.deych.cookchooser.ui.group.GroupFragment;
 import com.deych.cookchooser.ui.login.LoginActivity;
 import com.deych.cookchooser.ui.meals.MealsHostFragment;
@@ -28,7 +29,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
-        implements MainActivityView, NavigationView.OnNavigationItemSelectedListener {
+        implements MainActivityView,
+        NavigationView.OnNavigationItemSelectedListener,
+        MainUi {
 
     @Bind(R.id.tabs)
     TabLayout tabs;
@@ -49,15 +52,15 @@ public class MainActivity extends AppCompatActivity
     @Bind(R.id.fab)
     FloatingActionButton fab;
 
-    public FloatingActionButton getFab() {
+    public FloatingActionButton fab() {
         return fab;
     }
 
-    public TabLayout getTabs() {
+    public TabLayout tabs() {
         return tabs;
     }
 
-    public Toolbar getToolbar() {
+    public Toolbar toolbar() {
         return toolbar;
     }
 

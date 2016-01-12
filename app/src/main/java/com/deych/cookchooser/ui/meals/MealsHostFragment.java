@@ -5,22 +5,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
 import com.deych.cookchooser.db.entities.Category;
 import com.deych.cookchooser.ui.base.BaseFragment;
-import com.deych.cookchooser.ui.base.MainActivityUiDelegate;
+import com.deych.cookchooser.ui.base.ui_controls.MainUiDelegate;
 import com.deych.cookchooser.ui.base.Presenter;
 import com.deych.cookchooser.ui.meals.detail.AddMealActivity;
 
@@ -44,7 +41,7 @@ public class MealsHostFragment extends BaseFragment implements MealsHostView {
     @Inject
     MealsHostPresenter presenter;
 
-    private MainActivityUiDelegate mainActivityUiDelegate;
+    private MainUiDelegate mainUiDelegate;
 
     @Override
     protected void setUpComponents() {
@@ -83,7 +80,7 @@ public class MealsHostFragment extends BaseFragment implements MealsHostView {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mainActivityUiDelegate = new MainActivityUiDelegate.Builder(getActivity())
+        mainUiDelegate = new MainUiDelegate.Builder(getActivity())
                 .showFab()
                 .showTabs()
                 .setToolbarTitle(R.string.title_list)
@@ -92,7 +89,7 @@ public class MealsHostFragment extends BaseFragment implements MealsHostView {
                         Snackbar.make(v, "In a List!", Snackbar.LENGTH_LONG).setAction("Action", null).show())
                 .build();
 
-        mainActivityUiDelegate.onViewCreated();
+        mainUiDelegate.onViewCreated();
 
         mealsPagerAdapter = new MealsPagerAdapter(getChildFragmentManager());
         presenter.bindView(this);
@@ -119,7 +116,7 @@ public class MealsHostFragment extends BaseFragment implements MealsHostView {
     public void onDestroyView() {
         super.onDestroyView();
         presenter.unbindView(this);
-        mainActivityUiDelegate.onDestroyView();
+        mainUiDelegate.onDestroyView();
 
     }
 
@@ -131,6 +128,6 @@ public class MealsHostFragment extends BaseFragment implements MealsHostView {
         mealsPagerAdapter.setCategories(categories);
         viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(mealsPagerAdapter);
-        mainActivityUiDelegate.getTabs().setupWithViewPager(viewPager);
+        mainUiDelegate.getTabs().setupWithViewPager(viewPager);
     }
 }

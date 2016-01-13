@@ -72,13 +72,13 @@ public class MealsModel {
         for (Meal m : netMeals) {
             Meal found = null;
             for (Meal d : dbMeals) {
-                if (m.getClientId().equals(d.getClientId())) {
+                if (m.getUuid().equals(d.getUuid())) {
                     found = d;
                     break;
                 }
             }
             if (found != null) {
-                if (found.getId() < 0 || found.getRevision() != m.getRevision()) {
+                if (found.getRevision() != m.getRevision()) {
                     updateList.add(m);
                 }
             } else {
@@ -93,10 +93,10 @@ public class MealsModel {
 
         //Now we need to delete items that we didn't receive from the server (someone else deleted them)
         if (cat_id == null) {
-            query = Query.builder().table(MealTable.TABLE).where("_id > ?")
+            query = Query.builder().table(MealTable.TABLE).where("revision > ?")
                     .whereArgs(0).build();
         } else {
-            query = Query.builder().table(MealTable.TABLE).where(MealTable.CATEGORY_ID + " = ? and _id > ?")
+            query = Query.builder().table(MealTable.TABLE).where(MealTable.CATEGORY_ID + " = ? and revision > ?")
                     .whereArgs(cat_id, 0).build();
         }
 
@@ -112,7 +112,7 @@ public class MealsModel {
         for (Meal d : dbMeals) {
             Meal found = null;
             for (Meal m : netMeals) {
-                if (m.getClientId().equals(d.getClientId())) {
+                if (m.getUuid().equals(d.getUuid())) {
                     found = d;
                     break;
                 }
@@ -125,7 +125,7 @@ public class MealsModel {
         storIOSQLite.delete().objects(forDelete).prepare().executeAsBlocking();
 
         //Now we need to send NEW items to the server
-        query = Query.builder().table(MealTable.TABLE).where("_id < ?")
+        query = Query.builder().table(MealTable.TABLE).where("revision = ?")
                 .whereArgs(0).build();
 
         List<Meal> forSending = storIOSQLite.get()
@@ -252,32 +252,32 @@ public class MealsModel {
                     .take(1);
     }
 
-    public Observable<Meal> addMeal(long category_id, String name) {
-        Meal meal = new Meal();
-        meal.setId(preferences.getNewDbIdAndIncrement());
-        meal.setCategoryId(category_id);
-        meal.setName(name);
-        meal.setClientId(UUID.randomUUID().toString());
-        meal.setColor("none");
-        meal.setGroup(user.getGroup());
-
-        return storIOSQLite
-                .put()
-                .object(meal)
-                .prepare()
-                .createObservable()
-                .flatMap(putResult -> {
-                    if (putResult.wasInserted()) {
-                        return mealsService.addMeal(meal);
-                    }
-                    throw new StorIOException("Was not inserted!");
-                })
-                .doOnNext(netMeal -> {
-                    storIOSQLite.put()
-                            .object(netMeal)
-                            .withPutResolver(new MealSyncPutResolver())
-                            .prepare()
-                            .executeAsBlocking();
-                });
-    }
+//    public Observable<Meal> addMeal(long category_id, String name) {
+//        Meal meal = new Meal();
+//        meal.setId(preferences.getNewDbIdAndIncrement());
+//        meal.setCategoryId(category_id);
+//        meal.setName(name);
+//        meal.setClientId(UUID.randomUUID().toString());
+//        meal.setColor("none");
+//        meal.setGroup(user.getGroup());
+//
+//        return storIOSQLite
+//                .put()
+//                .object(meal)
+//                .prepare()
+//                .createObservable()
+//                .flatMap(putResult -> {
+//                    if (putResult.wasInserted()) {
+//                        return mealsService.addMeal(meal);
+//                    }
+//                    throw new StorIOException("Was not inserted!");
+//                })
+//                .doOnNext(netMeal -> {
+//                    storIOSQLite.put()
+//                            .object(netMeal)
+//                            .withPutResolver(new MealSyncPutResolver())
+//                            .prepare()
+//                            .executeAsBlocking();
+//                });
+//    }
 }

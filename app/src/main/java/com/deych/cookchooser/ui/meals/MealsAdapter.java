@@ -55,7 +55,7 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder>{
         }
 
         public void bind(Meal meal) {
-            if (meal.getId() < 0) {
+            if (meal.getRevision() == 0) {
                 tvName.setTextColor(Color.LTGRAY);
             } else {
                 tvName.setTextColor(Color.DKGRAY);

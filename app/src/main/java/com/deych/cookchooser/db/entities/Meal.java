@@ -1,7 +1,5 @@
 package com.deych.cookchooser.db.entities;
 
-import android.provider.BaseColumns;
-
 import com.deych.cookchooser.db.tables.MealTable;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
@@ -12,8 +10,8 @@ import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 @StorIOSQLiteType(table = MealTable.TABLE)
 public class Meal {
 
-    @StorIOSQLiteColumn(name = BaseColumns._ID, key = true)
-    long id;
+    @StorIOSQLiteColumn(name = MealTable.UUID, key = true)
+    String uuid;
 
     @StorIOSQLiteColumn(name = MealTable.NAME)
     String name;
@@ -23,9 +21,6 @@ public class Meal {
 
     @StorIOSQLiteColumn(name = MealTable.GROUP_ID)
     String group;
-
-    @StorIOSQLiteColumn(name = MealTable.CLIENT_ID)
-    String clientId;
 
     @StorIOSQLiteColumn(name = MealTable.COLOR)
     String color;
@@ -38,14 +33,6 @@ public class Meal {
 
     @StorIOSQLiteColumn(name = MealTable.DELETED)
     boolean deleted;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -71,48 +58,44 @@ public class Meal {
         this.group = group;
     }
 
-    public String getClientId() {
-        return clientId;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
+    public void setUuid(String clientId) {
+        this.uuid = uuid;
     }
 
     public String getColor() {
         return color;
     }
 
-    public Meal setColor(String color) {
+    public void setColor(String color) {
         this.color = color;
-        return this;
     }
 
     public long getRevision() {
         return revision;
     }
 
-    public Meal setRevision(long revision) {
+    public void setRevision(long revision) {
         this.revision = revision;
-        return this;
     }
 
     public boolean isChanged() {
         return changed;
     }
 
-    public Meal setChanged(boolean changed) {
+    public void setChanged(boolean changed) {
         this.changed = changed;
-        return this;
     }
 
     public boolean isDeleted() {
         return deleted;
     }
 
-    public Meal setDeleted(boolean deleted) {
+    public void setDeleted(boolean deleted) {
         this.deleted = deleted;
-        return this;
     }
 
 }

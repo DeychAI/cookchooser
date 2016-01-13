@@ -116,6 +116,6 @@ public class MealsDetailFragment extends BaseFragment implements MealsDetailView
 
     @Override
     public void setCategories(List<Category> categories) {
-        spCategory.setItemsArray(new ArrayList<>(categories));
+        spCategory.setItemsArray(categories);
     }
 }

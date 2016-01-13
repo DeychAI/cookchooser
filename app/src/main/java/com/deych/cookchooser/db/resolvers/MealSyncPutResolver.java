@@ -29,21 +29,20 @@ public class MealSyncPutResolver extends DefaultPutResolver<Meal> {
     protected UpdateQuery mapToUpdateQuery(@NonNull Meal object) {
         return UpdateQuery.builder()
                 .table(MealTable.TABLE)
-                .where(MealTable.CLIENT_ID + " = ?")
-                .whereArgs(object.getClientId())
+                .where(MealTable.UUID + " = ?")
+                .whereArgs(object.getUuid())
                 .build();
     }
 
     @NonNull
     @Override
     protected ContentValues mapToContentValues(@NonNull Meal object) {
-        ContentValues contentValues = new ContentValues(9);
+        ContentValues contentValues = new ContentValues(8);
 
+        contentValues.put(MealTable.UUID, object.getUuid());
         contentValues.put(MealTable.GROUP_ID, object.getGroup());
         contentValues.put(MealTable.NAME, object.getName());
         contentValues.put(MealTable.CATEGORY_ID, object.getCategoryId());
-        contentValues.put(BaseColumns._ID, object.getId());
-        contentValues.put(MealTable.CLIENT_ID, object.getClientId());
         contentValues.put(MealTable.COLOR, object.getColor());
         contentValues.put(MealTable.REVISION, object.getRevision());
         contentValues.put(MealTable.CHANGED, object.isChanged());

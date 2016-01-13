@@ -19,7 +19,7 @@ import com.deych.cookchooser.db.entities.Category;
 import com.deych.cookchooser.ui.base.BaseFragment;
 import com.deych.cookchooser.ui.base.ui_controls.MainUiDelegate;
 import com.deych.cookchooser.ui.base.Presenter;
-import com.deych.cookchooser.ui.meals.detail.AddMealActivity;
+import com.deych.cookchooser.ui.meals.add.AddMealActivity;
 
 import java.util.List;
 

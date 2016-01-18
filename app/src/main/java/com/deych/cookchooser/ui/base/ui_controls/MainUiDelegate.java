@@ -2,7 +2,9 @@ package com.deych.cookchooser.ui.base.ui_controls;
 
 import android.content.Context;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.view.View;
 
@@ -37,6 +39,14 @@ public class MainUiDelegate {
         ui.tabs().setOnTabSelectedListener(null);
         ui.fab().setOnClickListener(null);
         ui = null;
+    }
+
+    public Snackbar createSnackbar(@NonNull CharSequence text, int duration) {
+        return Snackbar.make(ui.toolbar(), text, duration);
+    }
+
+    public Snackbar createSnackbar(@StringRes int resId, int duration) {
+        return Snackbar.make(ui.toolbar(), resId, duration);
     }
 
     private MainUiDelegate(Builder builder) {

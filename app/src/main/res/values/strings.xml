@@ -15,7 +15,11 @@
     <string name="error_login">Неверное имя пользователя или пароль</string>
     <string name="user_name">Имя</string>
     <string name="btn_register">Регистрация</string>
-    <string name="nav_list">Список блюд</string>
+    <string name="nav_list_default_color">Все блюда</string>
+    <string name="nav_list_red_color">Красная метка</string>
+    <string name="nav_list_green_color">Зеленая метка</string>
+    <string name="nav_list_blue_color">Синяя метка</string>
+    <string name="nav_list_orange_color">Оранжевая метка</string>
     <string name="nav_group">Группа</string>
     <string name="nav_invites">Приглашения</string>
     <string name="nav_settings">Настройки</string>
@@ -25,4 +29,6 @@
     <string name="title_group">Группа</string>
     <string name="title_add_meal">Новое блюдо</string>
     <string name="menu_add_meal">Добавить блюдо</string>
+
+    <string name="error_save_meal">Ошибка при сохранении блюда!</string>
 </resources>

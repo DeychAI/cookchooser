@@ -14,7 +14,7 @@ import com.pushtorefresh.storio.sqlite.queries.UpdateQuery;
 /**
  * Created by deigo on 30.12.2015.
  */
-public class MealSyncPutResolver extends DefaultPutResolver<Meal> {
+public class MealPutResolver extends DefaultPutResolver<Meal> {
 
     @NonNull
     @Override
@@ -43,7 +43,7 @@ public class MealSyncPutResolver extends DefaultPutResolver<Meal> {
         contentValues.put(MealTable.GROUP_ID, object.getGroup());
         contentValues.put(MealTable.NAME, object.getName());
         contentValues.put(MealTable.CATEGORY_ID, object.getCategoryId());
-        contentValues.put(MealTable.COLOR, object.getColor());
+        contentValues.put(MealTable.COLOR, object.getColor().color());
         contentValues.put(MealTable.REVISION, object.getRevision());
         contentValues.put(MealTable.CHANGED, object.isChanged());
         contentValues.put(MealTable.DELETED, object.isDeleted());

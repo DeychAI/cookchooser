@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import android.util.Base64;
 
 import com.deych.cookchooser.api.service.UserService;
+import com.deych.cookchooser.db.entities.MealColor;
 import com.deych.cookchooser.db.entities.User;
 import com.deych.cookchooser.db.tables.UserTable;
 import com.deych.cookchooser.shared_pref.Preferences;
@@ -84,17 +85,16 @@ public class UserModel {
         if (preferences.getUserId() != 0 && !TextUtils.isEmpty(preferences.getUserToken())) {
             return storIOSQLite
                     .get()
-                    .listOfObjects(User.class)
+                    .object(User.class)
                     .withQuery(UserTable.get(preferences.getUserId()))
                     .prepare()
                     .createObservable()
                     .take(1)
-                    .map(list -> {
-                        if (list.isEmpty()) {
+                    .map(user -> {
+                        if (user == null) {
                             preferences.clearUserData();
                             throw new RuntimeException("User not found");
                         } else {
-                            User user = list.get(0);
                             user.setToken(preferences.getUserToken());
                             return user;
                         }
@@ -106,17 +106,16 @@ public class UserModel {
 
     public User loginAsBlocking() {
         if (preferences.getUserId() != 0 && !TextUtils.isEmpty(preferences.getUserToken())) {
-            List<User> list = storIOSQLite
+            User user = storIOSQLite
                     .get()
-                    .listOfObjects(User.class)
+                    .object(User.class)
                     .withQuery(UserTable.get(preferences.getUserId()))
                     .prepare()
                     .executeAsBlocking();
-            if (list.isEmpty()) {
+            if (user == null) {
                 preferences.clearUserData();
                 return null;
             } else {
-                User user = list.get(0);
                 user.setToken(preferences.getUserToken());
                 return user;
             }
@@ -127,5 +126,16 @@ public class UserModel {
 
     public void logout() {
         preferences.clearUserData();
+        preferences.clearSelectedColor();
     }
+
+
+    public void colorSelected(MealColor color) {
+        preferences.saveSelectedColor(color);
+    }
+
+    public MealColor getSelectedColor() {
+        return preferences.getSelectedColor();
+    }
+
 }

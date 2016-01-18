@@ -9,6 +9,8 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -32,4 +34,6 @@ public interface MealsService {
     @POST("meals")
     Call<Meal> addMealCall(@Body Meal meal);
 
+    @PUT("meals/{uuid}")
+    Call<Meal> updateMealCall(@Path("uuid") String uuid, @Body Meal meal);
 }

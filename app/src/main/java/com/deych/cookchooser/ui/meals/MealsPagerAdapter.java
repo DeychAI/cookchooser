@@ -39,4 +39,8 @@ public class MealsPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         return categories.get(position).getName();
     }
+
+    public Category getCategory(int id) {
+        return categories.get(id);
+    }
 }

@@ -3,11 +3,15 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               xmlns:tools="http://schemas.android.com/tools"
+              android:background="?selectableItemBackground"
               android:orientation="horizontal"
-              android:padding="@dimen/dimen_1x"
+              android:paddingLeft="@dimen/dimen_1x"
+              android:paddingRight="@dimen/dimen_1x"
+              android:paddingTop="@dimen/dimen_0.5x"
+              android:paddingBottom="@dimen/dimen_0.5x"
     >
     <ImageView
-        android:id="@+id/icon"
+        android:id="@+id/ivIcon"
         android:src="@drawable/none_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

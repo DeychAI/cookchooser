@@ -24,6 +24,7 @@ public class MealsListPresenter extends Presenter<MealsListView> {
     private User user;
     private List<Meal> meals = Collections.emptyList();
     private long id;
+    private Subscription mealsSubscription;
 
     @Inject
     public MealsListPresenter(MealsModel mealsModel, User user) {
@@ -49,7 +50,10 @@ public class MealsListPresenter extends Presenter<MealsListView> {
     }
 
     public void loadMeals() {
-        Subscription subscription = mealsModel.getMealsFromDb(id)
+        if (mealsSubscription != null) {
+            mealsSubscription.unsubscribe();
+        }
+        mealsSubscription = mealsModel.getMealsFromDb(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(l -> {
@@ -59,7 +63,14 @@ public class MealsListPresenter extends Presenter<MealsListView> {
                 }, e -> {
                     Timber.v("Error " + e);
                 });
-        addToUnbindSubscription(subscription);
+    }
+
+    @Override
+    public void unbindView(MealsListView view) {
+        super.unbindView(view);
+        if (mealsSubscription != null) {
+            mealsSubscription.unsubscribe();
+        }
     }
 
     public void setCategoryId(long id) {

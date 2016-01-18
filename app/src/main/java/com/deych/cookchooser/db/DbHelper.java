@@ -13,7 +13,7 @@ import com.deych.cookchooser.db.tables.UserTable;
  */
 public class DbHelper extends SQLiteOpenHelper {
 
-    private static final int DB_VERSION = 6;
+    private static final int DB_VERSION = 7;
 
     public DbHelper(Context context) {
         super(context, "cookchooser_db", null, DB_VERSION);
@@ -21,17 +21,25 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        createTables(db);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        dropAllTables(db);
+        createTables(db);
+    }
+
+    private void createTables(SQLiteDatabase db) {
         db.execSQL(UserTable.getCreateTableQuery());
         db.execSQL(CategoryTable.getCreateTableQuery());
         db.execSQL(MealTable.getCreateTableQuery());
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    private void dropAllTables(SQLiteDatabase db) {
         dropTable(db, UserTable.TABLE);
         dropTable(db, CategoryTable.TABLE);
         dropTable(db, MealTable.TABLE);
-        onCreate(db);
     }
 
     private void dropTable(SQLiteDatabase db, String table) {

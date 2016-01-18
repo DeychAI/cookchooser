@@ -7,13 +7,13 @@ import com.deych.cookchooser.db.entities.CategoryStorIOSQLiteDeleteResolver;
 import com.deych.cookchooser.db.entities.CategoryStorIOSQLiteGetResolver;
 import com.deych.cookchooser.db.entities.CategoryStorIOSQLitePutResolver;
 import com.deych.cookchooser.db.entities.Meal;
-import com.deych.cookchooser.db.entities.MealStorIOSQLiteDeleteResolver;
-import com.deych.cookchooser.db.entities.MealStorIOSQLiteGetResolver;
-import com.deych.cookchooser.db.entities.MealStorIOSQLitePutResolver;
 import com.deych.cookchooser.db.entities.User;
 import com.deych.cookchooser.db.entities.UserStorIOSQLiteDeleteResolver;
 import com.deych.cookchooser.db.entities.UserStorIOSQLiteGetResolver;
 import com.deych.cookchooser.db.entities.UserStorIOSQLitePutResolver;
+import com.deych.cookchooser.db.resolvers.MealDeleteResolver;
+import com.deych.cookchooser.db.resolvers.MealGetResolver;
+import com.deych.cookchooser.db.resolvers.MealPutResolver;
 import com.pushtorefresh.storio.sqlite.SQLiteTypeMapping;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.impl.DefaultStorIOSQLite;
@@ -51,9 +51,9 @@ public class DbModule {
                         .deleteResolver(new CategoryStorIOSQLiteDeleteResolver())
                         .build())
                 .addTypeMapping(Meal.class, SQLiteTypeMapping.<Meal>builder()
-                        .putResolver(new MealStorIOSQLitePutResolver())
-                        .getResolver(new MealStorIOSQLiteGetResolver())
-                        .deleteResolver(new MealStorIOSQLiteDeleteResolver())
+                        .putResolver(new MealPutResolver())
+                        .getResolver(new MealGetResolver())
+                        .deleteResolver(new MealDeleteResolver())
                         .build())
                 .build();
     }

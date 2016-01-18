@@ -15,7 +15,6 @@ import com.deych.cookchooser.ui.base.Presenter;
 import com.deych.cookchooser.util.Extras;
 import com.farbod.labelledspinner.LabelledSpinner;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -82,7 +81,7 @@ public class MealsDetailFragment extends BaseFragment implements MealsDetailView
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_meals_detail, container, false);
+        View v = inflater.inflate(R.layout.fragment_meals_edit, container, false);
         ButterKnife.bind(this, v);
 
         return v;

@@ -5,13 +5,12 @@ import android.support.annotation.NonNull;
 import com.deych.cookchooser.api.service.MealsService;
 import com.deych.cookchooser.db.entities.Category;
 import com.deych.cookchooser.db.entities.Meal;
+import com.deych.cookchooser.db.entities.MealColor;
 import com.deych.cookchooser.db.entities.User;
-import com.deych.cookchooser.db.resolvers.MealSyncPutResolver;
 import com.deych.cookchooser.db.tables.CategoryTable;
 import com.deych.cookchooser.db.tables.MealTable;
 import com.deych.cookchooser.shared_pref.Preferences;
 import com.deych.cookchooser.user_scope.UserScope;
-import com.pushtorefresh.storio.StorIOException;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
@@ -70,24 +69,31 @@ public class MealsModel {
         List<Meal> updateList = new ArrayList<>();
 
         for (Meal m : netMeals) {
-            Meal found = null;
-            for (Meal d : dbMeals) {
-                if (m.getUuid().equals(d.getUuid())) {
-                    found = d;
-                    break;
-                }
-            }
-            if (found != null) {
-                if (found.getRevision() != m.getRevision()) {
+            if (dbMeals.contains(m)) {
+                if (dbMeals.get(dbMeals.indexOf(m)).getRevision() != m.getRevision()) {
                     updateList.add(m);
                 }
             } else {
                 updateList.add(m);
             }
+//            Meal found = null;
+//            for (Meal d : dbMeals) {
+//                if (m.getUuid().equals(d.getUuid())) {
+//                    found = d;
+//                    break;
+//                }
+//            }
+//            if (found != null) {
+//                if (found.getRevision() != m.getRevision()) {
+//                    updateList.add(m);
+//                }
+//            } else {
+//                updateList.add(m);
+//            }
         }
 
         if (!updateList.isEmpty()) {
-            storIOSQLite.put().objects(updateList).withPutResolver(new MealSyncPutResolver())
+            storIOSQLite.put().objects(updateList)
                     .prepare().executeAsBlocking();
         }
 
@@ -110,16 +116,19 @@ public class MealsModel {
         List<Meal> forDelete = new ArrayList<>();
 
         for (Meal d : dbMeals) {
-            Meal found = null;
-            for (Meal m : netMeals) {
-                if (m.getUuid().equals(d.getUuid())) {
-                    found = d;
-                    break;
-                }
-            }
-            if (found == null) {
+            if (!netMeals.contains(d)) {
                 forDelete.add(d);
             }
+//            Meal found = null;
+//            for (Meal m : netMeals) {
+//                if (m.getUuid().equals(d.getUuid())) {
+//                    found = d;
+//                    break;
+//                }
+//            }
+//            if (found == null) {
+//                forDelete.add(d);
+//            }
         }
 
         storIOSQLite.delete().objects(forDelete).prepare().executeAsBlocking();
@@ -135,18 +144,7 @@ public class MealsModel {
                 .executeAsBlocking();
 
         for (Meal send : forSending) {
-            try {
-                Response<Meal> response = mealsService.addMealCall(send).execute();
-                if (response.isSuccess()) {
-                    storIOSQLite.put()
-                            .object(response.body())
-                            .withPutResolver(new MealSyncPutResolver())
-                            .prepare()
-                            .executeAsBlocking();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            serverAddMeal(send);
         }
 
 
@@ -156,70 +154,59 @@ public class MealsModel {
 
     }
 
+    private void serverAddMeal(Meal send) {
+        try {
+            Response<Meal> response = mealsService.addMealCall(send).execute();
+            if (response.isSuccess()) {
+                storIOSQLite.put()
+                        .object(response.body())
+                        .prepare()
+                        .executeAsBlocking();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void serverUpdateMeal(Meal meal) {
+        try {
+            Response<Meal> response = mealsService.updateMealCall(meal.getUuid(), meal).execute();
+            if (response.isSuccess()) {
+                storIOSQLite.put()
+                        .object(response.body())
+                        .prepare()
+                        .executeAsBlocking();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
     private void processMealsResponse(List<Meal> netMeals) {
-        storIOSQLite
-                .put()
-                .objects(netMeals)
-                .withPutResolver(new MealSyncPutResolver())
-                .prepare()
-                .executeAsBlocking();
 
-        List<Meal> dbMeals = storIOSQLite
-                .get()
-                .listOfObjects(Meal.class)
-                .withQuery(Query.builder()
-                        .table(MealTable.TABLE)
-                        .where("_id > ?")
-                        .whereArgs(0)
-                        .build())
-                .prepare()
-                .executeAsBlocking();
-
-        List<Meal> forDelete = new ArrayList<>();
-
-        for (Meal db : dbMeals) {
-            if (!netMeals.contains(db)) {
-                forDelete.add(db);
-            }
-        }
-        storIOSQLite.delete().objects(forDelete).prepare().executeAsBlocking();
-
-        List<Meal> forSending = storIOSQLite.get()
-                .listOfObjects(Meal.class)
-                .withQuery(Query.builder()
-                        .table(MealTable.TABLE)
-                        .where("_id < ?")
-                        .whereArgs(0)
-                        .build())
-                .prepare()
-                .executeAsBlocking();
-
-        for (Meal forSend : forSending) {
-            try {
-                Response<Meal> response = mealsService.addMealCall(forSend).execute();
-                if (response.isSuccess()) {
-                    storIOSQLite.put()
-                            .object(response.body())
-                            .withPutResolver(new MealSyncPutResolver())
-                            .prepare()
-                            .executeAsBlocking();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     @NonNull
     public Observable<List<Meal>> getMealsFromDb(long category_id) {
+
+        MealColor selectedColor = preferences.getSelectedColor();
+
+        Query.CompleteBuilder query = Query.builder()
+                .table(MealTable.TABLE)
+                .orderBy(MealTable.NAME);
+        if (!MealColor.None.equals(selectedColor)) {
+            query.where(MealTable.CATEGORY_ID + " = ? and " + MealTable.COLOR + " = ?")
+                    .whereArgs(category_id, selectedColor.color());
+
+        } else {
+            query.where(MealTable.CATEGORY_ID + " = ?").whereArgs(category_id);
+        }
+
         return storIOSQLite.get()
                 .listOfObjects(Meal.class)
-                .withQuery(Query.builder()
-                        .table(MealTable.TABLE)
-                        .where(MealTable.CATEGORY_ID + " = ?")
-                        .whereArgs(category_id)
-                        .orderBy(MealTable.NAME)
-                        .build())
+                .withQuery(query.build())
                 .prepare()
                 .createObservable();
     }
@@ -245,39 +232,64 @@ public class MealsModel {
     @NonNull
     public Observable<List<Category>> getCategoriesFromDb() {
         return storIOSQLite.get()
-                    .listOfObjects(Category.class)
-                    .withQuery(CategoryTable.QUERY_ALL)
-                    .prepare()
-                    .createObservable()
-                    .take(1);
+                .listOfObjects(Category.class)
+                .withQuery(CategoryTable.QUERY_ALL)
+                .prepare()
+                .createObservable()
+                .take(1);
     }
 
-//    public Observable<Meal> addMeal(long category_id, String name) {
-//        Meal meal = new Meal();
-//        meal.setId(preferences.getNewDbIdAndIncrement());
-//        meal.setCategoryId(category_id);
-//        meal.setName(name);
-//        meal.setClientId(UUID.randomUUID().toString());
-//        meal.setColor("none");
-//        meal.setGroup(user.getGroup());
-//
-//        return storIOSQLite
-//                .put()
-//                .object(meal)
-//                .prepare()
-//                .createObservable()
-//                .flatMap(putResult -> {
-//                    if (putResult.wasInserted()) {
-//                        return mealsService.addMeal(meal);
-//                    }
-//                    throw new StorIOException("Was not inserted!");
-//                })
-//                .doOnNext(netMeal -> {
-//                    storIOSQLite.put()
-//                            .object(netMeal)
-//                            .withPutResolver(new MealSyncPutResolver())
-//                            .prepare()
-//                            .executeAsBlocking();
-//                });
-//    }
+    public Observable<Integer> getMealsCountForColor(MealColor color) {
+        return storIOSQLite
+                .get()
+                .numberOfResults()
+                .withQuery(Query.builder().table(MealTable.TABLE)
+                        .where(MealTable.COLOR + " = ?")
+                        .whereArgs(color.color())
+                        .build())
+                .prepare()
+                .createObservable();
+    }
+
+    public Observable<Boolean> saveMeal(Meal meal) {
+        if (meal.getUuid() == null) {
+            meal.setUuid(UUID.randomUUID().toString());
+            meal.setGroup(user.getGroup());
+        } else {
+            meal.setChanged(true);
+        }
+
+        return storIOSQLite
+                .put()
+                .object(meal)
+                .prepare()
+                .createObservable()
+                .flatMap(putResult -> Observable.just(putResult.wasInserted() || putResult.wasUpdated()))
+                .doOnNext(result -> {
+                    if (result) {
+                        processSaveMeal(meal);
+                    }
+                });
+    }
+
+    private void processSaveMeal(Meal meal) {
+        if (!meal.isChanged()) {
+            serverAddMeal(meal);
+        } else {
+            serverUpdateMeal(meal);
+        }
+    }
+
+    public Observable<Meal> getMeal(String uuid) {
+        return storIOSQLite.get()
+                .object(Meal.class)
+                .withQuery(Query.builder()
+                        .table(MealTable.TABLE)
+                        .where(MealTable.UUID + " = ?")
+                        .whereArgs(uuid)
+                        .build())
+                .prepare()
+                .createObservable()
+                .take(1);
+    }
 }

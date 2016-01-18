@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.deych.cookchooser.R;
@@ -22,6 +23,11 @@ import butterknife.ButterKnife;
 public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder>{
 
     private List<Meal> list = Collections.emptyList();
+    private ItemClickListener listener;
+
+    public MealsAdapter(ItemClickListener listener) {
+        this.listener = listener;
+    }
 
     public void setList(List<Meal> list) {
         this.list = list;
@@ -36,7 +42,7 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(list.get(position));
+        holder.bind(listener, list.get(position));
     }
 
     @Override
@@ -49,18 +55,30 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.ViewHolder>{
         @Bind(R.id.tvName)
         TextView tvName;
 
+        @Bind(R.id.ivIcon)
+        ImageView ivIcon;
+
+        View itemView;
+
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            this.itemView = itemView;
         }
 
-        public void bind(Meal meal) {
+        public void bind(ItemClickListener listener, Meal meal) {
             if (meal.getRevision() == 0) {
                 tvName.setTextColor(Color.LTGRAY);
             } else {
                 tvName.setTextColor(Color.DKGRAY);
             }
             tvName.setText(meal.getName());
+            ivIcon.setImageResource(meal.getColor().drawableRes());
+            itemView.setOnClickListener(v -> listener.mealSelected(meal));
         }
+    }
+
+    public interface ItemClickListener {
+        void mealSelected(Meal meal);
     }
 }

@@ -1,38 +1,18 @@
 package com.deych.cookchooser.db.entities;
 
-import com.deych.cookchooser.db.tables.MealTable;
-import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
-import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
-
 /**
  * Created by deigo on 20.12.2015.
  */
-@StorIOSQLiteType(table = MealTable.TABLE)
 public class Meal {
 
-    @StorIOSQLiteColumn(name = MealTable.UUID, key = true)
-    String uuid;
-
-    @StorIOSQLiteColumn(name = MealTable.NAME)
-    String name;
-
-    @StorIOSQLiteColumn(name = MealTable.CATEGORY_ID)
-    long categoryId;
-
-    @StorIOSQLiteColumn(name = MealTable.GROUP_ID)
-    String group;
-
-    @StorIOSQLiteColumn(name = MealTable.COLOR)
-    String color;
-
-    @StorIOSQLiteColumn(name = MealTable.REVISION)
-    long revision;
-
-    @StorIOSQLiteColumn(name = MealTable.CHANGED)
-    boolean changed;
-
-    @StorIOSQLiteColumn(name = MealTable.DELETED)
-    boolean deleted;
+    private String uuid;
+    private String name;
+    private long categoryId;
+    private String group;
+    private MealColor color;
+    private long revision;
+    private boolean changed;
+    private boolean deleted;
 
     public String getName() {
         return name;
@@ -62,15 +42,15 @@ public class Meal {
         return uuid;
     }
 
-    public void setUuid(String clientId) {
+    public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 
-    public String getColor() {
+    public MealColor getColor() {
         return color;
     }
 
-    public void setColor(String color) {
+    public void setColor(MealColor color) {
         this.color = color;
     }
 
@@ -98,4 +78,23 @@ public class Meal {
         this.deleted = deleted;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Meal meal = (Meal) o;
+
+        return uuid.equals(meal.uuid);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return uuid.hashCode();
+    }
 }

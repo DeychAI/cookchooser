@@ -1,7 +1,6 @@
 package com.deych.cookchooser.ui.meals;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -19,7 +18,7 @@ import com.deych.cookchooser.db.entities.Category;
 import com.deych.cookchooser.ui.base.BaseFragment;
 import com.deych.cookchooser.ui.base.ui_controls.MainUiDelegate;
 import com.deych.cookchooser.ui.base.Presenter;
-import com.deych.cookchooser.ui.meals.add.AddMealActivity;
+import com.deych.cookchooser.ui.meals.edit.EditMealActivity;
 
 import java.util.List;
 
@@ -106,7 +105,8 @@ public class MealsHostFragment extends BaseFragment implements MealsHostView {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                startActivity(new Intent(getContext(), AddMealActivity.class));
+                EditMealActivity.startForAdding(getContext(),
+                        mealsPagerAdapter.getCategory(viewPager.getCurrentItem()).getId());
                 return true;
         }
         return super.onOptionsItemSelected(item);

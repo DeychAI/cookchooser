@@ -10,7 +10,7 @@
     <dimen name="dimen_0.5x">8dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="color_btn_margin">5dp</dimen>
-    <dimen name="color_btn_stroke">4dp</dimen>
+    <dimen name="color_btn_stroke">7dp</dimen>
     <dimen name="color_btn_normal_size">50dp</dimen>
 
     <!--Text size -->

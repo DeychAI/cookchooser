@@ -2,9 +2,11 @@ package com.deych.cookchooser.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,10 +20,13 @@ import android.widget.TextView;
 
 import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
+import com.deych.cookchooser.db.entities.MealColor;
+import com.deych.cookchooser.shared_pref.Preferences;
 import com.deych.cookchooser.ui.base.ui_controls.MainUi;
 import com.deych.cookchooser.ui.group.GroupFragment;
 import com.deych.cookchooser.ui.login.LoginActivity;
 import com.deych.cookchooser.ui.meals.MealsHostFragment;
+import com.deych.cookchooser.ui.meals.MealsListFragment;
 
 import javax.inject.Inject;
 
@@ -87,37 +92,6 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_list);
 
-        MenuItem item = navigationView.getMenu().findItem(R.id.nav_list);
-        View view = View.inflate(this, R.layout.drawer_action_layout, null);
-        ImageView imageView = (ImageView) view.findViewById(R.id.colorSelector);
-        imageView.setImageResource(R.drawable.none_btn);
-        MenuItemCompat.setActionView(item, view);
-
-        item = navigationView.getMenu().findItem(R.id.nav_list_red);
-        view = View.inflate(this, R.layout.drawer_action_layout, null);
-        imageView = (ImageView) view.findViewById(R.id.colorSelector);
-        imageView.setImageResource(R.drawable.red_btn);
-        MenuItemCompat.setActionView(item, view);
-
-
-        item = navigationView.getMenu().findItem(R.id.nav_list_green);
-        view = View.inflate(this, R.layout.drawer_action_layout, null);
-        imageView = (ImageView) view.findViewById(R.id.colorSelector);
-        imageView.setImageResource(R.drawable.green_btn);
-        MenuItemCompat.setActionView(item, view);
-
-        item = navigationView.getMenu().findItem(R.id.nav_list_blue);
-        view = View.inflate(this, R.layout.drawer_action_layout, null);
-        imageView = (ImageView) view.findViewById(R.id.colorSelector);
-        imageView.setImageResource(R.drawable.blue_btn);
-        MenuItemCompat.setActionView(item, view);
-
-        item = navigationView.getMenu().findItem(R.id.nav_list_orange);
-        view = View.inflate(this, R.layout.drawer_action_layout, null);
-        imageView = (ImageView) view.findViewById(R.id.colorSelector);
-        imageView.setImageResource(R.drawable.orange_btn);
-        MenuItemCompat.setActionView(item, view);
-
         tvUsername = ButterKnife.findById(navigationView.getHeaderView(0), R.id.tvUsername);
         tvName = ButterKnife.findById(navigationView.getHeaderView(0), R.id.tvName);
         presenter.bindView(this);
@@ -150,6 +124,23 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_list:
                 showMealsHostFragment();
+                presenter.colorSelected(MealColor.None);
+                break;
+            case R.id.nav_list_red:
+                showMealsHostFragment();
+                presenter.colorSelected(MealColor.Red);
+                break;
+            case R.id.nav_list_green:
+                showMealsHostFragment();
+                presenter.colorSelected(MealColor.Green);
+                break;
+            case R.id.nav_list_blue:
+                showMealsHostFragment();
+                presenter.colorSelected(MealColor.Blue);
+                break;
+            case R.id.nav_list_orange:
+                showMealsHostFragment();
+                presenter.colorSelected(MealColor.Orange);
                 break;
             case R.id.nav_group:
                 showGroupFragment();
@@ -167,6 +158,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showMealsHostFragment() {
+        if (getSupportFragmentManager().findFragmentById(R.id.content) instanceof MealsHostFragment) {
+            return;
+        }
         getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content, new MealsHostFragment())
                     .commit();
@@ -185,5 +179,33 @@ public class MainActivity extends AppCompatActivity
     public void bindUserData(String username, String name) {
         tvName.setText(name);
         tvUsername.setText(username);
+    }
+
+    @Override
+    public void onColorSelected() {
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MealsListFragment.ACTION_FILTER_MEALS));
+    }
+
+    @Override
+    public void updateColorCount(MealColor color, int count) {
+        setColorActionView(color, count);
+    }
+
+    @Override
+    public void selectColor(MealColor selectedColor) {
+        navigationView.setCheckedItem(selectedColor.menuRes());
+    }
+
+    private void setColorActionView(MealColor color, int count) {
+        MenuItem item = navigationView.getMenu().findItem(color.menuRes());
+        View view = MenuItemCompat.getActionView(item);
+        if (view == null) {
+            view = View.inflate(this, R.layout.drawer_action_layout, null);
+            ImageView imageView = (ImageView) view.findViewById(R.id.colorSelector);
+            imageView.setImageResource(color.drawableRes());
+        }
+        TextView textView = (TextView) view.findViewById(R.id.colorSelectorText);
+        textView.setText(String.valueOf(count));
+        MenuItemCompat.setActionView(item, view);
     }
 }

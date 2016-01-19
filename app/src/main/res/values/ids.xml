@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="meal_adapter_first_item" type="id"/>
+    <item name="meal_adapter_item" type="id"/>
+    <item name="meal_adapter_last_item" type="id"/>
+</resources>

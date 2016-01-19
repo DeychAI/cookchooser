@@ -73,18 +73,18 @@ dependencies {
     provided 'org.glassfish:javax.annotation:10.0-b28'
     compile 'com.jakewharton.timber:timber:4.1.0'
 
-    compile 'com.squareup.retrofit2:retrofit:2.0.0-beta3'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta3'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0-beta3'
-    compile 'com.squareup.okhttp3:okhttp:3.0.0-RC1'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.0.0-RC1'
+    compile "com.squareup.retrofit2:retrofit:$rootProject.ext.retrofitVersion"
+    compile "com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofitVersion"
+    compile "com.squareup.retrofit2:adapter-rxjava:$rootProject.ext.retrofitVersion"
+    compile "com.squareup.okhttp3:okhttp:$rootProject.ext.okHttpVersion"
+    compile "com.squareup.okhttp3:logging-interceptor:$rootProject.ext.okHttpVersion"
     compile 'io.reactivex:rxandroid:1.1.0'
     compile 'io.reactivex:rxjava:1.1.0'
 
-    compile 'com.pushtorefresh.storio:sqlite:1.7.0'
-    compile 'com.pushtorefresh.storio:sqlite-annotations:1.7.0'
-    apt 'com.pushtorefresh.storio:sqlite-annotations-processor:1.7.0'
+    compile "com.pushtorefresh.storio:sqlite:$rootProject.ext.storIoVersion"
+    compile "com.pushtorefresh.storio:sqlite-annotations:$rootProject.ext.storIoVersion"
+    apt "com.pushtorefresh.storio:sqlite-annotations-processor:$rootProject.ext.storIoVersion"
 
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta1'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta1'
+    debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.ext.leakCanaryVersion"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.ext.leakCanaryVersion"
 }

@@ -11,8 +11,7 @@ import java.util.List;
  */
 public interface EditMealView {
     void setCategories(List<Category> categories, long selectedCategory);
-//    void setSelectedColor(MealColor color);
-//    void setTitle(String title);
+    void setTitle(String title);
     void onSaved();
     void showError();
 

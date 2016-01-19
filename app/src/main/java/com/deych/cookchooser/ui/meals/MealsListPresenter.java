@@ -76,4 +76,8 @@ public class MealsListPresenter extends Presenter<MealsListView> {
     public void setCategoryId(long id) {
         this.id = id;
     }
+
+    public void deleteMeal(Meal meal) {
+
+    }
 }

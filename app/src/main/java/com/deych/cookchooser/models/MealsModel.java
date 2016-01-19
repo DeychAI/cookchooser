@@ -265,11 +265,7 @@ public class MealsModel {
                 .prepare()
                 .createObservable()
                 .flatMap(putResult -> Observable.just(putResult.wasInserted() || putResult.wasUpdated()))
-                .doOnNext(result -> {
-                    if (result) {
-                        processSaveMeal(meal);
-                    }
-                });
+                .doOnCompleted(() -> processSaveMeal(meal));
     }
 
     private void processSaveMeal(Meal meal) {
@@ -279,6 +275,11 @@ public class MealsModel {
             serverUpdateMeal(meal);
         }
     }
+//
+//    public Observable<Boolean> deleteMeal(Meal meal) {
+//        meal.setDeleted(true);
+//
+//    }
 
     public Observable<Meal> getMeal(String uuid) {
         return storIOSQLite.get()

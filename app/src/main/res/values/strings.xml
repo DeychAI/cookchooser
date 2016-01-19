@@ -31,4 +31,5 @@
     <string name="menu_add_meal">Добавить блюдо</string>
 
     <string name="error_save_meal">Ошибка при сохранении блюда!</string>
+    <string name="meal_popup_action_delete">Удалить</string>
 </resources>

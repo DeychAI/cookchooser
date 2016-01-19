@@ -29,7 +29,12 @@ public class EditMealPresenter extends Presenter<EditMealView> {
     }
 
     public void bindData(String uuid, long categoryId) {
-        Observable<Meal> mealObservable = null;
+        if (meal !=  null){
+            view().setTitle(meal.getName());
+            loadCategories();
+            return;
+        }
+        Observable<Meal> mealObservable;
         if (uuid == null) {
             //Adding
             Meal newMeal = new Meal();
@@ -47,9 +52,8 @@ public class EditMealPresenter extends Presenter<EditMealView> {
                     meal = result;
                     loadCategories();
                     if (view() != null) {
+                        view().setTitle(meal.getName());
                         view().setMealData(meal);
-//                        view().setSelectedColor(meal.getColor());
-//                        view().setTitle(meal.getName());
                     }
                 });
     }

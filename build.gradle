@@ -22,3 +22,10 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+ext {
+    storIoVersion = '1.7.0'
+    retrofitVersion = '2.0.0-beta3'
+    okHttpVersion = '3.0.0-RC1'
+    leakCanaryVersion = '1.4-beta1'
+}

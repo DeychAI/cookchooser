@@ -39,7 +39,7 @@ public class MealsListPresenter extends Presenter<MealsListView> {
                 .subscribe(list -> {
                     if(view() != null){
                         view().hideRefresh();
-//                        view().showMeals(list);
+//                        view().showMeals(list);y
                     }
                 }, e -> {
                     if(view() != null){

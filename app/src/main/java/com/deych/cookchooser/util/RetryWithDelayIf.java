@@ -1,4 +1,4 @@
-package com.deych.cookchooser.models;
+package com.deych.cookchooser.util;
 
 import android.util.Pair;
 

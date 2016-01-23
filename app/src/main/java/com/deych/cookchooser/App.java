@@ -39,13 +39,7 @@ public class App extends Application {
 
         refWatcher = LeakCanary.install(this);
 
-        appComponent = DaggerAppComponent
-                .builder()
-                .appModule(new AppModule(this))
-                .netModule(new NetModule("http://deych.myihor.ru/cookchooser/api/v1/"))
-                .dbModule(new DbModule())
-                .apiModule(new ApiModule())
-                .build();
+        appComponent = prepareAppComponent().build();
 
         User user = appComponent.userModel().loginAsBlocking();
         if (user != null) {
@@ -56,6 +50,15 @@ public class App extends Application {
             Timber.plant(new Timber.DebugTree());
         }
 
+    }
+
+    protected DaggerAppComponent.Builder prepareAppComponent() {
+        return DaggerAppComponent
+                .builder()
+                .appModule(new AppModule(this))
+                .netModule(new NetModule("http://deych.myihor.ru/cookchooser/api/v1/"))
+                .dbModule(new DbModule())
+                .apiModule(new ApiModule());
     }
 
     public AppComponent getAppComponent() {

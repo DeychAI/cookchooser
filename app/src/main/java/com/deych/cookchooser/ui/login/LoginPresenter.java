@@ -3,6 +3,7 @@ package com.deych.cookchooser.ui.login;
 import com.deych.cookchooser.db.entities.User;
 import com.deych.cookchooser.models.UserModel;
 import com.deych.cookchooser.ui.base.Presenter;
+import com.deych.cookchooser.util.RxSchedulerFactory;
 
 import javax.inject.Inject;
 
@@ -17,11 +18,13 @@ import rx.schedulers.Schedulers;
 public class LoginPresenter extends Presenter<LoginView> {
 
     private UserModel userModel;
+    private RxSchedulerFactory rxSchedulerFactory;
     private Observable<User> userObservable;
 
     @Inject
-    public LoginPresenter(UserModel userModel) {
+    public LoginPresenter(UserModel userModel, RxSchedulerFactory rxSchedulerFactory) {
         this.userModel = userModel;
+        this.rxSchedulerFactory = rxSchedulerFactory;
     }
 
     public void doLogin(String username, String password) {
@@ -30,8 +33,8 @@ public class LoginPresenter extends Presenter<LoginView> {
         }
 
         userObservable = userModel.login(username, password)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .subscribeOn(rxSchedulerFactory.io())
+                .observeOn(rxSchedulerFactory.mainThread());
 
         Subscription subscription = userObservable
                 .subscribe(user -> {

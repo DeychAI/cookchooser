@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.deych.cookchooser.shared_pref.Preferences;
 import com.deych.cookchooser.ui.base.PresenterCache;
+import com.deych.cookchooser.util.RxSchedulerFactory;
 
 import javax.inject.Singleton;
 
@@ -44,5 +45,11 @@ public class AppModule {
     @Provides
     public Preferences providePreferences(Context context) {
         return new Preferences(context);
+    }
+
+    @Singleton
+    @Provides
+    public RxSchedulerFactory provideRxSchedulerFactory() {
+        return new RxSchedulerFactory();
     }
 }

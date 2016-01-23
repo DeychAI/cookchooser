@@ -5,6 +5,7 @@ import com.deych.cookchooser.db.entities.MealColor;
 import com.deych.cookchooser.models.MealsModel;
 import com.deych.cookchooser.models.UserModel;
 import com.deych.cookchooser.ui.base.Presenter;
+import com.deych.cookchooser.util.RxSchedulerFactory;
 
 import javax.inject.Inject;
 
@@ -19,13 +20,15 @@ public class EditMealPresenter extends Presenter<EditMealView> {
 
     private UserModel userModel;
     private MealsModel mealsModel;
+    private RxSchedulerFactory rxSchedulerFactory;
 
     private Meal meal;
 
     @Inject
-    public EditMealPresenter(UserModel userModel, MealsModel mealsModel) {
+    public EditMealPresenter(UserModel userModel, MealsModel mealsModel, RxSchedulerFactory rxSchedulerFactory) {
         this.userModel = userModel;
         this.mealsModel = mealsModel;
+        this.rxSchedulerFactory = rxSchedulerFactory;
     }
 
     public void bindData(String uuid, long categoryId) {
@@ -46,8 +49,8 @@ public class EditMealPresenter extends Presenter<EditMealView> {
             mealObservable = mealsModel.getMeal(uuid);
         }
         mealObservable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(rxSchedulerFactory.io())
+                .observeOn(rxSchedulerFactory.mainThread())
                 .subscribe(result -> {
                     meal = result;
                     loadCategories();
@@ -60,8 +63,8 @@ public class EditMealPresenter extends Presenter<EditMealView> {
 
     private void loadCategories() {
         addToUnbindSubscription(mealsModel.getCategoriesFromDb()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(rxSchedulerFactory.io())
+                .observeOn(rxSchedulerFactory.mainThread())
                 .subscribe(categories -> {
                     if (view() != null) {
                         view().setCategories(categories, meal.getCategoryId());
@@ -74,8 +77,8 @@ public class EditMealPresenter extends Presenter<EditMealView> {
         meal.setCategoryId(categoryId);
         meal.setColor(color);
         mealsModel.saveMeal(meal)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(rxSchedulerFactory.io())
+                .observeOn(rxSchedulerFactory.mainThread())
                 .subscribe(result -> {
                     if (view() != null) {
                         if (result) {

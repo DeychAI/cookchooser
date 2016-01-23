@@ -5,11 +5,9 @@ import android.text.TextUtils;
 import com.deych.cookchooser.api.entities.Invite;
 import com.deych.cookchooser.models.InvitesModel;
 import com.deych.cookchooser.ui.base.Presenter;
+import com.deych.cookchooser.util.RxSchedulerFactory;
 
 import javax.inject.Inject;
-
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by deigo on 23.01.2016.
@@ -17,22 +15,28 @@ import rx.schedulers.Schedulers;
 public class InvitesPresenter extends Presenter<InvitesView> {
 
     private InvitesModel invitesModel;
+    private RxSchedulerFactory rxSchedulerFactory;
 
     @Inject
-    public InvitesPresenter(InvitesModel invitesModel) {
+    public InvitesPresenter(InvitesModel invitesModel, RxSchedulerFactory rxSchedulerFactory) {
         this.invitesModel = invitesModel;
+        this.rxSchedulerFactory = rxSchedulerFactory;
     }
 
     public void loadInvites() {
         invitesModel.load()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(rxSchedulerFactory.io())
+                .observeOn(rxSchedulerFactory.mainThread())
                 .subscribe(invites -> {
                     if (view() != null) {
                         view().hideRefresh();
                         view().setData(invites);
                     }
-                }, t -> {});
+                }, t -> {
+                    if (view() != null) {
+                        view().hideRefresh();
+                    }
+                });
     }
 
     public void sendInvite(String sendTo) {
@@ -44,8 +48,8 @@ public class InvitesPresenter extends Presenter<InvitesView> {
         }
 
         invitesModel.invite(sendTo)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(rxSchedulerFactory.io())
+                .observeOn(rxSchedulerFactory.mainThread())
                 .subscribe(invite -> {
                     if (view() != null) {
                         view().inviteSent();
@@ -56,9 +60,9 @@ public class InvitesPresenter extends Presenter<InvitesView> {
                         if (view() != null) {
                             view().errorInviteAlreadySent();
                         }
-                    } else if (error == InvitesModel.ERROR_USER_NOT_EXISTS) {
+                    } else if (error == InvitesModel.ERROR_USER_NOT_EXIST) {
                         if (view() != null) {
-                            view().errorInviteUserNotExists();
+                            view().errorInviteUserNotExist();
                         }
                     } else {
                         if (view() != null) {
@@ -74,8 +78,8 @@ public class InvitesPresenter extends Presenter<InvitesView> {
 
     public void acceptInvite(Invite invite) {
         invitesModel.accept(invite)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(rxSchedulerFactory.io())
+                .observeOn(rxSchedulerFactory.mainThread())
                 .subscribe(result -> {
                     if (view() != null) {
                         view().inviteAccepted();

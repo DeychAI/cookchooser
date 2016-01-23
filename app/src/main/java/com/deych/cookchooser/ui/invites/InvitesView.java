@@ -11,7 +11,7 @@ public interface InvitesView {
     void setData(List<Invite> invites);
     void inviteSent();
     void errorValidateEmail();
-    void errorInviteUserNotExists();
+    void errorInviteUserNotExist();
     void errorInviteAlreadySent();
     void inviteAccepted();
     void hideRefresh();

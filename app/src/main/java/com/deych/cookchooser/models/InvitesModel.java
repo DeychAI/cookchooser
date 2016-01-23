@@ -5,6 +5,7 @@ import com.deych.cookchooser.api.service.InvitesService;
 import com.deych.cookchooser.db.entities.User;
 import com.deych.cookchooser.db.tables.MealTable;
 import com.deych.cookchooser.user_scope.UserScope;
+import com.deych.cookchooser.util.RetryWithDelayIf;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.DeleteQuery;
 
@@ -23,7 +24,7 @@ import rx.Observable;
 @UserScope
 public class InvitesModel {
 
-    public static final int ERROR_USER_NOT_EXISTS = 1;
+    public static final int ERROR_USER_NOT_EXIST = 1;
     public static final int ERROR_OTHER = 2;
     public static final int ERROR_ALREADY_SENT = 3;
     public static final int ERROR_NOT_FOUND = 4;
@@ -56,7 +57,7 @@ public class InvitesModel {
         }
         HttpException error = (HttpException) e;
         if (error.code() == 400) {
-            return ERROR_USER_NOT_EXISTS;
+            return ERROR_USER_NOT_EXIST;
         }
         if (error.code() == 409) {
             return ERROR_ALREADY_SENT;

@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity
         tvUsername = ButterKnife.findById(navigationView.getHeaderView(0), R.id.tvUsername);
         tvName = ButterKnife.findById(navigationView.getHeaderView(0), R.id.tvName);
         presenter.bindView(this);
+        presenter.updateColorLabels();
 
         if (savedInstanceState == null) {
             showMealsHostFragment();

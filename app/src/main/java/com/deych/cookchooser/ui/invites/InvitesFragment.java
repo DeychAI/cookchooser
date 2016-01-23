@@ -122,7 +122,7 @@ public class InvitesFragment extends BaseFragment implements InvitesView{
     }
 
     @Override
-    public void errorInviteUserNotExists() {
+    public void errorInviteUserNotExist() {
         mainUiDelegate.createSnackbar("Пользователь не существует!", Snackbar.LENGTH_SHORT).show();
     }
 

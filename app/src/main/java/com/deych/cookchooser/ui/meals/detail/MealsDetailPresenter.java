@@ -2,6 +2,7 @@ package com.deych.cookchooser.ui.meals.detail;
 
 import com.deych.cookchooser.models.MealsModel;
 import com.deych.cookchooser.ui.base.Presenter;
+import com.deych.cookchooser.util.RxSchedulerFactory;
 
 import javax.inject.Inject;
 
@@ -14,16 +15,18 @@ import rx.schedulers.Schedulers;
 public class MealsDetailPresenter extends Presenter<MealsDetailView>{
 
     private MealsModel mealsModel;
+    private RxSchedulerFactory rxSchedulerFactory;
 
     @Inject
-    public MealsDetailPresenter(MealsModel mealsModel) {
+    public MealsDetailPresenter(MealsModel mealsModel, RxSchedulerFactory rxSchedulerFactory) {
         this.mealsModel = mealsModel;
+        this.rxSchedulerFactory = rxSchedulerFactory;
     }
 
     public void loadCategories() {
         addToUnbindSubscription(mealsModel.getCategoriesFromDb()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(rxSchedulerFactory.io())
+                .observeOn(rxSchedulerFactory.mainThread())
                 .subscribe(categories -> {
                    if (view() != null) {
                        view().setCategories(categories);

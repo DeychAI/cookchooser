@@ -8,6 +8,14 @@ public class Invite {
     private long id;
     private String from;
 
+    public Invite() {
+    }
+
+    public Invite(long id, String from) {
+        this.id = id;
+        this.from = from;
+    }
+
     public long getId() {
         return id;
     }

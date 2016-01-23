@@ -5,6 +5,7 @@ import com.deych.cookchooser.db.entities.User;
 import com.deych.cookchooser.models.MealsModel;
 import com.deych.cookchooser.models.UserModel;
 import com.deych.cookchooser.ui.base.Presenter;
+import com.deych.cookchooser.util.RxSchedulerFactory;
 
 import javax.inject.Inject;
 
@@ -19,12 +20,15 @@ public class MainActivityPresenter extends Presenter<MainActivityView> {
     private User user;
     private UserModel userModel;
     private MealsModel mealsModel;
+    private RxSchedulerFactory rxSchedulerFactory;
 
     @Inject
-    public MainActivityPresenter(User user, UserModel userModel, MealsModel mealsModel) {
+    public MainActivityPresenter(User user, UserModel userModel, MealsModel mealsModel,
+                                 RxSchedulerFactory rxSchedulerFactory) {
         this.user = user;
         this.userModel = userModel;
         this.mealsModel = mealsModel;
+        this.rxSchedulerFactory = rxSchedulerFactory;
     }
 
     @Override
@@ -34,7 +38,6 @@ public class MainActivityPresenter extends Presenter<MainActivityView> {
             view().bindUserData(user.getUsername(), user.getName());
             view().selectColor(userModel.getSelectedColor());
         }
-        updateColorLabels();
     }
 
     public void updateColorLabels() {
@@ -44,8 +47,8 @@ public class MainActivityPresenter extends Presenter<MainActivityView> {
             }
             addToUnbindSubscription(mealsModel
                     .getMealsCountForColor(mealColor)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(rxSchedulerFactory.io())
+                    .observeOn(rxSchedulerFactory.mainThread())
                     .subscribe(count -> {
                         if (view() != null) {
                             view().updateColorCount(mealColor, count);

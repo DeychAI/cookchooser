@@ -12,18 +12,17 @@ import com.deych.cookchooser.db.tables.MealTable;
 import com.deych.cookchooser.shared_pref.Preferences;
 import com.deych.cookchooser.sync.MealsSync;
 import com.deych.cookchooser.user_scope.UserScope;
+import com.deych.cookchooser.util.RetryWithDelayIf;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import retrofit2.Response;
 import rx.Observable;
 
 /**

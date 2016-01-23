@@ -24,6 +24,7 @@ import com.deych.cookchooser.db.entities.MealColor;
 import com.deych.cookchooser.shared_pref.Preferences;
 import com.deych.cookchooser.ui.base.ui_controls.MainUi;
 import com.deych.cookchooser.ui.group.GroupFragment;
+import com.deych.cookchooser.ui.invites.InvitesFragment;
 import com.deych.cookchooser.ui.login.LoginActivity;
 import com.deych.cookchooser.ui.meals.MealsHostFragment;
 import com.deych.cookchooser.ui.meals.MealsListFragment;
@@ -145,10 +146,19 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_group:
                 showGroupFragment();
                 break;
+            case R.id.nav_invites:
+                showInvitesFragment();
+                break;
         }
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void showInvitesFragment() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content, new InvitesFragment())
+                .commit();
     }
 
     private void showGroupFragment() {

@@ -97,4 +97,9 @@ public class Meal {
     public int hashCode() {
         return uuid.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

@@ -25,6 +25,10 @@ public class MainUiDelegate {
         return ui.tabs();
     }
 
+    public static Builder builder(Context context){
+        return new Builder(context);
+    }
+
     public void onViewCreated() {
         ui.fab().setVisibility(showFab ? View.VISIBLE : View.GONE);
         ui.fab().setOnClickListener(fabListener);

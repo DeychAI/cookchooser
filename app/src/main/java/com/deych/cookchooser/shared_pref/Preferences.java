@@ -16,7 +16,7 @@ public class Preferences {
     private static final String USER_ID = "user.id";
     private static final String USER_TOKEN = "user.token";
     private static final String PRESENTER_CACHE_ID = "presenter.cache.id";
-    public static final String SELECTED_COLOR = "selected.color";
+    private static final String SELECTED_COLOR = "selected.color";
 
     private final SharedPreferences preferences;
 

@@ -1,5 +1,6 @@
 package com.deych.cookchooser.user_scope;
 
+import com.deych.cookchooser.api.service.InvitesService;
 import com.deych.cookchooser.api.service.MealsService;
 
 import javax.inject.Named;
@@ -20,4 +21,9 @@ public class UserScopeApiModule {
         return retrofit.create(MealsService.class);
     }
 
+    @UserScope
+    @Provides
+    InvitesService provideInvitesService(@Named("RetrofitWithAuth") Retrofit retrofit) {
+        return retrofit.create(InvitesService.class);
+    }
 }

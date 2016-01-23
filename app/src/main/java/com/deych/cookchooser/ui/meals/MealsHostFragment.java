@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,9 +16,11 @@ import android.view.ViewGroup;
 import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
 import com.deych.cookchooser.db.entities.Category;
+import com.deych.cookchooser.db.entities.Meal;
 import com.deych.cookchooser.ui.base.BaseFragment;
 import com.deych.cookchooser.ui.base.ui_controls.MainUiDelegate;
 import com.deych.cookchooser.ui.base.Presenter;
+import com.deych.cookchooser.ui.meals.dialog.ChooseFullDialog;
 import com.deych.cookchooser.ui.meals.edit.EditMealActivity;
 
 import java.util.List;
@@ -84,8 +87,7 @@ public class MealsHostFragment extends BaseFragment implements MealsHostView {
                 .showTabs()
                 .setToolbarTitle(R.string.title_list)
                 .setFabDrawable(R.drawable.ic_help)
-                .setFabListener(v ->
-                        Snackbar.make(v, "In a List!", Snackbar.LENGTH_LONG).setAction("Action", null).show())
+                .setFabListener(v -> fabChoose())
                 .build();
 
         mainUiDelegate.onViewCreated();
@@ -94,6 +96,10 @@ public class MealsHostFragment extends BaseFragment implements MealsHostView {
         presenter.bindView(this);
         presenter.loadData();
 
+    }
+
+    private void fabChoose() {
+        presenter.chooseOneMeal(mealsPagerAdapter.getCategory(viewPager.getCurrentItem()).getId());
     }
 
     @Override
@@ -108,8 +114,15 @@ public class MealsHostFragment extends BaseFragment implements MealsHostView {
                 EditMealActivity.startForAdding(getContext(),
                         mealsPagerAdapter.getCategory(viewPager.getCurrentItem()).getId());
                 return true;
+            case R.id.action_choose:
+                menuChoose();
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void menuChoose() {
+        presenter.chooseFromAllCategories();
     }
 
     @Override
@@ -129,5 +142,15 @@ public class MealsHostFragment extends BaseFragment implements MealsHostView {
         viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(mealsPagerAdapter);
         mainUiDelegate.getTabs().setupWithViewPager(viewPager);
+    }
+
+    @Override
+    public void showOneMeal(Meal meal) {
+        mainUiDelegate.createSnackbar(meal.getName(), Snackbar.LENGTH_INDEFINITE).show();
+    }
+
+    @Override
+    public void showFullMeals(List<Meal> meals) {
+        ChooseFullDialog.newInstance(TextUtils.join("\n", meals)).show(getFragmentManager(), "dialog");
     }
 }

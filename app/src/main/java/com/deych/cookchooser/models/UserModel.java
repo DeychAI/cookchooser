@@ -29,16 +29,14 @@ public class UserModel {
 
     private Preferences preferences;
     private StorIOSQLite storIOSQLite;
-    private Retrofit retrofit;
     private UserService userService;
 
 
     @Inject
-    public UserModel(UserService userService, Preferences preferences, StorIOSQLite storIOSQLite, Retrofit retrofit) {
+    public UserModel(UserService userService, Preferences preferences, StorIOSQLite storIOSQLite) {
         this.userService = userService;
         this.preferences = preferences;
         this.storIOSQLite = storIOSQLite;
-        this.retrofit = retrofit;
     }
 
     public Observable<User> register(String username, String password, String name) {

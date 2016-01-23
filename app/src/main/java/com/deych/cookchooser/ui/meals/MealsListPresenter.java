@@ -78,6 +78,9 @@ public class MealsListPresenter extends Presenter<MealsListView> {
     }
 
     public void deleteMeal(Meal meal) {
-
+        mealsModel.deleteMeal(meal)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
     }
 }

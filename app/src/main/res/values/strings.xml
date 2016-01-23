@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Cook Chooser</string>
+    <string name="app_name">Выбираем Обед</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -28,8 +28,12 @@
     <string name="title_list">Список блюд</string>
     <string name="title_group">Группа</string>
     <string name="title_add_meal">Новое блюдо</string>
+    <string name="title_invites">Приглашения</string>
     <string name="menu_add_meal">Добавить блюдо</string>
 
     <string name="error_save_meal">Ошибка при сохранении блюда!</string>
     <string name="meal_popup_action_delete">Удалить</string>
+    <string name="menu_choose">Выбор блюд</string>
+    <string name="sent_invite_dialog_title">Email получателя</string>
+    <string name="dialog_accept_invite_message">Принять приглашение в группу от %s?</string>
 </resources>

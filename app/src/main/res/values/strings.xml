@@ -34,6 +34,6 @@
     <string name="error_save_meal">Ошибка при сохранении блюда!</string>
     <string name="meal_popup_action_delete">Удалить</string>
     <string name="menu_choose">Выбор блюд</string>
-    <string name="sent_invite_dialog_title">Email получателя</string>
+    <string name="dialog_sent_invite_title">Email получателя</string>
     <string name="dialog_accept_invite_message">Принять приглашение в группу от %s?</string>
 </resources>

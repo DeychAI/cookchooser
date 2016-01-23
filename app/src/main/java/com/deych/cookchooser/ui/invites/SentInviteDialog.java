@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.TextView;
 
 import com.deych.cookchooser.R;
@@ -23,7 +21,7 @@ public class SentInviteDialog extends AppCompatDialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setView(R.layout.dialog_sent_invite)
-                .setTitle(getActivity().getString(R.string.sent_invite_dialog_title))
+                .setTitle(getActivity().getString(R.string.dialog_sent_invite_title))
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                     TextView tvSendTo = (TextView) getDialog().findViewById(R.id.etSendTo);
                     if (listener != null) {

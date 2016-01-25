@@ -137,8 +137,16 @@ public class MealsModel {
 
 
     public Observable<Boolean> deleteMeal(Meal meal) {
-        meal.setDeleted(true);
+        if (meal.getRevision() == 0) {
+            return storIOSQLite
+                    .delete()
+                    .object(meal)
+                    .prepare()
+                    .asRxObservable()
+                    .flatMap(deleteResult -> Observable.just(deleteResult.numberOfRowsDeleted() > 0));
+        }
 
+        meal.setDeleted(true);
         return storIOSQLite
                 .put()
                 .object(meal)

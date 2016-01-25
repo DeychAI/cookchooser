@@ -34,7 +34,7 @@ public class MealsSync {
     public void save(Meal meal) {
         if (meal.isDeleted()) {
             delete(meal);
-        } else if (meal.isChanged()) {
+        } else if (meal.isChanged() && meal.getRevision() > 0) {
             update(meal);
         } else {
             add(meal);

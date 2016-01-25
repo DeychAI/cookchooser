@@ -86,7 +86,7 @@ public class UserModel {
                     .object(User.class)
                     .withQuery(UserTable.get(preferences.getUserId()))
                     .prepare()
-                    .createObservable()
+                    .asRxObservable()
                     .take(1)
                     .map(user -> {
                         if (user == null) {

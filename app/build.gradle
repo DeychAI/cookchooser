@@ -20,6 +20,11 @@ apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.fernandocejas.frodo'
 
+def versionMajor = 0
+def versionMinor = 1
+def versionPatch = 1
+def versionBuild = 0
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -29,28 +34,15 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    signingConfigs {
-        cookchooser {
-            keyAlias 'release'
-            keyPassword 'cookchooser'
-            storeFile file('../cookchooser.jks')
-            storePassword 'cookchooser'
-        }
-    }
-
     defaultConfig {
         applicationId "com.deych.cookchooser"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 1
-        versionName "0.1"
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
     }
     buildTypes {
-        debug {
-            signingConfig signingConfigs.cookchooser
-        }
         release {
-            signingConfig signingConfigs.cookchooser
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

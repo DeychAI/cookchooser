@@ -53,7 +53,7 @@ public class LoginPresenterTest {
     }
 
     @Test
-    public void doLogin_shoudShowError() {
+    public void doLogin_shouldShowError() {
         when(userModel.login(anyString(), anyString())).thenReturn(Observable.error(new IOException()));
 
         loginPresenter.doLogin("test", "test");

@@ -23,14 +23,10 @@ import rx.Observable;
  */
 @Singleton
 public class UserModel {
-    public static final int ERROR_USER_EXISTS = 1;
-    public static final int ERROR_NETWORK = 2;
-    public static final int ERROR_INVALID_CREDENTIALS = 3;
 
     private Preferences preferences;
     private StorIOSQLite storIOSQLite;
     private UserService userService;
-
 
     @Inject
     public UserModel(UserService userService, Preferences preferences, StorIOSQLite storIOSQLite) {
@@ -42,38 +38,6 @@ public class UserModel {
     public Observable<User> register(String username, String password, String name) {
         return userService.register(username, password, name);
     }
-
-    public int handleRegisterError(Throwable e) {
-        if (!(e instanceof HttpException)) {
-            return ERROR_NETWORK;
-        }
-        HttpException error = (HttpException) e;
-        if (error.code() == 409) {
-            return ERROR_USER_EXISTS;
-            //TODO just a memo how to convert errors
-//                        try {
-//                            ResponseError responseError = (ResponseError) retrofit.responseConverter(ResponseError.class,
-//                                    ResponseError.class.getAnnotations()).convert(error.response().errorBody());
-//                        } catch (IOException e1) {
-//                            e1.printStackTrace();
-//                        }
-        }
-        return ERROR_NETWORK;
-    }
-
-    public int handleLoginError(Throwable e) {
-        if (e instanceof IOException) {
-            return ERROR_NETWORK;
-        }
-        if (e instanceof HttpException) {
-            HttpException error = (HttpException) e;
-            if (error.code() == 401) {
-                return ERROR_INVALID_CREDENTIALS;
-            }
-        }
-        throw new RuntimeException(e);
-    }
-
     public Observable<User> login(String username, String password) {
         final String credentials = username + ":" + password;
         final String basic =
@@ -130,7 +94,6 @@ public class UserModel {
                 user.setToken(preferences.getUserToken());
                 return user;
             }
-
         }
         return null;
     }

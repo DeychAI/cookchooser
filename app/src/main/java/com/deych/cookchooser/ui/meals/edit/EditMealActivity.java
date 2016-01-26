@@ -12,10 +12,7 @@ import com.deych.cookchooser.R;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-import com.deych.cookchooser.ui.base.ui_controls.FabToolbarUi;
-import com.deych.cookchooser.ui.meals.detail.MealsDetailFragment;
-
-import java.util.UUID;
+import com.deych.cookchooser.ui.base.uicontrols.FabToolbarUi;
 
 /**
  * Created by deigo on 04.01.2016.

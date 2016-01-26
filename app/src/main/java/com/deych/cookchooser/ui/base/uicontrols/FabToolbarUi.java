@@ -1,4 +1,4 @@
-package com.deych.cookchooser.ui.base.ui_controls;
+package com.deych.cookchooser.ui.base.uicontrols;
 
 /**
  * Created by alexanderdeych on 13.01.16.

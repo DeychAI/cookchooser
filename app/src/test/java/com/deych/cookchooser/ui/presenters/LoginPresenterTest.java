@@ -60,7 +60,6 @@ public class LoginPresenterTest {
     @Test
     public void doLogin_shouldShowNetworkError() {
         when(userModel.login(anyString(), anyString())).thenReturn(Observable.error(new IOException()));
-        when(userModel.handleLoginError(any())).thenReturn(UserModel.ERROR_NETWORK);
 
         loginPresenter.doLogin("test", "test");
         verify(loginView).showNetworkError();
@@ -70,7 +69,6 @@ public class LoginPresenterTest {
     public void doLogin_shouldShowInvalidCredentialsError() {
         Response<TokenResponse> response = Response.error(401, ResponseBody.create(MediaType.parse("text"), "Unauthorized Access"));
         when(userModel.login(anyString(), anyString())).thenReturn(Observable.error(new HttpException(response)));
-        when(userModel.handleLoginError(any())).thenReturn(UserModel.ERROR_INVALID_CREDENTIALS);
 
         loginPresenter.doLogin("test", "test");
         verify(loginView).showInvalidCredentialsError();

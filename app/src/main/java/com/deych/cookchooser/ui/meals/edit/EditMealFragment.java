@@ -1,7 +1,6 @@
 package com.deych.cookchooser.ui.meals.edit;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -19,7 +18,7 @@ import com.deych.cookchooser.db.entities.Meal;
 import com.deych.cookchooser.db.entities.MealColor;
 import com.deych.cookchooser.ui.base.BaseFragment;
 import com.deych.cookchooser.ui.base.Presenter;
-import com.deych.cookchooser.ui.base.ui_controls.FabToolbarUiDelegate;
+import com.deych.cookchooser.ui.base.uicontrols.FabToolbarUiDelegate;
 import com.farbod.labelledspinner.LabelledSpinner;
 
 import java.util.List;

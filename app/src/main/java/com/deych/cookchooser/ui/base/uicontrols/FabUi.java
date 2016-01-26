@@ -1,4 +1,4 @@
-package com.deych.cookchooser.ui.base.ui_controls;
+package com.deych.cookchooser.ui.base.uicontrols;
 
 import android.support.design.widget.FloatingActionButton;
 

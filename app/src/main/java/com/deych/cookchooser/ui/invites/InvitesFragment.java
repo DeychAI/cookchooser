@@ -15,7 +15,7 @@ import com.deych.cookchooser.R;
 import com.deych.cookchooser.api.entities.Invite;
 import com.deych.cookchooser.ui.base.BaseFragment;
 import com.deych.cookchooser.ui.base.Presenter;
-import com.deych.cookchooser.ui.base.ui_controls.MainUiDelegate;
+import com.deych.cookchooser.ui.base.uicontrols.MainUiDelegate;
 
 import java.util.List;
 

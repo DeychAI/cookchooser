@@ -18,7 +18,7 @@ import com.deych.cookchooser.R;
 import com.deych.cookchooser.db.entities.Category;
 import com.deych.cookchooser.db.entities.Meal;
 import com.deych.cookchooser.ui.base.BaseFragment;
-import com.deych.cookchooser.ui.base.ui_controls.MainUiDelegate;
+import com.deych.cookchooser.ui.base.uicontrols.MainUiDelegate;
 import com.deych.cookchooser.ui.base.Presenter;
 import com.deych.cookchooser.ui.meals.dialog.ChooseFullDialog;
 import com.deych.cookchooser.ui.meals.edit.EditMealActivity;

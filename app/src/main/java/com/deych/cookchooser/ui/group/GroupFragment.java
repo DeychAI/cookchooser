@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.deych.cookchooser.R;
-import com.deych.cookchooser.ui.base.ui_controls.MainUiDelegate;
+import com.deych.cookchooser.ui.base.uicontrols.MainUiDelegate;
 
 /**
  * Created by deigo on 30.12.2015.

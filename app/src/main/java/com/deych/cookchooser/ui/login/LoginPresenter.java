@@ -1,6 +1,8 @@
 package com.deych.cookchooser.ui.login;
 
 import com.deych.cookchooser.db.entities.User;
+import com.deych.cookchooser.ui.base.errorhandling.ErrorHandler;
+import com.deych.cookchooser.ui.base.errorhandling.Resolver;
 import com.deych.cookchooser.models.UserModel;
 import com.deych.cookchooser.ui.base.Presenter;
 import com.deych.cookchooser.util.RxSchedulerFactory;
@@ -40,15 +42,8 @@ public class LoginPresenter extends Presenter<LoginView> {
                         view().loginSuccessful(user);
                     }
                 }, t -> {
-                    int error = userModel.handleLoginError(t);
-                    if (error == UserModel.ERROR_INVALID_CREDENTIALS) {
-                        if (view() != null) {
-                            view().showInvalidCredentialsError();
-                        }
-                    } else if (error == UserModel.ERROR_NETWORK) {
-                        if (view() != null) {
-                            view().showNetworkError();
-                        }
+                    if (view() != null) {
+                        ErrorHandler.forLogin().handle(t).resolve(view());
                     }
                 });
         addToSubscription(subscription);

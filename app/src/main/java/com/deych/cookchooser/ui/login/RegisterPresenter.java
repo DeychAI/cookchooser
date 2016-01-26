@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.deych.cookchooser.db.entities.User;
 import com.deych.cookchooser.models.UserModel;
 import com.deych.cookchooser.ui.base.Presenter;
+import com.deych.cookchooser.ui.base.errorhandling.ErrorHandler;
 
 import javax.inject.Inject;
 
@@ -62,14 +63,8 @@ public class RegisterPresenter extends Presenter<RegisterView> {
                         view().registerSuccessful();
                     }
                 }, e -> {
-                    if (userModel.handleRegisterError(e) == UserModel.ERROR_USER_EXISTS) {
-                        if (view() != null) {
-                            view().showUserExistsError();
-                        }
-                    } else {
-                        if (view() != null) {
-                            view().showError();
-                        }
+                    if (view() != null) {
+                        ErrorHandler.forRegister().handle(e).resolve(view());
                     }
                 });
         addToSubscription(subscription);

@@ -152,7 +152,7 @@ public class RegisterFragment extends BaseViewStateFragment implements RegisterV
     }
 
     @Override
-    public void showError() {
+    public void showNetworkError() {
         showForm();
         Snackbar.make(btnRegister, R.string.error_network, Snackbar.LENGTH_SHORT).show();
     }

@@ -23,7 +23,7 @@ public abstract class BaseViewStateFragment extends BaseFragment implements View
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewStateDelegate.onActivityCreated(savedInstanceState);
+        viewStateDelegate.onActivityCreated();
     }
 
     @Override

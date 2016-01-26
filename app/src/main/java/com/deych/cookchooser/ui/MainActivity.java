@@ -2,7 +2,6 @@ package com.deych.cookchooser.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -21,8 +20,7 @@ import android.widget.TextView;
 import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
 import com.deych.cookchooser.db.entities.MealColor;
-import com.deych.cookchooser.shared_pref.Preferences;
-import com.deych.cookchooser.ui.base.ui_controls.MainUi;
+import com.deych.cookchooser.ui.base.uicontrols.MainUi;
 import com.deych.cookchooser.ui.group.GroupFragment;
 import com.deych.cookchooser.ui.invites.InvitesFragment;
 import com.deych.cookchooser.ui.login.LoginActivity;

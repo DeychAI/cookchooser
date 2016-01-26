@@ -1,6 +1,7 @@
 package com.deych.cookchooser.ui.base.errorhandling;
 
 import com.deych.cookchooser.api.response.TokenResponse;
+import com.deych.cookchooser.ui.base.errorhandling.login.LoginViewCaseHandler;
 import com.deych.cookchooser.ui.login.LoginView;
 import com.pushtorefresh.storio.StorIOException;
 
@@ -26,7 +27,7 @@ public class LoginErrorsTest {
 
     @Before
     public void before() {
-        errorHandler = ErrorHandler.forLogin();
+        errorHandler = new ErrorHandler<>(new LoginViewCaseHandler());
         view = mock(LoginView.class);
     }
 

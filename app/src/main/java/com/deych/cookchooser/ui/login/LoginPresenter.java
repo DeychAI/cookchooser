@@ -2,7 +2,6 @@ package com.deych.cookchooser.ui.login;
 
 import com.deych.cookchooser.db.entities.User;
 import com.deych.cookchooser.ui.base.errorhandling.ErrorHandler;
-import com.deych.cookchooser.ui.base.errorhandling.Resolver;
 import com.deych.cookchooser.models.UserModel;
 import com.deych.cookchooser.ui.base.Presenter;
 import com.deych.cookchooser.util.RxSchedulerFactory;
@@ -20,11 +19,14 @@ public class LoginPresenter extends Presenter<LoginView> {
     private UserModel userModel;
     private RxSchedulerFactory rxSchedulerFactory;
     private Observable<User> userObservable;
+    private ErrorHandler<LoginView> errorHandler;
 
     @Inject
-    public LoginPresenter(UserModel userModel, RxSchedulerFactory rxSchedulerFactory) {
+    public LoginPresenter(UserModel userModel, RxSchedulerFactory rxSchedulerFactory,
+                          ErrorHandler<LoginView> errorHandler) {
         this.userModel = userModel;
         this.rxSchedulerFactory = rxSchedulerFactory;
+        this.errorHandler = errorHandler;
     }
 
     public void doLogin(String username, String password) {
@@ -43,7 +45,7 @@ public class LoginPresenter extends Presenter<LoginView> {
                     }
                 }, t -> {
                     if (view() != null) {
-                        ErrorHandler.forLogin().handle(t).resolve(view());
+                        errorHandler.handle(t).resolve(view());
                     }
                 });
         addToSubscription(subscription);

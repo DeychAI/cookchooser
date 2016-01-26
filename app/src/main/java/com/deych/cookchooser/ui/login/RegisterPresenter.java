@@ -18,13 +18,15 @@ import rx.schedulers.Schedulers;
  * Created by deigo on 19.12.2015.
  */
 public class RegisterPresenter extends Presenter<RegisterView> {
+
     private UserModel userModel;
     private Observable<User> userObservable;
-
+    private ErrorHandler<RegisterView> errorHandler;
 
     @Inject
-    public RegisterPresenter(UserModel userModel) {
+    public RegisterPresenter(UserModel userModel, ErrorHandler<RegisterView> errorHandler) {
         this.userModel = userModel;
+        this.errorHandler = errorHandler;
     }
 
     public void doRegister(String username, String password, String repeatPassword, String name) {
@@ -64,7 +66,7 @@ public class RegisterPresenter extends Presenter<RegisterView> {
                     }
                 }, e -> {
                     if (view() != null) {
-                        ErrorHandler.forRegister().handle(e).resolve(view());
+                        errorHandler.handle(e).resolve(view());
                     }
                 });
         addToSubscription(subscription);

@@ -1,6 +1,7 @@
 package com.deych.cookchooser.ui.base.errorhandling;
 
 import com.deych.cookchooser.api.response.TokenResponse;
+import com.deych.cookchooser.ui.base.errorhandling.register.RegisterViewCaseHandler;
 import com.deych.cookchooser.ui.login.RegisterView;
 import com.pushtorefresh.storio.StorIOException;
 
@@ -26,7 +27,7 @@ public class RegisterErrorsTest {
 
     @Before
     public void before() {
-        errorHandler = ErrorHandler.forRegister();
+        errorHandler = new ErrorHandler<>(new RegisterViewCaseHandler());
         view = mock(RegisterView.class);
     }
 

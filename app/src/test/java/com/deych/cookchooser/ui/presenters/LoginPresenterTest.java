@@ -1,16 +1,16 @@
 package com.deych.cookchooser.ui.presenters;
 
 import com.deych.cookchooser.MockRxSchedulerFactory;
-import com.deych.cookchooser.api.entities.ResponseError;
 import com.deych.cookchooser.api.response.TokenResponse;
 import com.deych.cookchooser.db.entities.User;
 import com.deych.cookchooser.models.UserModel;
+import com.deych.cookchooser.ui.base.errorhandling.ErrorHandler;
+import com.deych.cookchooser.ui.base.errorhandling.login.LoginViewCaseHandler;
 import com.deych.cookchooser.ui.login.LoginPresenter;
 import com.deych.cookchooser.ui.login.LoginView;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
 
 import java.io.IOException;
 
@@ -30,6 +30,7 @@ public class LoginPresenterTest {
     private UserModel userModel;
     private LoginView loginView;
 
+
     private LoginPresenter loginPresenter;
 
     @Before
@@ -37,7 +38,8 @@ public class LoginPresenterTest {
         userModel = mock(UserModel.class);
         loginView = mock(LoginView.class);
 
-        loginPresenter = new LoginPresenter(userModel, new MockRxSchedulerFactory());
+        loginPresenter = new LoginPresenter(userModel, new MockRxSchedulerFactory(),
+                new ErrorHandler<>(new LoginViewCaseHandler()));
         loginPresenter.bindView(loginView);
     }
 

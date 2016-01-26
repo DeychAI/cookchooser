@@ -3,6 +3,7 @@ package com.deych.cookchooser;
 import com.deych.cookchooser.api.ApiModule;
 import com.deych.cookchooser.api.NetModule;
 import com.deych.cookchooser.db.DbModule;
+import com.deych.cookchooser.ui.base.errorhandling.UiErrorHandlingModule;
 import com.deych.cookchooser.user_scope.UserComponent;
 import com.deych.cookchooser.models.UserModel;
 import com.deych.cookchooser.user_scope.UserModule;
@@ -20,7 +21,8 @@ import javax.inject.Singleton;
 @dagger.Component(modules = {AppModule.class,
         NetModule.class,
         DbModule.class,
-        ApiModule.class
+        ApiModule.class,
+        UiErrorHandlingModule.class
     }
 )
 public interface AppComponent {

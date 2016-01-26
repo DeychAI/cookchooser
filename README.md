@@ -3,6 +3,10 @@
 [![Build Status](https://travis-ci.org/DeychAI/cookchooser.svg?branch=master)](https://travis-ci.org/DeychAI/cookchooser)
 
 
-Libraries used: RxJava, Dagger 2, Retrofit 2, StorIO, LeakCanary, Butterknife, LabelledSpinner
+Used: MVP, RxJava, Dagger 2, Retrofit 2, StorIO, LeakCanary, Butterknife, and others
 
 API: https://github.com/DeychAI/cookchooser-api
+
+
+# Выбираем обед
+Приложение позволяет создавать списки блюд, обмениваться ими в пределах группы и случайным образом выбирать одно или несколько блюд.

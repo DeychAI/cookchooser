@@ -18,7 +18,8 @@ public class RetryWithDelayIf implements
     private TimeUnit timeUnit;
     private Func1<Throwable, Boolean> retryIf;
 
-    public RetryWithDelayIf(final int maxRetries, final int retryDelay, TimeUnit timeUnit, Func1<Throwable, Boolean> retryIf) {
+    public RetryWithDelayIf(final int maxRetries, final int retryDelay, TimeUnit timeUnit,
+                            Func1<Throwable, Boolean> retryIf) {
         this.maxRetries = maxRetries;
         this.retryDelay = retryDelay;
         this.timeUnit = timeUnit;

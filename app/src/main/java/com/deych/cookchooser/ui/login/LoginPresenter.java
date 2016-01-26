@@ -9,8 +9,6 @@ import javax.inject.Inject;
 
 import rx.Observable;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by deigo on 16.12.2015.
@@ -42,8 +40,15 @@ public class LoginPresenter extends Presenter<LoginView> {
                         view().loginSuccessful(user);
                     }
                 }, t -> {
-                    if (view() != null) {
-                        view().showError();
+                    int error = userModel.handleLoginError(t);
+                    if (error == UserModel.ERROR_INVALID_CREDENTIALS) {
+                        if (view() != null) {
+                            view().showInvalidCredentialsError();
+                        }
+                    } else if (error == UserModel.ERROR_NETWORK) {
+                        if (view() != null) {
+                            view().showNetworkError();
+                        }
                     }
                 });
         addToSubscription(subscription);

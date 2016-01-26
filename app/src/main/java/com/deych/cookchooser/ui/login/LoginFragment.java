@@ -131,7 +131,13 @@ public class LoginFragment extends BaseViewStateFragment implements LoginView {
         setFormEnabled(false);
     }
 
-    public void showError() {
+    public void showNetworkError() {
+        showForm();
+        etPassword.setError(getString(R.string.error_login));
+    }
+
+    @Override
+    public void showInvalidCredentialsError() {
         showForm();
         etPassword.setError(getString(R.string.error_login));
     }

@@ -10,13 +10,12 @@ import com.deych.cookchooser.db.tables.UserTable;
 import com.deych.cookchooser.shared_pref.Preferences;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
-import java.util.List;
+import java.io.IOException;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import retrofit2.HttpException;
-import retrofit2.Retrofit;
 import rx.Observable;
 
 /**
@@ -25,7 +24,8 @@ import rx.Observable;
 @Singleton
 public class UserModel {
     public static final int ERROR_USER_EXISTS = 1;
-    public static final int ERROR_OTHER = 2;
+    public static final int ERROR_NETWORK = 2;
+    public static final int ERROR_INVALID_CREDENTIALS = 3;
 
     private Preferences preferences;
     private StorIOSQLite storIOSQLite;
@@ -45,7 +45,7 @@ public class UserModel {
 
     public int handleRegisterError(Throwable e) {
         if (!(e instanceof HttpException)) {
-            return ERROR_OTHER;
+            return ERROR_NETWORK;
         }
         HttpException error = (HttpException) e;
         if (error.code() == 409) {
@@ -58,7 +58,20 @@ public class UserModel {
 //                            e1.printStackTrace();
 //                        }
         }
-        return ERROR_OTHER;
+        return ERROR_NETWORK;
+    }
+
+    public int handleLoginError(Throwable e) {
+        if (e instanceof IOException) {
+            return ERROR_NETWORK;
+        }
+        if (e instanceof HttpException) {
+            HttpException error = (HttpException) e;
+            if (error.code() == 401) {
+                return ERROR_INVALID_CREDENTIALS;
+            }
+        }
+        throw new RuntimeException(e);
     }
 
     public Observable<User> login(String username, String password) {

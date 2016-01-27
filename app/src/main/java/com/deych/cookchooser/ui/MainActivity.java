@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity
             imageView.setImageResource(color.drawableRes());
         }
         TextView textView = (TextView) view.findViewById(R.id.colorSelectorText);
-        textView.setText(String.valueOf(count));
+        textView.setText(count < 100 ? String.valueOf(count) : "99+");
         MenuItemCompat.setActionView(item, view);
     }
 }

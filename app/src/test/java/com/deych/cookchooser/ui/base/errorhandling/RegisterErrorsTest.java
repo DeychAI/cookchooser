@@ -3,12 +3,9 @@ package com.deych.cookchooser.ui.base.errorhandling;
 import com.deych.cookchooser.api.response.TokenResponse;
 import com.deych.cookchooser.ui.base.errorhandling.register.RegisterViewCaseHandler;
 import com.deych.cookchooser.ui.login.RegisterView;
-import com.pushtorefresh.storio.StorIOException;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.IOException;
 
 import okhttp3.MediaType;
 import okhttp3.ResponseBody;
@@ -20,21 +17,12 @@ import static org.mockito.Mockito.*;
 /**
  * Created by deigo on 26.01.2016.
  */
-public class RegisterErrorsTest {
-
-    private ErrorHandler<RegisterView> errorHandler;
-    private RegisterView view;
+public class RegisterErrorsTest extends BaseUiHandlingTest<RegisterView> {
 
     @Before
     public void before() {
         errorHandler = new ErrorHandler<>(new RegisterViewCaseHandler());
         view = mock(RegisterView.class);
-    }
-
-    @Test
-    public void shouldHandleIOException() {
-        errorHandler.handle(new IOException()).resolve(view);
-        verify(view).showNetworkError();
     }
 
     @Test
@@ -45,17 +33,4 @@ public class RegisterErrorsTest {
 
         verify(view).showUserExistsError();
     }
-
-    @Test(expected = RuntimeException.class)
-    public void shouldThrowOnUnhandledCode() {
-        Response<TokenResponse> response = Response.error(404, ResponseBody
-                .create(MediaType.parse("text"), "Not found"));
-        errorHandler.handle(new HttpException(response)).resolve(view);
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void shouldThrowOnUnknownError() {
-        errorHandler.handle(new StorIOException("message")).resolve(view);
-    }
-
 }

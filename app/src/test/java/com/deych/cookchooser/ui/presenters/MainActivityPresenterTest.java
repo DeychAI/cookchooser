@@ -67,6 +67,7 @@ public class MainActivityPresenterTest {
 
     @Test
     public void logout() {
+        when(mealsModel.deleteAll()).thenReturn(Observable.just(true));
         presenter.bindView(view);
         presenter.logout();
         verify(userModel).logout();

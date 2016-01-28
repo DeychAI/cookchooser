@@ -58,11 +58,15 @@ public class MainActivityPresenter extends Presenter<MainActivityView> {
     }
 
     public void logout() {
-        //TODO clear all data
-        userModel.logout();
-        if (view() != null) {
-            view().showLoginScreen();
-        }
+        mealsModel.deleteAll()
+                .subscribeOn(rxSchedulerFactory.io())
+                .observeOn(rxSchedulerFactory.mainThread())
+                .subscribe(result -> {
+                    userModel.logout();
+                    if (view() != null) {
+                        view().showLoginScreen();
+                    }
+                });
     }
 
     public void colorSelected(MealColor color) {

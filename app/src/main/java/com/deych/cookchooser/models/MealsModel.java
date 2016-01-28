@@ -14,6 +14,8 @@ import com.deych.cookchooser.sync.MealsSync;
 import com.deych.cookchooser.user_scope.UserScope;
 import com.deych.cookchooser.util.RetryWithDelayIf;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
+import com.pushtorefresh.storio.sqlite.queries.DeleteQuery;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import java.io.IOException;
@@ -167,5 +169,13 @@ public class MealsModel {
                 .prepare()
                 .asRxObservable()
                 .take(1);
+    }
+
+    public Observable<Boolean> deleteAll() {
+        return storIOSQLite.delete()
+                .byQuery(DeleteQuery.builder().table(MealTable.TABLE).build())
+                .prepare()
+                .asRxObservable()
+                .flatMap(deleteResult -> Observable.just(!deleteResult.affectedTables().isEmpty()));
     }
 }

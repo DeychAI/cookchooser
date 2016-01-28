@@ -67,6 +67,7 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:hint="@string/user_name"
+                android:inputType="textCapSentences"
                 />
         </android.support.design.widget.TextInputLayout>
 

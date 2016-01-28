@@ -21,6 +21,8 @@ public class MealGetResolver extends DefaultGetResolver<Meal> {
         meal.setColor(MealColor.fromStringColor(cursor.getString(cursor.getColumnIndex(MealTable.COLOR))));
         meal.setGroup(cursor.getString(cursor.getColumnIndex(MealTable.GROUP_ID)));
         meal.setName(cursor.getString(cursor.getColumnIndex(MealTable.NAME)));
+        meal.setImage(cursor.getString(cursor.getColumnIndex(MealTable.IMAGE)));
+        meal.setDescription(cursor.getString(cursor.getColumnIndex(MealTable.DESCRIPTION)));
         meal.setCategoryId(cursor.getLong(cursor.getColumnIndex(MealTable.CATEGORY_ID)));
         meal.setUuid(cursor.getString(cursor.getColumnIndex(MealTable.UUID)));
         meal.setRevision(cursor.getLong(cursor.getColumnIndex(MealTable.REVISION)));

@@ -8,7 +8,4 @@ import java.util.List;
  * Created by deigo on 04.01.2016.
  */
 public interface MealsDetailView {
-    void showLoading();
-    void hideLoading();
-    void setCategories(List<Category> categories);
 }

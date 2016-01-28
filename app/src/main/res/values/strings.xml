@@ -36,5 +36,7 @@
     <string name="menu_choose">Выбор блюд</string>
     <string name="dialog_sent_invite_title">Email получателя</string>
     <string name="dialog_accept_invite_message">Принять приглашение в группу от %s?</string>
+    <string name="dialog_full_menu_title">Меню</string>
     <string name="error_network">Ошибка. Попробуйте позднее</string>
+    <string name="meal_name">Название</string>
 </resources>

@@ -16,6 +16,8 @@ public class MealTable {
     public static final String REVISION = "revision";
     public static final String CHANGED = "changed";
     public static final String DELETED = "deleted";
+    public static final String IMAGE = "image";
+    public static final String DESCRIPTION = "description";
 
     public static String getCreateTableQuery() {
         return "create table " + TABLE + "("
@@ -24,6 +26,8 @@ public class MealTable {
                 + CATEGORY_ID + " integer, "
                 + GROUP_ID + " text, "
                 + COLOR + " text, "
+                + IMAGE + " text, "
+                + DESCRIPTION + " text, "
                 + REVISION + " integer, "
                 + CHANGED + " integer, "
                 + DELETED + " integer"

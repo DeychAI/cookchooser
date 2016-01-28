@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
 
+import com.deych.cookchooser.R;
+
 /**
  * Created by deigo on 23.01.2016.
  */
@@ -25,6 +27,7 @@ public class ChooseFullDialog extends AppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new AlertDialog.Builder(getContext())
+                .setTitle(R.string.dialog_full_menu_title)
                 .setMessage(getArguments().getString(ARG_MESSAGE))
                 .setPositiveButton(android.R.string.ok, null)
                 .create();

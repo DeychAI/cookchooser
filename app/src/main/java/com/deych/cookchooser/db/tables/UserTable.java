@@ -14,12 +14,14 @@ public class UserTable {
     public static final String LOGIN = "username";
     public static final String NAME = "name";
     public static final String GROUP_ID = "group_id";
+    public static final String IMAGE = "image";
 
     public static String getCreateTableQuery() {
         return "create table " + TABLE + "("
                 + BaseColumns._ID + " integer primary key, "
                 + LOGIN + " text, "
                 + NAME + " text, "
+                + IMAGE + " text, "
                 + GROUP_ID + " text)";
     }
 

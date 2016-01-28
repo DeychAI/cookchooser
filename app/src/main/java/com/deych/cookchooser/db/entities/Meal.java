@@ -13,6 +13,8 @@ public class Meal {
     private long revision;
     private boolean changed;
     private boolean deleted;
+    private String image;
+    private String description;
 
     public String getName() {
         return name;
@@ -76,6 +78,22 @@ public class Meal {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

@@ -13,7 +13,7 @@ import com.deych.cookchooser.db.tables.UserTable;
  */
 public class DbHelper extends SQLiteOpenHelper {
 
-    private static final int DB_VERSION = 7;
+    private static final int DB_VERSION = 8;
 
     public DbHelper(Context context) {
         super(context, "cookchooser_db", null, DB_VERSION);

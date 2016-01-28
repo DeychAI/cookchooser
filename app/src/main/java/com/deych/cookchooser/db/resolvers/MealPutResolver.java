@@ -42,6 +42,8 @@ public class MealPutResolver extends DefaultPutResolver<Meal> {
         contentValues.put(MealTable.UUID, object.getUuid());
         contentValues.put(MealTable.GROUP_ID, object.getGroup());
         contentValues.put(MealTable.NAME, object.getName());
+        contentValues.put(MealTable.IMAGE, object.getImage());
+        contentValues.put(MealTable.DESCRIPTION, object.getDescription());
         contentValues.put(MealTable.CATEGORY_ID, object.getCategoryId());
         contentValues.put(MealTable.COLOR, object.getColor().color());
         contentValues.put(MealTable.REVISION, object.getRevision());

@@ -23,6 +23,9 @@ public class User {
     @StorIOSQLiteColumn(name = UserTable.GROUP_ID)
     String group;
 
+    @StorIOSQLiteColumn(name = UserTable.IMAGE)
+    String image;
+
     String token;
 
     public User() {
@@ -66,5 +69,13 @@ public class User {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

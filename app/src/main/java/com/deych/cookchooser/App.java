@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.crashlytics.android.Crashlytics;
 import com.deych.cookchooser.api.ApiModule;
 import com.deych.cookchooser.api.NetModule;
 import com.deych.cookchooser.db.DbModule;
@@ -13,6 +14,7 @@ import com.deych.cookchooser.user_scope.UserModule;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
+import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
 /**
@@ -36,6 +38,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
 
         refWatcher = LeakCanary.install(this);
 
@@ -66,6 +69,8 @@ public class App extends Application {
     }
 
     public UserComponent createUserComponent(User user) {
+        Crashlytics.setUserEmail(user.getUsername());
+        Crashlytics.setUserName(user.getName());
         userComponent = appComponent.plus(new UserModule(user));
         return userComponent;
     }

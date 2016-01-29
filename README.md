@@ -10,3 +10,5 @@ API: https://github.com/DeychAI/cookchooser-api
 
 # Выбираем обед
 Приложение позволяет создавать списки блюд, обмениваться ими в пределах группы и случайным образом выбирать одно или несколько блюд.
+
+https://play.google.com/store/apps/details?id=com.deych.cookchooser

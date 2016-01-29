@@ -24,13 +24,17 @@ public class FabToolbarUiDelegate {
     public void onViewCreated() {
         ui.fab().setVisibility(showFab ? View.VISIBLE : View.GONE);
         ui.fab().setOnClickListener(fabListener);
+        setTitle();
+        if (showFab) {
+            ui.fab().setImageResource(fabDrawableRes);
+        }
+    }
+
+    private void setTitle() {
         if (toolbarTitleRes != -1) {
             ui.toolbar().setTitle(toolbarTitleRes);
         } else {
             ui.toolbar().setTitle(toolbarTitle);
-        }
-        if (showFab) {
-            ui.fab().setImageResource(fabDrawableRes);
         }
     }
 
@@ -45,6 +49,10 @@ public class FabToolbarUiDelegate {
 
     public Snackbar createSnackbar(@StringRes int resId, int duration) {
         return Snackbar.make(ui.toolbar(), resId, duration);
+    }
+
+    public void onResume() {
+        setTitle();
     }
 
     private FabToolbarUiDelegate(Builder builder) {

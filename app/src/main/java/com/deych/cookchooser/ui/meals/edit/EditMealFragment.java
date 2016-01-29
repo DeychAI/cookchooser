@@ -155,6 +155,14 @@ public class EditMealFragment extends BaseFragment implements EditMealView{
         fabToolbarUiDelegate.onViewCreated();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (fabToolbarUiDelegate != null) {
+            fabToolbarUiDelegate.onResume();
+        }
+    }
+
     private void save() {
         Category category = (Category) spCategory.getSpinner().getAdapter()
                 .getItem(spCategory.getSpinner().getSelectedItemPosition());

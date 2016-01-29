@@ -21,7 +21,6 @@
         <activity
             android:name=".ui.meals.edit.EditMealActivity"
             android:windowSoftInputMode="adjustResize"
-            android:label="@string/title_add_meal"
             android:theme="@style/AppTheme">
         </activity>
 

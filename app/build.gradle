@@ -27,7 +27,7 @@ apply plugin: 'com.fernandocejas.frodo'
 def versionMajor = 0
 def versionMinor = 1
 def versionPatch = 3
-def versionBuild = 0
+def versionBuild = 1
 
 android {
     compileSdkVersion 23

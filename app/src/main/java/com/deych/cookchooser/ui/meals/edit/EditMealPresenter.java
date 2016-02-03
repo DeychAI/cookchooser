@@ -72,10 +72,11 @@ public class EditMealPresenter extends Presenter<EditMealView> {
                 }));
     }
 
-    public void save(String name, long categoryId, MealColor color) {
+    public void save(String name, long categoryId, MealColor color, String description) {
         meal.setName(name);
         meal.setCategoryId(categoryId);
         meal.setColor(color);
+        meal.setDescription(description);
         mealsModel.saveMeal(meal)
                 .subscribeOn(rxSchedulerFactory.io())
                 .observeOn(rxSchedulerFactory.mainThread())

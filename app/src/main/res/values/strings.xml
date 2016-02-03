@@ -39,4 +39,6 @@
     <string name="dialog_full_menu_title">Меню</string>
     <string name="error_network">Ошибка. Попробуйте позднее</string>
     <string name="meal_name">Название</string>
+    <string name="menu_action_save">Сохранить</string>
+    <string name="edit_meals_description_hint">Описание</string>
 </resources>

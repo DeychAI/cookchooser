@@ -2,14 +2,17 @@ package com.deych.cookchooser.ui.meals.edit;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
@@ -18,7 +21,7 @@ import com.deych.cookchooser.db.entities.Meal;
 import com.deych.cookchooser.db.entities.MealColor;
 import com.deych.cookchooser.ui.base.BaseFragment;
 import com.deych.cookchooser.ui.base.Presenter;
-import com.deych.cookchooser.ui.base.uicontrols.FabToolbarUiDelegate;
+import com.deych.cookchooser.ui.base.uicontrols.ToolbarUiDelegate;
 import com.farbod.labelledspinner.LabelledSpinner;
 
 import java.util.List;
@@ -84,14 +87,23 @@ public class EditMealFragment extends BaseFragment implements EditMealView{
     @Bind(R.id.tilName)
     TextInputLayout tilName;
 
-    private FabToolbarUiDelegate fabToolbarUiDelegate;
+    @Bind(R.id.etDescription)
+    EditText etDescription;
+
+    private ToolbarUiDelegate toolbarUiDelegate;
 
     private int spCategoryPosition = -1;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_meals_edit, container, false);
+        View v = inflater.inflate(R.layout.fragment_edit_meal, container, false);
         ButterKnife.bind(this, v);
 
         return v;
@@ -108,6 +120,19 @@ public class EditMealFragment extends BaseFragment implements EditMealView{
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.edit_meals, menu);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (toolbarUiDelegate != null) {
+            toolbarUiDelegate.onResume();
+        }
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (spCategory != null) {
@@ -119,8 +144,18 @@ public class EditMealFragment extends BaseFragment implements EditMealView{
     public void onDestroyView() {
         super.onDestroyView();
         presenter.unbindView(this);
-        fabToolbarUiDelegate.onDestroyView();
+        toolbarUiDelegate.onDestroyView();
         ButterKnife.unbind(this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_save:
+                save();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -144,31 +179,22 @@ public class EditMealFragment extends BaseFragment implements EditMealView{
         if (TextUtils.isEmpty(title)) {
             title = getString(R.string.title_add_meal);
         }
-        if (fabToolbarUiDelegate == null) {
-            fabToolbarUiDelegate = new FabToolbarUiDelegate.Builder(getActivity())
+        if (toolbarUiDelegate == null) {
+            toolbarUiDelegate = new ToolbarUiDelegate.Builder(getActivity())
                     .setToolbarTitle(title)
-                    .showFab()
-                    .setFabDrawable(R.drawable.ic_done)
-                    .setFabListener(v -> save())
                     .build();
         }
-        fabToolbarUiDelegate.onViewCreated();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (fabToolbarUiDelegate != null) {
-            fabToolbarUiDelegate.onResume();
-        }
+        toolbarUiDelegate.onViewCreated();
     }
 
     private void save() {
         Category category = (Category) spCategory.getSpinner().getAdapter()
                 .getItem(spCategory.getSpinner().getSelectedItemPosition());
 
-        presenter.save(etName.getText().toString(), category.getId(),
-                MealColor.fromRadioBtn(colorGroup.getCheckedRadioButtonId()));
+        presenter.save(etName.getText().toString(),
+                category.getId(),
+                MealColor.fromRadioBtn(colorGroup.getCheckedRadioButtonId()),
+                etDescription.getText().toString());
     }
 
     @Override
@@ -178,7 +204,7 @@ public class EditMealFragment extends BaseFragment implements EditMealView{
 
     @Override
     public void showError() {
-        fabToolbarUiDelegate.createSnackbar(R.string.error_save_meal, Snackbar.LENGTH_LONG).show();
+        Toast.makeText(getContext(), R.string.error_save_meal, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -186,6 +212,7 @@ public class EditMealFragment extends BaseFragment implements EditMealView{
         tilName.setHintAnimationEnabled(false);
         etName.setText(meal.getName());
         etName.setSelection(etName.getText().length());
+        etDescription.setText(meal.getDescription());
         colorGroup.check(meal.getColor().radioBtnRes());
     }
 

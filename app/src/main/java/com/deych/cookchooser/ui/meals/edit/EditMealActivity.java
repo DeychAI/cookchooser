@@ -11,7 +11,7 @@ import com.deych.cookchooser.R;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-import com.deych.cookchooser.ui.base.uicontrols.ToolbarUi;
+import com.deych.cookchooser.ui.base.config.ToolbarUi;
 
 /**
  * Created by deigo on 04.01.2016.
@@ -42,6 +42,9 @@ public class EditMealActivity extends AppCompatActivity implements ToolbarUi{
         setContentView(R.layout.activity_edit_meal);
         ButterKnife.bind(this);
 
+        //With this setTitle, toolbar title will be changed twice. Here and in fragment
+        //Without - it will be changed 3 times. Here, in fragment and then in onPostCreate(). sic!
+//        toolbar.setTitle(R.string.title_add_meal);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

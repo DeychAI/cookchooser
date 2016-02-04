@@ -1,11 +1,14 @@
 package com.deych.cookchooser.ui.meals.edit;
 
+import com.deych.cookchooser.db.entities.Category;
 import com.deych.cookchooser.db.entities.Meal;
 import com.deych.cookchooser.db.entities.MealColor;
 import com.deych.cookchooser.models.MealsModel;
 import com.deych.cookchooser.models.UserModel;
 import com.deych.cookchooser.ui.base.Presenter;
 import com.deych.cookchooser.util.RxSchedulerFactory;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -23,6 +26,7 @@ public class EditMealPresenter extends Presenter<EditMealView> {
     private RxSchedulerFactory rxSchedulerFactory;
 
     private Meal meal;
+    private List<Category> categories;
 
     @Inject
     public EditMealPresenter(UserModel userModel, MealsModel mealsModel, RxSchedulerFactory rxSchedulerFactory) {
@@ -32,9 +36,9 @@ public class EditMealPresenter extends Presenter<EditMealView> {
     }
 
     public void bindData(String uuid, long categoryId) {
-        if (meal !=  null){
+        if (meal != null && categories !=  null){
             view().setTitle(meal.getName());
-            loadCategories();
+            view().setCategories(categories, meal.getCategoryId());
             return;
         }
         Observable<Meal> mealObservable;
@@ -66,6 +70,7 @@ public class EditMealPresenter extends Presenter<EditMealView> {
                 .subscribeOn(rxSchedulerFactory.io())
                 .observeOn(rxSchedulerFactory.mainThread())
                 .subscribe(categories -> {
+                    this.categories = categories;
                     if (view() != null) {
                         view().setCategories(categories, meal.getCategoryId());
                     }

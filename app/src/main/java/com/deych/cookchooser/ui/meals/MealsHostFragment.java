@@ -18,7 +18,11 @@ import com.deych.cookchooser.R;
 import com.deych.cookchooser.db.entities.Category;
 import com.deych.cookchooser.db.entities.Meal;
 import com.deych.cookchooser.ui.base.BaseFragment;
-import com.deych.cookchooser.ui.base.uicontrols.MainUiDelegate;
+import com.deych.cookchooser.ui.base.config.UiConfig;
+import com.deych.cookchooser.ui.base.config.impl.ActionBarConfig;
+import com.deych.cookchooser.ui.base.config.impl.CompositeConfig;
+import com.deych.cookchooser.ui.base.config.impl.FabConfig;
+import com.deych.cookchooser.ui.base.config.impl.TabLayoutConfig;
 import com.deych.cookchooser.ui.base.Presenter;
 import com.deych.cookchooser.ui.meals.dialog.ChooseFullDialog;
 import com.deych.cookchooser.ui.meals.edit.EditMealActivity;
@@ -43,7 +47,9 @@ public class MealsHostFragment extends BaseFragment implements MealsHostView {
     @Inject
     MealsHostPresenter presenter;
 
-    private MainUiDelegate mainUiDelegate;
+    private UiConfig uiConfig;
+    private TabLayoutConfig tabLayoutConfig;
+    private FabConfig fabConfig;
 
     @Override
     protected void setUpComponents() {
@@ -82,15 +88,14 @@ public class MealsHostFragment extends BaseFragment implements MealsHostView {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mainUiDelegate = new MainUiDelegate.Builder(getActivity())
-                .showFab()
-                .showTabs()
-                .setToolbarTitle(R.string.title_list)
-                .setFabDrawable(R.drawable.ic_help)
-                .setFabListener(v -> fabChoose())
-                .build();
 
-        mainUiDelegate.onViewCreated();
+        tabLayoutConfig = new TabLayoutConfig(getActivity()).show();
+        fabConfig = new FabConfig(getActivity()).show().drawableRes(R.drawable.ic_help).listener(v -> fabChoose());
+        uiConfig = new CompositeConfig()
+                .add(new ActionBarConfig(getActivity()).title(R.string.title_list))
+                .add(fabConfig)
+                .add(tabLayoutConfig);
+        uiConfig.apply();
 
         mealsPagerAdapter = new MealsPagerAdapter(getChildFragmentManager());
         presenter.bindView(this);
@@ -129,8 +134,7 @@ public class MealsHostFragment extends BaseFragment implements MealsHostView {
     public void onDestroyView() {
         super.onDestroyView();
         presenter.unbindView(this);
-        mainUiDelegate.onDestroyView();
-
+        uiConfig.release();
     }
 
     @Override
@@ -141,12 +145,12 @@ public class MealsHostFragment extends BaseFragment implements MealsHostView {
         mealsPagerAdapter.setCategories(categories);
         viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(mealsPagerAdapter);
-        mainUiDelegate.getTabs().setupWithViewPager(viewPager);
+        tabLayoutConfig.tabs().setupWithViewPager(viewPager);
     }
 
     @Override
     public void showOneMeal(Meal meal) {
-        mainUiDelegate.createSnackbar(meal.getName(), Snackbar.LENGTH_INDEFINITE).show();
+        Snackbar.make(fabConfig.fab(),  meal.getName(), Snackbar.LENGTH_INDEFINITE).show();
     }
 
     @Override

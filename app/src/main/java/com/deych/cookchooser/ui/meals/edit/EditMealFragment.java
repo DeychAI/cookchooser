@@ -21,7 +21,8 @@ import com.deych.cookchooser.db.entities.Meal;
 import com.deych.cookchooser.db.entities.MealColor;
 import com.deych.cookchooser.ui.base.BaseFragment;
 import com.deych.cookchooser.ui.base.Presenter;
-import com.deych.cookchooser.ui.base.uicontrols.ToolbarUiDelegate;
+import com.deych.cookchooser.ui.base.config.impl.ActionBarConfig;
+import com.deych.cookchooser.ui.base.config.UiConfig;
 import com.farbod.labelledspinner.LabelledSpinner;
 
 import java.util.List;
@@ -90,7 +91,7 @@ public class EditMealFragment extends BaseFragment implements EditMealView{
     @Bind(R.id.etDescription)
     EditText etDescription;
 
-    private ToolbarUiDelegate toolbarUiDelegate;
+    private UiConfig uiConfig;
 
     private int spCategoryPosition = -1;
 
@@ -125,14 +126,6 @@ public class EditMealFragment extends BaseFragment implements EditMealView{
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (toolbarUiDelegate != null) {
-            toolbarUiDelegate.onResume();
-        }
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (spCategory != null) {
@@ -144,7 +137,7 @@ public class EditMealFragment extends BaseFragment implements EditMealView{
     public void onDestroyView() {
         super.onDestroyView();
         presenter.unbindView(this);
-        toolbarUiDelegate.onDestroyView();
+        uiConfig.release();
         ButterKnife.unbind(this);
     }
 
@@ -179,12 +172,10 @@ public class EditMealFragment extends BaseFragment implements EditMealView{
         if (TextUtils.isEmpty(title)) {
             title = getString(R.string.title_add_meal);
         }
-        if (toolbarUiDelegate == null) {
-            toolbarUiDelegate = new ToolbarUiDelegate.Builder(getActivity())
-                    .setToolbarTitle(title)
-                    .build();
-        }
-        toolbarUiDelegate.onViewCreated();
+
+        uiConfig = new ActionBarConfig(getActivity()).title(title);
+        uiConfig.apply();
+
     }
 
     private void save() {

@@ -20,7 +20,9 @@ import android.widget.TextView;
 import com.deych.cookchooser.App;
 import com.deych.cookchooser.R;
 import com.deych.cookchooser.db.entities.MealColor;
-import com.deych.cookchooser.ui.base.uicontrols.MainUi;
+import com.deych.cookchooser.ui.base.config.FabUi;
+import com.deych.cookchooser.ui.base.config.TabLayoutUi;
+import com.deych.cookchooser.ui.base.config.ToolbarUi;
 import com.deych.cookchooser.ui.group.GroupFragment;
 import com.deych.cookchooser.ui.invites.InvitesFragment;
 import com.deych.cookchooser.ui.login.LoginActivity;
@@ -35,7 +37,7 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity
         implements MainActivityView,
         NavigationView.OnNavigationItemSelectedListener,
-        MainUi {
+        ToolbarUi, FabUi, TabLayoutUi {
 
     @Bind(R.id.tabs)
     TabLayout tabs;

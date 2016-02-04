@@ -1,4 +1,4 @@
-package com.deych.cookchooser.ui.base.uicontrols;
+package com.deych.cookchooser.ui.base.config;
 
 import android.support.v7.widget.Toolbar;
 

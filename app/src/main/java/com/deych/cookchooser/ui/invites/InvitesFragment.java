@@ -15,7 +15,11 @@ import com.deych.cookchooser.R;
 import com.deych.cookchooser.api.entities.Invite;
 import com.deych.cookchooser.ui.base.BaseFragment;
 import com.deych.cookchooser.ui.base.Presenter;
-import com.deych.cookchooser.ui.base.uicontrols.MainUiDelegate;
+import com.deych.cookchooser.ui.base.config.impl.ActionBarConfig;
+import com.deych.cookchooser.ui.base.config.impl.CompositeConfig;
+import com.deych.cookchooser.ui.base.config.impl.FabConfig;
+import com.deych.cookchooser.ui.base.config.impl.TabLayoutConfig;
+import com.deych.cookchooser.ui.base.config.UiConfig;
 
 import java.util.List;
 
@@ -32,6 +36,7 @@ public class InvitesFragment extends BaseFragment implements InvitesView{
     @Inject
     InvitesPresenter presenter;
     private InvitesAdapter adapter;
+    private FabConfig fabConfig;
 
     @Override
     protected void setUpComponents() {
@@ -48,7 +53,7 @@ public class InvitesFragment extends BaseFragment implements InvitesView{
         this.presenter = (InvitesPresenter) presenter;
     }
 
-    private MainUiDelegate mainUiDelegate;
+    private UiConfig uiConfig;
 
     @Bind(R.id.list)
     RecyclerView list;
@@ -72,13 +77,17 @@ public class InvitesFragment extends BaseFragment implements InvitesView{
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mainUiDelegate = MainUiDelegate.builder(getActivity())
-                .setToolbarTitle(R.string.title_invites)
-                .showFab()
-                .setFabDrawable(R.drawable.ic_invites_fab)
-                .setFabListener(v -> askSentInvite())
-                .build();
-        mainUiDelegate.onViewCreated();
+        fabConfig = new FabConfig(getActivity())
+                .show()
+                .drawableRes(R.drawable.ic_invites_fab)
+                .listener(v -> askSentInvite());
+        uiConfig = new CompositeConfig()
+                .add(fabConfig)
+                .add(new ActionBarConfig(getActivity())
+                        .title(R.string.title_invites))
+                .add(new TabLayoutConfig(getActivity())
+                        .hide());
+        uiConfig.apply();
 
         presenter.bindView(this);
         presenter.loadInvites();
@@ -91,7 +100,7 @@ public class InvitesFragment extends BaseFragment implements InvitesView{
         super.onDestroyView();
         ButterKnife.unbind(this);
         presenter.unbindView(this);
-        mainUiDelegate.onDestroyView();
+        uiConfig.release();
     }
 
     private void askAcceptInvite(Invite invite) {
@@ -113,27 +122,27 @@ public class InvitesFragment extends BaseFragment implements InvitesView{
 
     @Override
     public void inviteSent() {
-        mainUiDelegate.createSnackbar("Приглашение отправлено", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(fabConfig.fab(), "Приглашение отправлено", Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
     public void errorValidateEmail() {
-        mainUiDelegate.createSnackbar("Неверный Email!", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(fabConfig.fab(), "Неверный Email!", Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
     public void errorInviteUserNotExist() {
-        mainUiDelegate.createSnackbar("Пользователь не существует!", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(fabConfig.fab(), "Пользователь не существует!", Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
     public void errorInviteAlreadySent() {
-        mainUiDelegate.createSnackbar("Приглашение пользователю уже отправлено!", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(fabConfig.fab(), "Приглашение пользователю уже отправлено!", Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
     public void inviteAccepted() {
-        mainUiDelegate.createSnackbar("Приглашение принято", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(fabConfig.fab(), "Приглашение принято", Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -143,6 +152,6 @@ public class InvitesFragment extends BaseFragment implements InvitesView{
 
     @Override
     public void generalError() {
-        mainUiDelegate.createSnackbar("Ошибка. Попробуйте позднее.", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(fabConfig.fab(), R.string.error_network, Snackbar.LENGTH_SHORT).show();
     }
 }

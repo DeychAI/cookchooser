@@ -4,22 +4,17 @@ import android.util.Base64;
 
 import com.deych.cookchooser.db.entities.User;
 import com.google.gson.Gson;
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.GsonConverterFactory;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import retrofit2.Retrofit;
-import retrofit2.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by deigo on 19.12.2015.

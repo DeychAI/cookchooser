@@ -25,8 +25,8 @@ task clean(type: Delete) {
 
 ext {
     storIoVersion = '1.8.0'
-    retrofitVersion = '2.0.0-beta3'
-    okHttpVersion = '3.0.0-RC1'
+    retrofitVersion = '2.0.0-beta4'
+    okHttpVersion = '3.0.1'
     leakCanaryVersion = '1.4-beta1'
     mockitoVersion = '1.10.19'
     hamcrestVersion = '1.3'

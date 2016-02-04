@@ -1,6 +1,7 @@
 package com.deych.cookchooser.ui.base.errorhandling;
 
-import retrofit2.HttpException;
+
+import retrofit2.adapter.rxjava.HttpException;
 
 /**
  * Created by deigo on 26.01.2016.

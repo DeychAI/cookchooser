@@ -4,7 +4,8 @@ import com.deych.cookchooser.ui.base.errorhandling.CaseHandler;
 import com.deych.cookchooser.ui.base.errorhandling.Resolver;
 import com.deych.cookchooser.ui.login.RegisterView;
 
-import retrofit2.HttpException;
+import retrofit2.adapter.rxjava.HttpException;
+
 
 /**
  * Created by deigo on 26.01.2016.

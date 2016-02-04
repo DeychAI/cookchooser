@@ -10,12 +10,9 @@ import com.deych.cookchooser.db.tables.UserTable;
 import com.deych.cookchooser.shared_pref.Preferences;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
-import java.io.IOException;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import retrofit2.HttpException;
 import rx.Observable;
 
 /**

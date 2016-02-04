@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import retrofit2.HttpException;
+import retrofit2.adapter.rxjava.HttpException;
 import rx.Observable;
 
 /**

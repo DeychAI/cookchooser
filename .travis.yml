@@ -13,7 +13,7 @@ android:
     - extra-android-support
 
 script:
-   - ci.sh
+   - sh ci.sh
 
 cache:
   directories:
